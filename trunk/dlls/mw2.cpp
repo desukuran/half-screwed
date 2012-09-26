@@ -165,6 +165,10 @@ void CMW2::PrimaryAttack()
 	flags = 0;
 #endif
 
+#ifndef CLIENT_DLL
+		UTIL_ScreenShake( m_pPlayer->pev->origin, 250.0, 200.0, 2.5, 1 );
+#endif
+
 	PLAYBACK_EVENT_FULL( flags, m_pPlayer->edict(), m_usMW2, 0.0, (float *)&g_vecZero, (float *)&g_vecZero, vecDir.x, vecDir.y, 0, 0, 0, 0 );
 
 	if (!m_iClip && m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType] <= 0)

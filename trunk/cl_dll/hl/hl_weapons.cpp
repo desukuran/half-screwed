@@ -63,7 +63,7 @@ CBoombox g_Boombox;
 CMP5 g_Mp5;
 CShotgun g_Shotgun;
 CRpg g_Rpg;
-CHgun g_HGun;
+CSodaCan g_Soda;
 CHandGrenade g_HandGren;
 CSatchel g_Satchel;
 CTripmine g_Tripmine;
@@ -641,7 +641,7 @@ void HUD_InitClientWeapons( void )
 	HUD_PrepEntity( &g_Mp5	, &player );
 	HUD_PrepEntity( &g_Shotgun	, &player );
 	HUD_PrepEntity( &g_Rpg	, &player );
-	HUD_PrepEntity( &g_HGun	, &player );
+	HUD_PrepEntity( &g_Soda	, &player );
 	HUD_PrepEntity( &g_HandGren	, &player );
 	HUD_PrepEntity( &g_Satchel	, &player );
 	HUD_PrepEntity( &g_Tripmine	, &player );
@@ -748,8 +748,8 @@ void HUD_WeaponsPostThink( local_state_s *from, local_state_s *to, usercmd_t *cm
 			pWeapon = &g_Rpg;
 			break;
 
-		case WEAPON_HORNETGUN:
-			pWeapon = &g_HGun;
+		case WEAPON_SODA:
+			pWeapon = &g_Soda;
 			break;
 
 		case WEAPON_HANDGRENADE:

@@ -62,7 +62,7 @@ void CTestplay::PlayerSpawn( CBasePlayer *pPlayer )
 		pPlayer->GiveNamedItem( "ammo_rpgclip" );
 		pPlayer->GiveNamedItem( "weapon_satchel" );
 		pPlayer->GiveNamedItem( "weapon_snark" );
-		pPlayer->GiveNamedItem( "weapon_hornetgun" );
+		pPlayer->GiveNamedItem( "weapon_soda" );
 		pPlayer->GiveNamedItem( "weapon_dosh" );
 		pPlayer->GiveNamedItem( "weapon_beamkatana" );
 		pPlayer->GiveNamedItem( "weapon_ak47" );

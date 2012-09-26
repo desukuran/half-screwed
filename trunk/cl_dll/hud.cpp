@@ -381,7 +381,7 @@ void CHud :: Init( void )
 	m_AmmoSecondary.Init();
 	m_TextMessage.Init();
 	m_StatusIcons.Init();
-//	m_Halloween.Init();
+	m_COD.Init();
 	GetClientVoiceMgr()->Init(&g_VoiceStatusHelper, (vgui::Panel**)&gViewPort);
 
 	m_Menu.Init();
@@ -530,10 +530,10 @@ void CHud :: VidInit( void )
 	m_DeathNotice.VidInit();
 	m_SayText.VidInit();
 	m_Menu.VidInit();
-//	m_Halloween.VidInit();
 	m_AmmoSecondary.VidInit();
 	m_TextMessage.VidInit();
 	m_StatusIcons.VidInit();
+	m_COD.VidInit();
 	GetClientVoiceMgr()->VidInit();
 }
 

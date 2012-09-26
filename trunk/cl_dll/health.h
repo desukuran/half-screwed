@@ -73,7 +73,7 @@
 #define DMG_AIMED			(1 << 28)   // Does Hit location damage
 #define DMG_WALLPIERCING	(1 << 29)	// Blast Damages ents through walls
 
-#define DMG_CALTROP				(1<<30)
+#define DMG_BILLNYE				(1<<30)
 #define DMG_HALLUC				(1<<31)
 
 // TF Healing Additions for TakeHealth
@@ -105,6 +105,7 @@ public:
 	virtual int VidInit( void );
 	virtual int Draw(float fTime);
 	virtual void Reset( void );
+	int MsgFunc_Items(const char *pszName,  int iSize, void *pbuf);
 	int MsgFunc_Health(const char *pszName,  int iSize, void *pbuf);
 	int MsgFunc_Damage(const char *pszName,  int iSize, void *pbuf);
 	int m_iHealth;
@@ -126,10 +127,34 @@ private:
 	wrect_t *m_prc2;
 	int	  m_iWidth;
 	
+	int m_HUD_mstar;
+	int item_mstar;
+
 	DAMAGE_IMAGE m_dmg[NUM_DMG_TYPES];
 	int	m_bitsDamage;
 	int DrawPain(float fTime);
 	int DrawDamage(float fTime);
 	void CalcDamageDirection(vec3_t vecFrom);
 	void UpdateTiles(float fTime, long bits);
+};	
+
+class CHudCOD: public CHudBase
+{
+public:
+	virtual int Init( void );
+	virtual int VidInit( void );
+	virtual int Draw(float fTime);
+	int MsgFunc_COD(const char *pszName,  int iSize, void *pbuf);
+	int RankExists(int rank);
+	int m_iRank;
+	float m_fFade;
+
+private:
+	int Ranks [1000];
+	int m_HUD_codrank;
+	int m_HUD_codrank2;
+	wrect_t *m_prc2;
+	int m_iHeight;
+	int m_iWidth;
+	char *charSpriteName;
 };	

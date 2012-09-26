@@ -115,7 +115,7 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine="copy &quot;$(TargetPath)&quot; &quot;C:\Program Files\Steam\steamapps\bbayserver\half-life\half-screwed\dlls&quot;"
+				CommandLine=""
 			/>
 		</Configuration>
 		<Configuration
@@ -818,6 +818,10 @@
 						PreprocessorDefinitions=""
 					/>
 				</FileConfiguration>
+			</File>
+			<File
+				RelativePath=".\cod_gamerules.cpp"
+				>
 			</File>
 			<File
 				RelativePath="combat.cpp"
@@ -1717,37 +1721,6 @@
 			</File>
 			<File
 				RelativePath="hornet.cpp"
-				>
-				<FileConfiguration
-					Name="Release|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						AdditionalIncludeDirectories=""
-						PreprocessorDefinitions=""
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Profile|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						AdditionalIncludeDirectories=""
-						PreprocessorDefinitions=""
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Debug|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						AdditionalIncludeDirectories=""
-						PreprocessorDefinitions=""
-					/>
-				</FileConfiguration>
-			</File>
-			<File
-				RelativePath="hornetgun.cpp"
 				>
 				<FileConfiguration
 					Name="Release|Win32"
@@ -2841,6 +2814,10 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath=".\soda_can.cpp"
+				>
+			</File>
+			<File
 				RelativePath="sound.cpp"
 				>
 				<FileConfiguration
@@ -3480,6 +3457,10 @@
 			</File>
 			<File
 				RelativePath="client.h"
+				>
+			</File>
+			<File
+				RelativePath=".\cod_gamerules.h"
 				>
 			</File>
 			<File

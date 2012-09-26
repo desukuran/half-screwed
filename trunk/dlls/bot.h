@@ -169,6 +169,9 @@ class CBot : public CBasePlayer //Derive a bot class from CBasePlayer
       BOOL BotFollowUser( void );  // returns FALSE if can find "user"
       BOOL BotCheckWallOnLeft( void );
       BOOL BotCheckWallOnRight( void );
+
+private:
+	char NormalChatter [100];
 };
 
 #endif // BOT_H

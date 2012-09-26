@@ -613,7 +613,7 @@ public:
 #define DMG_SLOWBURN		(1 << 21)	// in an oven
 #define DMG_SLOWFREEZE		(1 << 22)	// in a subzero freezer
 #define DMG_MORTAR			(1 << 23)	// Hit by air raid (done to distinguish grenade from mortar)
-#define DMG_BUTTER_FINGERS  (1 << 24)   // Hit by butter fingers bullet
+#define DMG_BILLNYE			(1 << 24)   // Hit by BILL NYE THE SCIENCE GUY
 #define DMG_AK47			(1 << 25)
 #define DMG_BOW				(1 << 26)
 
@@ -621,7 +621,7 @@ public:
 #define DMG_GIB_CORPSE		( DMG_CRUSH | DMG_FALL | DMG_BLAST | DMG_SONIC | DMG_CLUB )
 
 // these are the damage types that have client hud art
-#define DMG_SHOWNHUD		(DMG_POISON | DMG_ACID | DMG_FREEZE | DMG_SLOWFREEZE | DMG_DROWN | DMG_BURN | DMG_SLOWBURN | DMG_NERVEGAS | DMG_RADIATION | DMG_SHOCK)
+#define DMG_SHOWNHUD		(DMG_POISON | DMG_ACID | DMG_FREEZE | DMG_SLOWFREEZE | DMG_DROWN | DMG_BURN | DMG_SLOWBURN | DMG_NERVEGAS | DMG_RADIATION | DMG_SHOCK | DMG_BILLNYE)
 
 // NOTE: tweak these values based on gameplay feedback:
 

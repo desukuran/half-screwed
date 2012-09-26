@@ -1538,12 +1538,6 @@ void CBaseEntity::FireBullets(ULONG cShots, Vector vecSrc, Vector vecDirShooting
 
 				break;
 
-			case BULLET_PLAYER_9MM_BF:
-			{
-				pEntity->TraceAttack(pevAttacker, gSkillData.plrDmg9MM, vecDir, &tr, DMG_BUTTER_FINGERS);
-				break;
-			}
-
 			case BULLET_PLAYER_GOLDENGUN:
 			{
 				pEntity->TraceAttack(pevAttacker, gSkillData.plrDmgGOLDENGUN, vecDir, &tr, DMG_BULLET);

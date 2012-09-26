@@ -71,7 +71,7 @@ void EV_FireModman2( struct event_args_s *args  );
 void EV_FireRpg( struct event_args_s *args  );
 //void EV_EgonFire( struct event_args_s *args  );
 //void EV_EgonStop( struct event_args_s *args  );
-void EV_HornetGunFire( struct event_args_s *args  );
+void EV_SodaDrink( struct event_args_s *args  );
 void EV_TripmineFire( struct event_args_s *args  );
 void EV_SnarkFire( struct event_args_s *args  );
 void EV_FireDosh( struct event_args_s *args  );
@@ -975,18 +975,15 @@ void EV_FireRpg( event_args_t *args )
 //======================
 
 //======================
-//	   HORNET START
+//	   SODA START
 //======================
-enum hgun_e {
-	HGUN_IDLE1 = 0,
-	HGUN_FIDGETSWAY,
-	HGUN_FIDGETSHAKE,
-	HGUN_DOWN,
-	HGUN_UP,
-	HGUN_SHOOT
+enum soda_e {
+	SODA_IDLE1 = 0,
+	SODA_FIDGET,
+	SODA_DRINK
 };
 
-void EV_HornetGunFire( event_args_t *args )
+void EV_SodaDrink( event_args_t *args )
 {
 	int idx, iFireMode;
 	vec3_t origin, angles, vecSrc, forward, right, up;
@@ -999,19 +996,18 @@ void EV_HornetGunFire( event_args_t *args )
 	//Only play the weapon anims if I shot it.
 	if ( EV_IsLocal( idx ) )
 	{
-		V_PunchAxis( 0, gEngfuncs.pfnRandomLong ( 0, 2 ) );
-		gEngfuncs.pEventAPI->EV_WeaponAnimation ( HGUN_SHOOT, 1 );
+		V_PunchAxis( 0, gEngfuncs.pfnRandomLong ( 0, 1 ) );
+		gEngfuncs.pEventAPI->EV_WeaponAnimation ( SODA_DRINK, 1 );
 	}
 
-	switch ( gEngfuncs.pfnRandomLong ( 0 , 2 ) )
+	switch ( gEngfuncs.pfnRandomLong ( 0 , 1 ) )
 	{
-		case 0:	gEngfuncs.pEventAPI->EV_PlaySound( idx, origin, CHAN_WEAPON, "agrunt/ag_fire1.wav", 1, ATTN_NORM, 0, 100 );	break;
-		case 1:	gEngfuncs.pEventAPI->EV_PlaySound( idx, origin, CHAN_WEAPON, "agrunt/ag_fire2.wav", 1, ATTN_NORM, 0, 100 );	break;
-		case 2:	gEngfuncs.pEventAPI->EV_PlaySound( idx, origin, CHAN_WEAPON, "agrunt/ag_fire3.wav", 1, ATTN_NORM, 0, 100 );	break;
+		case 0:	gEngfuncs.pEventAPI->EV_PlaySound( idx, origin, CHAN_WEAPON, "weapons/soda1.wav", 1, ATTN_NORM, 0, 100 );	break;
+		case 1:	gEngfuncs.pEventAPI->EV_PlaySound( idx, origin, CHAN_WEAPON, "weapons/soda2.wav", 1, ATTN_NORM, 0, 100 );	break;
 	}
 }
 //======================
-//	   HORNET END
+//	   SODA END
 //======================
 
 //======================

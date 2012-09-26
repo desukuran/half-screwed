@@ -1,19 +1,26 @@
-//
-// Halloween.cpp
-//
-// implementation of the secret of Halloween
-//
 
-#include "STDIO.H"
-#include "STDLIB.H"
-#include "MATH.H"
+//
+// custom_message.cpp
+//
+// implementation of CHudHalloween class
+//
+// Coded By: Pongles
 
 #include "hud.h"
 #include "cl_util.h"
 #include "parsemsg.h"
 #include <string.h>
+#include <stdio.h>
 
-char const * billymc [] = {
+#define MSG_RESPAWN      1
+#define MSG_GAME         2
+#define MSG_FIRSTBLOOD   3
+#define MSG_NAME         4
+#define MSG_VICTIM       5
+#define MSG_KILLER       6
+#define MSG_HALLOWEEN       7
+
+const char *billymc [] = {
 	"Victim #1",
 	"Victim #2. Although he was still alive when he\nwas found starving in an\nabandoned apartment, he\ndied from blood loss on\nthe way to the hospital.\nThe place has apparently\nno tenant or owner",
 	"The Three is The Terrible Treat for Those who Think",
@@ -45,51 +52,189 @@ char const * billymc [] = {
     "RG8geW91IHJlYWxseSBlbmpveSB0aGlzIHNlbnNlbGVzcyBraWxsaW5nPyBUaGVzZSBwbGF5ZXJzIGFyZSByZWFsOyB0aGUgYm90cyBhcmUgYWxzbyByZWFsIHRvZGF5LiBUaGV5IGxpdmUgYW5kIGRpZSB3aXRoaW4gdGhlIGdhbWUgYW5kIGdldCBxdWlja2x5IHJlcGxhY2VkIHdoZW4geW91IGtpbGwgdGhlbS4gT25seSBvbiB0b2RheS4gVGhpcyBpcyBhbGwgdHJ1ZS4gVGhhdCBib3QgaXMgcmVhbC4gSSBob3BlIHlvdSBlbmpveSB5b3Vyc2VsZiwgS2lsbGVyLiAyIDMgMSA0IElTIFRIRSBXQVk=",
 	"K!" };
 
-DECLARE_MESSAGE( m_Halloween, Halloween )
+CCustomMessage::CCustomMessage(byte rr, byte gg, byte bb, float yy, float fo, float ht,
+      float st, char *szt)
+{
+   r = rr;
+   g = gg;
+   b = bb;
+   y = yy;
+   fadeout = fo;
+   holdtime = ht;
+   time = st;
+   strcpy(szText, szt);
+}
+
+
+DECLARE_MESSAGE(m_Halloween, Halloween);
 
 int CHudHalloween::Init(void)
 {
-	HOOK_MESSAGE(Halloween);
+   HOOK_MESSAGE(Halloween);
 
-	gHUD.AddHudElem(this);
-	return 1;
-}
+   gHUD.AddHudElem(this);
 
-void CHudHalloween::Reset( void )
-{
-//	insanity = 0; //reset the player's sanity
+   Reset();
+
+   return 1;
 }
 
 int CHudHalloween::VidInit(void)
 {
-//	insanity = 0;
-	return 1;
+   return 1;
 }
 
-int CHudHalloween::MsgFunc_Halloween(const char *pszName,  int iSize, void *pbuf )
+void CHudHalloween::Reset( void )
 {
-	// TODO: update local health data
-	BEGIN_READ( pbuf, iSize );
-	int x = READ_BYTE();
+   for(int i = 0; i < maxCustomMessages; i++)
+   {
+      if (m_pCustomMsgs[i])
+         delete m_pCustomMsgs[i];
+      m_pCustomMsgs[i] = NULL;
+   }
+}
 
-	m_iFlags |= HUD_ACTIVE;
-
-	insanity = x;
-
-	return 1;
+CHudHalloween::~CHudHalloween( )
+{
+   for(int i = 0; i < maxCustomMessages; i++)
+   {
+      if(m_pCustomMsgs[i])
+      {
+         delete m_pCustomMsgs[i];
+      }
+   }
 }
 
 int CHudHalloween::Draw(float flTime)
 {
-	if (!insanity)
-		return 1;
+   int Index;
+   
+   bool BeingDrawn = false;
 
-	if (insanity >= 1)
-	{
-		m_cChatter = "TEST";
+   float factor, endTime, holdTime;
 
-	gHUD.DrawHudString(ScreenWidth/2, ScreenHeight/2, ScreenWidth, m_cChatter, 0xFF, 0xFF, 0xFF); //s.o. 
-	}
+   CCustomMessage *pMessage;
 
-	return 1;
+   // loop though 0 - 16
+   for ( Index = 0; Index < maxCustomMessages; Index++ )
+   {
+      // is there one here?
+      if ( m_pCustomMsgs[Index] )
+      {
+         pMessage = m_pCustomMsgs[Index];
+
+         endTime = pMessage->time + pMessage->fadeout
+            + pMessage->holdtime;
+         holdTime = pMessage->time + pMessage->holdtime;
+
+         BeingDrawn = true;
+         
+         if ( flTime <= holdTime )
+         {
+            // hold
+            factor = 1;
+         }
+         else
+         {
+            // fade out
+            factor = 1 - ((flTime - holdTime) / pMessage->fadeout);
+         }
+           
+         gHUD.DrawHudString( (ScreenWidth - CenterPos(pMessage->szText)) / 2,
+            pMessage->y, ScreenWidth, pMessage->szText, factor * (pMessage->r),
+            factor * (pMessage->g), factor * (pMessage->b) );
+           
+         // finished ?
+         if(flTime >= endTime)
+         {
+            m_pCustomMsgs[Index] = NULL;
+            delete pMessage;
+         }
+      }
+   }
+
+   if ( !BeingDrawn )
+      m_iFlags &= ~HUD_ACTIVE;
+
+   return 1;
+}
+
+int CHudHalloween::MsgFunc_Halloween(const char*pszName, int iSize, void *pbuf)
+{
+   BEGIN_READ(pbuf,iSize);
+
+   int x = READ_BYTE();
+
+   // reads string sent from server
+   char *szText = READ_STRING();
+
+   MessageAdd( x, gHUD.m_flTime, szText );
+
+   m_iFlags |= HUD_ACTIVE;
+
+   return 1;
+}
+
+int CHudHalloween::CenterPos( char *szMessage )
+{
+   int width = 0;
+
+   for (; *szMessage != 0 && *szMessage != '\n'; szMessage++ )
+   {
+      width += gHUD.m_scrinfo.charWidths[ *szMessage ];
+   }
+
+   return width;
+}
+
+void CHudHalloween::MessageAdd( int type, float time, char *text )
+{
+   // check if there is an instance already
+
+   char tempBuffer[512];
+   
+   if(m_pCustomMsgs[type] != NULL)
+   {
+      delete m_pCustomMsgs[type];
+   }
+
+   // add new instance
+
+   switch ( type )
+   {
+   case MSG_RESPAWN:
+      m_pCustomMsgs[type] = new CCustomMessage(0, 255, 0, (ScreenHeight / 2)
+            + (ScreenHeight / 4),1.5, 1, time, "Press [Fire] To Respawn");
+      break;
+   case MSG_GAME:
+      m_pCustomMsgs[type] = new CCustomMessage(192, 192, 192, ScreenHeight / 2,
+         1.5, 5, time, text);
+      break;
+   case MSG_FIRSTBLOOD:
+      sprintf(tempBuffer, "%s Drew First Blood", text);
+      m_pCustomMsgs[type] = new CCustomMessage(255, 0, 0, ScreenHeight / 4.5,
+         1.5, 5, time, tempBuffer);
+      break;
+   case MSG_NAME:
+      sprintf(tempBuffer, "Name: %s", text);
+      m_pCustomMsgs[type] = new CCustomMessage(0, 255, 0, ScreenHeight / 2
+            + (ScreenHeight / 4),1, 1.5, time, tempBuffer);
+      break;
+   case MSG_VICTIM:
+      sprintf(tempBuffer, "You were killed by %s", text);
+      m_pCustomMsgs[type] = new CCustomMessage(0, 0, 255, ScreenHeight / 4,
+            1.5, 1, time, tempBuffer);
+      break;
+   case MSG_KILLER:
+      sprintf(tempBuffer, "You Killed %s", text);
+      m_pCustomMsgs[type] = new CCustomMessage(255, 0, 0, ScreenHeight / 4.5,
+            1.5, 1, time, tempBuffer);
+      break;
+   case MSG_HALLOWEEN:
+	  int youbet = atoi(text);
+      sprintf(tempBuffer, "%s", billymc[youbet]);
+      m_pCustomMsgs[type] = new CCustomMessage(200, 200, 200, ScreenHeight / 2
+            + (ScreenHeight / 4.5), 1.5, 5, time, tempBuffer);
+      break;
+   }
 }

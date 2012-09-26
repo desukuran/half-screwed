@@ -153,7 +153,18 @@ void ClientDisconnect( edict_t *pEntity )
 		return;
 
 	char text[256];
-	sprintf( text, "- %s has busted the fuck out\n", STRING(pEntity->v.netname) );
+
+	switch (RANDOM_LONG(0,3))
+	{
+		case 0:
+		sprintf( text, "- %s has busted the fuck out\n", STRING(pEntity->v.netname) ); break;
+		case 1:
+		sprintf( text, "- %s has ran away\n", STRING(pEntity->v.netname) ); break;
+		case 2:
+		sprintf( text, "- %s ragequitted.\n", STRING(pEntity->v.netname) ); break;
+		case 3:
+		sprintf( text, "- %s is out.\n", STRING(pEntity->v.netname) ); break;
+	}
 	MESSAGE_BEGIN( MSG_ALL, gmsgSayText, NULL );
 		WRITE_BYTE( ENTINDEX(pEntity) );
 		WRITE_STRING( text );
@@ -331,11 +342,27 @@ void Host_Say( edict_t *pEntity, int teamonly )
 	if ( pc != NULL )
 		return;  // no character found, so say nothing
 
+	LPSYSTEMTIME sysDate;
+	sysDate = (LPSYSTEMTIME) malloc(sizeof(SYSTEMTIME));
+	GetLocalTime(sysDate);
+
+	char *dd = "AM";
+
+	WORD hour = sysDate->wHour;
+
+	if (hour > 11)
+	{
+		dd = "PM";
+		hour = hour - 12;
+	}
+	if (hour == 0)
+		hour = 12;
+
 // turn on color set 2  (color on,  no sound)
 	if ( teamonly )
-		sprintf( text, "%c(TEAM) %s: ", 2, STRING( pEntity->v.netname ) );
+		sprintf( text, "[%d:%d %s] %c(TEAM) %s: ", hour, sysDate->wMinute, dd, 2, STRING( pEntity->v.netname ) );
 	else
-		sprintf( text, "%c%s: ", 2, STRING( pEntity->v.netname ) );
+		sprintf( text, "[%d:%d %s] %c%s: ", hour, sysDate->wMinute, dd, 2, STRING( pEntity->v.netname ) );
 
 	j = sizeof(text) - 2 - strlen(text);  // -2 for /n and null terminator
 	if ( (int)strlen(p) > j )
@@ -394,7 +421,7 @@ void Host_Say( edict_t *pEntity, int teamonly )
 		temp = "say";
 	
 	// team match?
-	if ( g_gameplay == 1 || 2)
+	if ( g_gameplay == HL_TEAMPLAY || HS_SHYTPLAY)
 	{
 		UTIL_LogPrintf( "\"%s<%i><%s><%s>\" %s \"%s\"\n", 
 			STRING( pEntity->v.netname ), 
@@ -598,6 +625,14 @@ void ClientCommand( edict_t *pEntity )
       else
          CLIENT_PRINTF( pEntity, print_console, "botdontshoot not allowed from client!\n" );
    }
+	else if ( FStrEq(pcmd, "use_starman" ) )
+    {
+            GetClassPtr((CBasePlayer *)pev)->UseMarioStar();
+    }
+	else if ( FStrEq(pcmd, "what_a_shame" ) )
+	{
+			GetClassPtr((CBasePlayer *)pev)->WhatAShame();
+	}
 }
 
 /*
@@ -1261,6 +1296,8 @@ void ClientPrecache( void )
 	PRECACHE_SOUND("debris/glass2.wav");
 	PRECACHE_SOUND("debris/glass3.wav");
 
+	PRECACHE_SOUND("starman.wav");
+
 	PRECACHE_SOUND( SOUND_FLASHLIGHT_ON );
 	PRECACHE_SOUND( SOUND_FLASHLIGHT_OFF );
 
@@ -1281,6 +1318,9 @@ void ClientPrecache( void )
 	PRECACHE_SOUND("player/death4.wav");
 	PRECACHE_SOUND("player/death5.wav");
 	PRECACHE_SOUND("player/death6.wav");
+
+// What a shame
+	PRECACHE_SOUND("player/shame.wav");
 	
 // Christmas Time Sounds
 	PRECACHE_SOUND("misc/b2.wav");

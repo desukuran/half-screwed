@@ -283,6 +283,7 @@ else
 	pev->solid			= SOLID_SLIDEBOX;
 	pev->movetype		= MOVETYPE_STEP;
 	pev->renderfx		= kRenderFxGlowShell;
+	pev->rendercolor.x  = 255;
 	m_bloodColor		= BLOOD_COLOR_GREEN;
 	pev->health			= gSkillData.sinistarHealth;
 	pev->view_ofs		= VEC_VIEW;// position of the eyes relative to monster's origin.

@@ -186,10 +186,12 @@ void DecalGunshot( TraceResult *pTrace, int iBulletType )
 		default:
 			// smoke and decal
 			UTIL_GunshotDecalTrace( pTrace, DamageDecal( pEntity, DMG_BULLET ) );
+			UTIL_Sparks( pTrace->vecEndPos );
 			break;
 		case BULLET_MONSTER_12MM:
 			// smoke and decal
 			UTIL_GunshotDecalTrace( pTrace, DamageDecal( pEntity, DMG_BULLET ) );
+			UTIL_Sparks( pTrace->vecEndPos );
 			break;
 		case BULLET_PLAYER_CROWBAR:
 			// wall decal
@@ -332,6 +334,7 @@ void W_Precache(void)
 	UTIL_PrecacheOther( "item_antidote" );
 	UTIL_PrecacheOther( "item_security" );
 	UTIL_PrecacheOther( "item_longjump" );
+	UTIL_PrecacheOther( "item_mariostar" );
 
 	// shotgun
 	UTIL_PrecacheOtherWeapon( "weapon_shotgun" );
@@ -411,8 +414,8 @@ void W_Precache(void)
 #endif
 
 #if !defined( OEM_BUILD ) && !defined( HLDEMO_BUILD )
-	// hornetgun
-	UTIL_PrecacheOtherWeapon( "weapon_hornetgun" );
+	// soda
+	UTIL_PrecacheOtherWeapon( "weapon_soda" );
 #endif
 
 

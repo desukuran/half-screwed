@@ -27,6 +27,8 @@
 #include "decals.h"
 #include "explode.h"
 
+int RESPAWN_TIME = 60;
+
 extern DLL_GLOBAL Vector		g_vecAttackDir;
 
 // =================== FUNC_Breakable ==============================================
@@ -57,7 +59,7 @@ const char *CBreakable::pSpawnObjects[] =
 	"weapon_tripmine",	// 18
 	"weapon_satchel",	// 19
 	"weapon_snark",		// 20
-	"weapon_hornetgun",	// 21
+	"weapon_soda",	// 21 -- Soda
 	"weapon_dosh",		// 22 -- Dosh!
 	"weapon_jason",		// 23 -- Jaysun
 	"weapon_beamkatana", // 24 -- FUCKHEAD
@@ -578,8 +580,17 @@ int CBreakable :: TakeDamage( entvars_t* pevInflictor, entvars_t* pevAttacker, f
 	pev->health -= flDamage;
 	if (pev->health <= 0)
 	{
-		Killed( pevAttacker, GIB_NORMAL );
-		Die();
+		if (IsRespawnable())
+		{
+			Die();
+		}
+		else
+		{
+			Killed( pevAttacker, GIB_NORMAL );
+			Die();
+		}
+
+		
 		return 0;
 	}
 
@@ -756,7 +767,16 @@ void CBreakable::Die( void )
 	// Fire targets on break
 	SUB_UseTargets( NULL, USE_TOGGLE, 0 );
 
-	SetThink( &CBaseEntity::SUB_Remove );
+	if (IsRespawnable())
+	{
+		pev->effects |= EF_NODRAW;
+		m_iRespawnTime = gpGlobals->time + RESPAWN_TIME;
+		SetThink( &CBreakable::RespawnThink );
+	}
+	else
+	{
+		SetThink( &CBaseEntity::SUB_Remove );
+	}
 	pev->nextthink = pev->ltime + 0.1;
 	if ( m_iszSpawnObject )
 		CBaseEntity::Create( (char *)STRING(m_iszSpawnObject), VecBModelOrigin(pev), pev->angles, edict() );
@@ -775,6 +795,19 @@ BOOL CBreakable :: IsBreakable( void )
 	return m_Material != matUnbreakableGlass;
 }
 
+void CBreakable::RespawnThink()
+{
+	if (m_iRespawnTime < gpGlobals->time)
+	{
+		pev->solid = SOLID_BSP;
+		pev->effects &= ~EF_NODRAW;
+		EMIT_SOUND_DYN( ENT(pev), CHAN_WEAPON, "items/suitchargeok1.wav", 1, ATTN_NORM, 0, 150 );
+	}
+	else
+	{
+		pev->nextthink = pev->ltime + 1;
+	}
+}
 
 int	CBreakable :: DamageDecal( int bitsDamageType )
 {

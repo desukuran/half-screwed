@@ -1336,6 +1336,27 @@ void UTIL_GunshotDecalTrace( TraceResult *pTrace, int decalNumber )
 	MESSAGE_END();
 }
 
+void UTIL_PaintballDecalTrace( TraceResult *pTrace, int decalNumber )
+{
+	if ( decalNumber < 0 )
+		return;
+
+	int index = gDecals[ decalNumber ].index;
+	if ( index < 0 )
+		return;
+
+	if (pTrace->flFraction == 1.0)
+		return;
+
+	MESSAGE_BEGIN( MSG_PAS, SVC_TEMPENTITY, pTrace->vecEndPos );
+		WRITE_BYTE( TE_GUNSHOTDECAL );
+		WRITE_COORD( pTrace->vecEndPos.x );
+		WRITE_COORD( pTrace->vecEndPos.y );
+		WRITE_COORD( pTrace->vecEndPos.z );
+		WRITE_SHORT( (short)ENTINDEX(pTrace->pHit) );
+		WRITE_BYTE( index );
+	MESSAGE_END();
+}
 
 void UTIL_Sparks( const Vector &position )
 {
@@ -1635,7 +1656,6 @@ void UTIL_StripToken( const char *pKey, char *pDest )
 	}
 	pDest[i] = 0;
 }
-
 
 // --------------------------------------------------------------
 //

@@ -84,7 +84,7 @@ public:
 #define WEAPON_RPG				8
 #define WEAPON_BOOMBOX			9
 #define WEAPON_SCIENTIST		10
-#define WEAPON_HORNETGUN		11
+#define WEAPON_SODA				11
 #define WEAPON_HANDGRENADE		12
 #define WEAPON_TRIPMINE			13
 #define	WEAPON_SATCHEL			14
@@ -200,7 +200,7 @@ public:
 #define SATCHEL_DEFAULT_GIVE		1
 #define TRIPMINE_DEFAULT_GIVE		1
 #define SNARK_DEFAULT_GIVE			5
-#define HIVEHAND_DEFAULT_GIVE		8
+#define SODA_USUAL_DRINKS			6
 #define DOSH_DEFAULT_GIVE			15
 #define AK47_DEFAULT_GIVE			60
 #define BOW_DEFAULT_GIVE			5
@@ -591,6 +591,7 @@ public:
 	int GetItemInfo(ItemInfo *p);
 
 	void PrimaryAttack( void );
+	void SecondaryAttack( void );
 	int Swing( int fFirst );
 	BOOL Deploy( void );
 	void Holster( int skiplocal = 0 );
@@ -655,6 +656,7 @@ public:
 	int GetItemInfo(ItemInfo *p);
 
 	void PrimaryAttack( void );
+	void SecondaryAttack( void );
 	BOOL Deploy( void );
 	void Holster( int skiplocal = 0 );
 
@@ -668,6 +670,7 @@ public:
 	}
 private:
 	unsigned short m_usBoombox;
+	int m_iSpriteTexture;
 };
 
 class CMP5 : public CBasePlayerWeapon
@@ -835,7 +838,42 @@ public:
 	CRpg *m_pLauncher;// pointer back to the launcher that fired me. 
 };
 
-class CHgun : public CBasePlayerWeapon
+//class CHgun : public CBasePlayerWeapon
+//{
+//public:
+//	void Spawn( void );
+//	void Precache( void );
+//	int iItemSlot( void ) { return 4; }
+//	int GetItemInfo(ItemInfo *p);
+//	int AddToPlayer( CBasePlayer *pPlayer );
+//
+//	void PrimaryAttack( void );
+//	void SecondaryAttack( void );
+//	BOOL Deploy( void );
+//	BOOL IsUseable( void );
+//	void Holster( int skiplocal = 0 );
+//	void Reload( void );
+//	void WeaponIdle( void );
+//	float m_flNextAnimTime;
+//
+//	float m_flRechargeTime;
+//	
+//	int m_iFirePhase;// don't save me.
+//
+//	virtual BOOL UseDecrement( void )
+//	{ 
+//#if defined( CLIENT_WEAPONS )
+//		return TRUE;
+//#else
+//		return FALSE;
+//#endif
+//	}
+//private:
+//	unsigned short m_usHornetFire;
+//};
+
+
+class CSodaCan : public CBasePlayerWeapon
 {
 public:
 	void Spawn( void );
@@ -845,17 +883,10 @@ public:
 	int AddToPlayer( CBasePlayer *pPlayer );
 
 	void PrimaryAttack( void );
-	void SecondaryAttack( void );
 	BOOL Deploy( void );
 	BOOL IsUseable( void );
 	void Holster( int skiplocal = 0 );
-	void Reload( void );
 	void WeaponIdle( void );
-	float m_flNextAnimTime;
-
-	float m_flRechargeTime;
-	
-	int m_iFirePhase;// don't save me.
 
 	virtual BOOL UseDecrement( void )
 	{ 
@@ -866,9 +897,8 @@ public:
 #endif
 	}
 private:
-	unsigned short m_usHornetFire;
+	unsigned short m_usSodaDrink;
 };
-
 
 
 class CHandGrenade : public CBasePlayerWeapon

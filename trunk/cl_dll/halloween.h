@@ -1,16 +1,37 @@
-//
-//-----------------------------------------------------
-//
-class CHudHalloween: public CHudBase
+// Pongles [
+class CCustomMessage
 {
 public:
-	virtual int Init( void );
-	virtual int VidInit( void );
-	virtual int Draw(float fTime);
-	virtual void Reset( void );
-	int MsgFunc_Halloween(const char *pszName,  int iSize, void *pbuf);
-	int insanity;
-	char * billymc [32];
-private:
-	char * m_cChatter;
-};	
+   byte   r, g, b;
+   float   y;
+   float   fadein;
+   float   fadeout;
+   float   holdtime;
+   char   *pText;
+   float   time;
+   char   szText[64];
+
+   CCustomMessage() {}
+   
+   CCustomMessage(byte rr, byte gg, byte bb, float yy, float fo, float ht,
+      float st, char *szt);
+};
+
+const int maxCustomMessages = 16;
+
+class CHudHalloween : public CHudBase
+{
+   CCustomMessage   *m_pCustomMsgs[maxCustomMessages];
+
+public:
+   int   Init(void);
+   int   VidInit( void );
+   int   Draw(float flTime);
+   int   MsgFunc_Halloween(const char *pszName, int iSize, void *pbuf);
+   int   CenterPos(char *szMessage);
+   void MessageAdd( int type, float time, char *text );
+   void Reset( void );
+
+   ~CHudHalloween();
+};
+// Pongles ]
