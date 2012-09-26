@@ -63,6 +63,7 @@ Task_t	tlCWCHide[] =
 {
 	//{ TASK_SET_FAIL_SCHEDULE,		(float)SCHED_PANIC },		// If you fail, just panic!
 	{ TASK_STOP_MOVING,				(float)0					},
+	{ TASK_FIND_COVER_FROM_ENEMY,	(float)0					},
 	{ TASK_PLAY_SEQUENCE,			(float)ACT_CROUCH			},
 	{ TASK_SET_ACTIVITY,			(float)ACT_CROUCHIDLE		},	// FIXME: This looks lame
 	{ TASK_WAIT_RANDOM,				(float)10.0					},

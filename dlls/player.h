@@ -161,6 +161,9 @@ public:
 	BOOL			m_fNoPlayerSound;	// a debugging feature. Player makes no sound if this is true. 
 	BOOL			m_fLongJump; // does this player have the longjump module?
 
+	int					mstars; //mario Stars
+	float				m_fEndMarioTime;
+
 
 	float       m_tSneaking;
 	int			m_iUpdateTime;		// stores the number of frame ticks before sending HUD update messages
@@ -189,6 +192,7 @@ public:
 
 	int m_nCustomSprayFrames;// Custom clan logo frames for this player
 	float	m_flNextDecalTime;// next time this player can spray a decal
+	float   m_flNextShame;		//Next time to say what a shame - Dethklan
 
 	char m_szTeamName[TEAM_NAME_LENGTH];
 
@@ -198,6 +202,8 @@ public:
 	virtual void Spawn( void );
 	void Pain( void );
 
+	int UseMarioStar( void );
+	int WhatAShame( void );
 //	virtual void Think( void );
 	virtual void Jump( void );
 	virtual void Duck( void );

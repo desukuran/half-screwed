@@ -25,6 +25,7 @@
 #include	"teamplay_gamerules.h"
 #include	"shytplay_gamerules.h"
 #include	"heavyrain_gamerules.h"
+#include	"cod_gamerules.h"
 #include	"test_gamerules.h"
 #include	"skill.h"
 #include	"game.h"
@@ -350,38 +351,34 @@ CGameRules *InstallGameRules( void )
 
 	if ( !gpGlobals->deathmatch )
 	{
-		// generic half-life
-		g_gameplay = 0;
+		g_gameplay = HL_DEATHMATCH;
 		return new CHalfLifeRules;
 	}
 	else
 	{
-		if ( gameplay.value == 1 )
+		if ( gameplay.value == HL_TEAMPLAY )
 		{
-			// teamplay
-
-			g_gameplay = 1;
+			g_gameplay = HL_TEAMPLAY;
 			return new CHalfLifeTeamplay;
 		}
-		if ( gameplay.value == 2 )
+		if ( gameplay.value == HS_SHYTPLAY )
 		{
-			// shytplay
-
-			g_gameplay = 2;
+			g_gameplay = HS_SHYTPLAY;
 			return new CHalfLifeShytplay;
 		}
-		if ( gameplay.value == 3 )
+		if ( gameplay.value == HS_HEAVYRAIN )
 		{
-			// heavy rain
-
-			g_gameplay = 3;
+			g_gameplay = HS_HEAVYRAIN;
 			return new CHeavyRainplay;
 		}
-		if ( gameplay.value == 9 )
+		if ( gameplay.value == HS_COD )
 		{
-			//Test Gamemode
-
-			g_gameplay = 9;
+			g_gameplay = HS_COD;
+			return new CCodplay;
+		}
+		if ( gameplay.value == HS_TESTMODE )
+		{
+			g_gameplay = HS_TESTMODE;
 			return new CTestplay;
 		}
 		else

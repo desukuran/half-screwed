@@ -42,7 +42,6 @@ extern int gmsgMOTD;
 extern int gmsgServerName;
 extern int gmsgItemPickup;
 extern int gmsgTimer;
-//extern int gmsgHalloween;
 
 extern int g_gameplay;
 int check = 0;
@@ -61,7 +60,7 @@ class CMultiplayGameMgrHelper : public IVoiceGameMgrHelper
 public:
 	virtual bool		CanPlayerHearPlayer(CBasePlayer *pListener, CBasePlayer *pTalker)
 	{
-		if ( g_gameplay == 1 || 2 )
+		if ( g_gameplay == HL_TEAMPLAY || HS_SHYTPLAY )
 		{
 			if ( g_pGameRules->PlayerRelationship( pListener, pTalker ) != GR_TEAMMATE )
 			{
@@ -563,7 +562,7 @@ void CHalfLifeMultiplay :: ClientDisconnected( edict_t *pClient )
 			FireTargets( "game_playerleave", pPlayer, pPlayer, USE_TOGGLE, 0 );
 
 			// team match?
-			if ( g_gameplay == 1 || 2 )
+			if ( g_gameplay == HL_TEAMPLAY || HS_SHYTPLAY )
 			{
 				UTIL_LogPrintf( "\"%s<%i><%s><%s>\" just fucking ran\n",  
 					STRING( pPlayer->pev->netname ), 
@@ -762,12 +761,9 @@ void CHalfLifeMultiplay :: PlayerKilled( CBasePlayer *pVictim, entvars_t *pKille
 			WRITE_SHORT( GetTeamIndex( PK->m_szTeamName) + 1 );
 		MESSAGE_END();
 
-//		MESSAGE_BEGIN( MSG_ONE, gmsgHalloween, NULL, PK->pev );
-//		WRITE_BYTE( pKiller->frags );
-//		MESSAGE_END();
-
 		// let the killer paint another decal as soon as he'd like.
 		PK->m_flNextDecalTime = gpGlobals->time;
+		PK->m_flNextShame = gpGlobals->time;
 	}
 #ifndef HLDEMO_BUILD
 	if ( pVictim->HasNamedPlayerItem("weapon_satchel") )
@@ -847,7 +843,7 @@ void CHalfLifeMultiplay::DeathNotice( CBasePlayer *pVictim, entvars_t *pKiller, 
 		// killed self
 
 		// team match?
-		if ( g_gameplay == 1 || 2 )
+		if ( g_gameplay == HL_TEAMPLAY || HS_SHYTPLAY )
 		{
 			UTIL_LogPrintf( "\"%s<%i><%s><%s>\" committed suicide with \"%s\"\n",  
 				STRING( pVictim->pev->netname ), 
@@ -909,7 +905,7 @@ void CHalfLifeMultiplay::DeathNotice( CBasePlayer *pVictim, entvars_t *pKiller, 
 		// killed by the world
 
 		// team match?
-		if ( g_gameplay == 1 || 2 )
+		if ( g_gameplay == HL_TEAMPLAY || HS_SHYTPLAY )
 		{
 			UTIL_LogPrintf( "\"%s<%i><%s><%s>\" committed suicide with \"%s\" (world)\n",
 				STRING( pVictim->pev->netname ), 

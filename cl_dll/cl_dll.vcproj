@@ -211,7 +211,7 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine="copy &quot;$(TargetPath)&quot; &quot;C:\Program Files\Steam\steamapps\bbayserver\half-life\half-screwed\cl_dlls&quot;"
+				CommandLine=""
 			/>
 		</Configuration>
 	</Configurations>
@@ -309,6 +309,10 @@
 						PreprocessorDefinitions=""
 					/>
 				</FileConfiguration>
+			</File>
+			<File
+				RelativePath=".\cawadooty.cpp"
+				>
 			</File>
 			<File
 				RelativePath="cdll_int.cpp"
@@ -796,10 +800,6 @@
 			</File>
 			<File
 				RelativePath=".\mp3.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\mp3.h"
 				>
 			</File>
 			<File
@@ -1725,28 +1725,6 @@
 					</FileConfiguration>
 				</File>
 				<File
-					RelativePath="..\dlls\hornetgun.cpp"
-					>
-					<FileConfiguration
-						Name="Debug|Win32"
-						>
-						<Tool
-							Name="VCCLCompilerTool"
-							AdditionalIncludeDirectories=""
-							PreprocessorDefinitions=""
-						/>
-					</FileConfiguration>
-					<FileConfiguration
-						Name="Release|Win32"
-						>
-						<Tool
-							Name="VCCLCompilerTool"
-							AdditionalIncludeDirectories=""
-							PreprocessorDefinitions=""
-						/>
-					</FileConfiguration>
-				</File>
-				<File
 					RelativePath="..\common\interface.cpp"
 					>
 					<FileConfiguration
@@ -1879,6 +1857,10 @@
 							PreprocessorDefinitions=""
 						/>
 					</FileConfiguration>
+				</File>
+				<File
+					RelativePath="..\dlls\soda_can.cpp"
+					>
 				</File>
 				<File
 					RelativePath="..\dlls\squeakgrenade.cpp"
@@ -2095,6 +2077,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\mp3.h"
+				>
+			</File>
+			<File
 				RelativePath="overview.h"
 				>
 			</File>
@@ -2191,22 +2177,14 @@
 				>
 			</File>
 			<Filter
-				Name="FMOD"
+				Name="audiere"
 				>
 				<File
-					RelativePath=".\fmod.h"
+					RelativePath=".\audiere.h"
 					>
 				</File>
 				<File
-					RelativePath=".\fmod_errors.h"
-					>
-				</File>
-				<File
-					RelativePath=".\fmoddyn.h"
-					>
-				</File>
-				<File
-					RelativePath=".\fmodvc.lib"
+					RelativePath=".\audiere.lib"
 					>
 				</File>
 			</Filter>

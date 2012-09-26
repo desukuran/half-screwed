@@ -64,6 +64,9 @@ void CBoombox::Precache( void )
 	for ( i = 0; i < ARRAYSIZE( pBoomboxSongs ); i++ )
 		PRECACHE_SOUND((char *)pBoomboxSongs[i]);
 	PRECACHE_SOUND("bbox/xmassong.wav");
+	PRECACHE_SOUND("bbox/songrc.wav");
+
+	m_iSpriteTexture = PRECACHE_MODEL( "sprites/shockwave.spr" );
 
 	m_usBoombox = PRECACHE_EVENT ( 1, "events/boombox.sc" );
 }
@@ -115,4 +118,14 @@ void CBoombox::PrimaryAttack()
 	}
 	EMIT_SOUND(ENT(m_pPlayer->pev), CHAN_WEAPON, pBoomboxSongs[ RANDOM_LONG(0,ARRAYSIZE(pBoomboxSongs)-1) ], 1, ATTN_NORM);
 	m_pPlayer->m_flNextAttack = UTIL_WeaponTimeBase() + 0.5;
+}
+
+void CBoombox::SecondaryAttack()
+{	
+		EMIT_SOUND(ENT(m_pPlayer->pev), CHAN_WEAPON, "bbox/songrc.wav", 1, ATTN_NORM); //1.83
+#ifndef CLIENT_DLL
+		UTIL_ScreenShake( m_pPlayer->pev->origin, 25.0, 200.0, 2, 750 );
+#endif
+		RadiusDamage( m_pPlayer->pev->origin, pev, m_pPlayer->pev, 10, 750, CLASS_NONE, DMG_BILLNYE | DMG_ALWAYSGIB );
+		m_pPlayer->m_flNextAttack = UTIL_WeaponTimeBase() + 1.75;
 }

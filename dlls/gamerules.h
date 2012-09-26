@@ -73,6 +73,7 @@ public:
 	virtual BOOL IsDeathmatch( void ) = 0;//is this a deathmatch game?
 	virtual BOOL IsTeamplay( void ) { return FALSE; };// is this deathmatch game being played with team rules?
 	virtual BOOL IsHeavyRain( void ) { return FALSE; }; //is this Heavy Rain?
+	virtual BOOL IsCOD( void ) {return FALSE; }; // is this COD?
 	virtual BOOL IsTest( void ) {return FALSE; }; // are we in test mode?
 	virtual BOOL IsCoOp( void ) = 0;// is this a coop game?
 	virtual const char *GetGameDescription( void ) { return "Half-Screwed"; }  // this is the game name that gets seen in the server browser

@@ -90,24 +90,13 @@ int CHudBattery::Draw(float flTime)
 	rc = *m_prc2;
 	rc.top  += m_iHeight * ((float)(100-(min(100,m_iBat))) * 0.01);	// battery can go from 0 to 100 so * 0.01 goes from 0 to 1
 
-	//UnpackRGB(r,g,b, RGB_YELLOWISH);
-
 	if (!(gHUD.m_iWeaponBits & (1<<(WEAPON_SUIT)) ))
 		return 1;
 	
-	int iOffset = (m_prc1->bottom - m_prc1->top)/6;
+		int iOffset = (m_prc1->bottom - m_prc1->top)/6;
 
-	//y = ScreenHeight - gHUD.m_iFontHeight - gHUD.m_iFontHeight / 2;
-	//x = ScreenWidth/5;
-
-		int MGSX = 20; // name +3
-		int MGSY = ScreenHeight-40; // bar +5
-
-	//if (rc.bottom > rc.top)
-	//{
-		//SPR_Set(m_SpriteHandle_t2, r, g, b );
-		//SPR_DrawAdditive( 0, x, y - iOffset + (rc.top - m_prc2->top), &rc);
-	//}
+		int MGSX = (gHUD.GetSpriteRect(m_HUD_mgs3suitbar).right - gHUD.GetSpriteRect(m_HUD_mgs3suitbar).left)/10; //Needs 20. It's 104
+		int MGSY = ScreenHeight-45; 
 
 		int iOffset2 = m_iWidth * (1.0 - m_flBat);	//32 * (1 - 1) = 0
 

@@ -172,6 +172,7 @@ int gmsgWeaponList = 0;
 int gmsgAmmoX = 0;
 int gmsgHudText = 0;
 int gmsgDeathMsg = 0;
+int gmsgDeathMsg2 = 0; //Monster
 int gmsgScoreInfo = 0;
 int gmsgTeamInfo = 0;
 int gmsgTeamScore = 0;
@@ -191,6 +192,8 @@ int gmsgGeigerRange = 0;
 int gmsgRoundTime = 0;
 int gmsgTeamNames = 0;
 int gmsgRainData = 0;
+int gmsgItems = 0;
+int gmsgCOD = 0;
 
 int gmsgStatusText = 0;
 int gmsgStatusValue = 0; 
@@ -211,7 +214,7 @@ void LinkUserMessages( void )
 	gmsgFlashlight = REG_USER_MSG("Flashlight", 2);
 	gmsgFlashBattery = REG_USER_MSG("FlashBat", 1);
 	gmsgHealth = REG_USER_MSG( "Health", 1 );
-//	gmsgHalloween = REG_USER_MSG( "Halloween", 1 );
+	//gmsgHalloween = REG_USER_MSG( "Halloween", -1 );
 	gmsgDamage = REG_USER_MSG( "Damage", 12 );
 	gmsgBattery = REG_USER_MSG( "Battery", 2);
 	gmsgTrain = REG_USER_MSG( "Train", 1);
@@ -235,12 +238,14 @@ void LinkUserMessages( void )
 	gmsgItemPickup = REG_USER_MSG( "ItemPickup", -1 );
 	gmsgHideWeapon = REG_USER_MSG( "HideWeapon", 1 );
 	gmsgSetFOV = REG_USER_MSG( "SetFOV", 1 );
+	gmsgItems = REG_USER_MSG("Items", 4);
 	gmsgShowMenu = REG_USER_MSG( "ShowMenu", -1 );
 	gmsgShake = REG_USER_MSG("ScreenShake", sizeof(ScreenShake));
 	gmsgFade = REG_USER_MSG("ScreenFade", sizeof(ScreenFade));
 	gmsgAmmoX = REG_USER_MSG("AmmoX", 2);
 	gmsgTeamNames = REG_USER_MSG( "TeamNames", -1 );
 	gmsgRoundTime = REG_USER_MSG("RoundTime", 4);
+	gmsgCOD = REG_USER_MSG("COD", 1);
 
 	gmsgStatusText = REG_USER_MSG("StatusText", -1);
 	gmsgStatusValue = REG_USER_MSG("StatusValue", 3); 
@@ -659,9 +664,9 @@ int CBasePlayer :: TakeDamage( entvars_t *pevInflictor, entvars_t *pevAttacker, 
 			bitsDamage &= ~DMG_SHOCK;
 			ffound = TRUE;
 		}
-		if (bitsDamage & DMG_BUTTER_FINGERS)
+		if (bitsDamage & DMG_BILLNYE)
 		{
-			bitsDamage &= ~DMG_BUTTER_FINGERS;
+			bitsDamage &= ~DMG_BILLNYE;
 			ffound = TRUE;
 		} 
 	}
@@ -1562,6 +1567,33 @@ void CBasePlayer::PlayerUse ( void )
 		if ( m_afButtonPressed & IN_USE )
 			EMIT_SOUND( ENT(pev), CHAN_ITEM, "common/wpn_denyselect.wav", 0.4, ATTN_NORM);
 	}
+}
+int CBasePlayer::UseMarioStar( void )
+{
+	if (mstars <= 0)
+		return 0;
+
+	mstars--;
+
+    MESSAGE_BEGIN(MSG_ONE, gmsgItems, NULL, ENT(pev));
+		WRITE_LONG( 0 );
+	MESSAGE_END();
+
+	m_fEndMarioTime = gpGlobals->time + 10;
+
+	EMIT_SOUND( ENT(pev), CHAN_VOICE, "starman.wav", 1, ATTN_NORM);
+
+	pev->renderfx = kRenderFxGlowShell;
+	pev->rendercolor.x = 255;
+	pev->rendercolor.y = 255;
+	pev->flags |= FL_GODMODE;
+
+	return 1;
+}
+int CBasePlayer::WhatAShame( void )
+{
+	EMIT_SOUND( ENT(pev), CHAN_WEAPON, "player/shame.wav", 1, ATTN_NORM);
+		return 1;
 }
 void CBasePlayer::Jump()
 {
@@ -2521,6 +2553,21 @@ void CBasePlayer::PostThink()
 
 	if (!IsAlive())
 		goto pt_end;
+
+	/*if ( m_fEndMarioTime > gpGlobals->time )
+	{
+		RadiusDamage( pev->origin, pev, pev, 999, CLASS_NONE, DMG_BURN | DMG_ALWAYSGIB );
+	}*/
+	if ( m_fEndMarioTime < gpGlobals->time )
+	{
+		pev->renderfx = kRenderFxNone;
+		pev->rendercolor.x = 0;
+		pev->rendercolor.y = 0;
+		pev->flags &= ~FL_GODMODE;
+
+		STOP_SOUND( ENT(pev), CHAN_VOICE, "starman.wav" );
+	}
+
 
 	m_iHelo = CVAR_GET_FLOAT("shotgun_enable");
 
@@ -3549,7 +3596,10 @@ void CBasePlayer::CheatImpulseCommands( int iImpulse )
 
 	case 101:
 		if (g_pGameRules->IsHeavyRain())
-		return; //Genuflect
+			return; //Genuflect
+
+		if (g_pGameRules->IsCOD())
+			return;
 
 		gEvilImpulse101 = TRUE;
 		GiveNamedItem( "item_suit" );
@@ -3570,7 +3620,7 @@ void CBasePlayer::CheatImpulseCommands( int iImpulse )
 		GiveNamedItem( "ammo_rpgclip" );
 		GiveNamedItem( "weapon_satchel" );
 		GiveNamedItem( "weapon_snark" );
-		GiveNamedItem( "weapon_hornetgun" );
+		GiveNamedItem( "weapon_soda" );
 		GiveNamedItem( "weapon_dosh" );
 		GiveNamedItem( "weapon_beamkatana" );
 		GiveNamedItem( "weapon_ak47" );

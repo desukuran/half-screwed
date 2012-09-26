@@ -74,6 +74,7 @@ void UTIL_PrecacheOther( const char *szClassname ) { }
 void UTIL_BloodDrips( const Vector &origin, const Vector &direction, int color, int amount ) { }
 void UTIL_DecalTrace( TraceResult *pTrace, int decalNumber ) { }
 void UTIL_GunshotDecalTrace( TraceResult *pTrace, int decalNumber ) { }
+void UTIL_PaintballDecalTrace( TraceResult *pTrace, int decalNumber ) { }
 void UTIL_MakeVectors( const Vector &vecAngles ) { }
 BOOL UTIL_IsValidEntity( edict_t *pent ) { return TRUE; }
 void UTIL_SetOrigin( entvars_t *, const Vector &org ) { }

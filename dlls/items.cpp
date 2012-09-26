@@ -30,6 +30,7 @@
 #include "gamerules.h"
 
 extern int gmsgItemPickup;
+extern int gmsgItems;
 
 class CWorldItem : public CBaseEntity
 {
@@ -280,6 +281,39 @@ class CItemAntidote : public CItem
 };
 
 LINK_ENTITY_TO_CLASS(item_antidote, CItemAntidote);
+
+class CItemMarioStar : public CItem
+{
+	void Spawn( void )
+	{ 
+		Precache( );
+		SET_MODEL(ENT(pev), "models/w_starman.mdl");
+		pev->renderfx = kRenderFxGlowShell;
+		pev->rendercolor.x = 255;
+		pev->rendercolor.y = 255;
+		CItem::Spawn( );
+	}
+	void Precache( void )
+	{
+		PRECACHE_MODEL ("models/w_starman.mdl");
+	}
+	BOOL MyTouch( CBasePlayer *pPlayer )
+	{
+		if (pPlayer->mstars > 0)
+			return FALSE;
+
+		pPlayer->mstars = 1;
+
+		MESSAGE_BEGIN(MSG_ONE, gmsgItems, NULL, pPlayer->pev);
+			WRITE_LONG( 1 );
+		MESSAGE_END();
+
+		return TRUE;
+	}
+};
+
+LINK_ENTITY_TO_CLASS(item_mariostar, CItemMarioStar);
+
 
 
 class CItemSecurity : public CItem

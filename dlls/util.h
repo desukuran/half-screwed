@@ -439,7 +439,12 @@ extern DLL_GLOBAL int			g_Language;
 #define SVC_ROOMTYPE		37
 #define	SVC_DIRECTOR		51
 
-
+#define HL_DEATHMATCH		0
+#define HL_TEAMPLAY			1
+#define HS_SHYTPLAY			2
+#define HS_HEAVYRAIN		3
+#define HS_COD				4
+#define HS_TESTMODE			9
 
 // triggers
 #define	SF_TRIGGER_ALLOWMONSTERS	1// monsters allowed to fire this trigger
@@ -451,6 +456,7 @@ extern DLL_GLOBAL int			g_Language;
 #define	SF_BREAK_TOUCH			2// can be 'crashed through' by running player (plate glass)
 #define SF_BREAK_PRESSURE		4// can be broken by a player standing on it
 #define SF_BREAK_CROWBAR		256// instant break if hit with crowbar
+#define SF_BREAK_RESPAWNABLE	5// Respawnable?
 
 // func_pushable (it's also func_breakable, so don't collide with those flags)
 #define SF_PUSH_BREAKABLE		128

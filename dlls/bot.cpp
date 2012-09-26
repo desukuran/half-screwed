@@ -32,6 +32,9 @@ extern DLL_GLOBAL BOOL g_fGameOver;
 extern int gmsgHealth;
 extern int gmsgCurWeapon;
 extern int gmsgSetFOV;
+extern int gmsgSayText;
+
+#define MODE_CHAT 0
 
 #define PLAYER_SEARCH_RADIUS (float)40
 
@@ -2127,4 +2130,3 @@ void CBot::BotThink( void )
                                 gpGlobals->frametime * 1000 );
    // TheFatal - END
 }
-

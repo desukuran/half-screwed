@@ -171,8 +171,6 @@ private:
 
 #include "health.h"
 
-//#include "halloween.h"
-
 #define FADE_TIME 100
 
 
@@ -191,7 +189,6 @@ private:
 	int m_iGeigerRange;
 
 };
-
 //
 //-----------------------------------------------------
 //
@@ -634,8 +631,7 @@ public:
 	CHudTimer		m_Timer;
 	CHudAmmo		m_Ammo;
 	CHudHealth		m_Health;
-//	CHudHalloween	m_Halloween;
-	CHudSpectator		m_Spectator;
+	CHudSpectator	m_Spectator;
 	CHudGeiger		m_Geiger;
 	CHudBattery		m_Battery;
 	CHudTrain		m_Train;
@@ -646,6 +642,7 @@ public:
 	CHudSayText		m_SayText;
 	CHudMenu		m_Menu;
 	CHudAmmoSecondary	m_AmmoSecondary;
+	CHudCOD			m_COD;
 	CHudTextMessage m_TextMessage;
 	CHudStatusIcons m_StatusIcons;
 

@@ -382,7 +382,7 @@ void CBot::BotWeaponInventory( void )
          primary_ammo[WEAPON_EGON] = m_rgAmmo[i];
       }*/
       else if (stricmp("Hornets", CBasePlayerItem::AmmoInfoArray[i].pszName) == 0)
-         primary_ammo[WEAPON_HORNETGUN] = m_rgAmmo[i];
+         primary_ammo[WEAPON_SODA] = m_rgAmmo[i];
       else if (stricmp("Hand Grenade", CBasePlayerItem::AmmoInfoArray[i].pszName) == 0)
          primary_ammo[WEAPON_HANDGRENADE] = m_rgAmmo[i];
       else if (stricmp("Trip Mine", CBasePlayerItem::AmmoInfoArray[i].pszName) == 0)

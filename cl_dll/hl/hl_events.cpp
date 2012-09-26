@@ -28,7 +28,7 @@ void EV_FireMP52( struct event_args_s *args  );
 void EV_Crowbar( struct event_args_s *args );
 void EV_Boombox( struct event_args_s *args );
 void EV_FireRpg( struct event_args_s *args );
-void EV_HornetGunFire( struct event_args_s *args );
+void EV_SodaDrink( struct event_args_s *args );
 void EV_TripmineFire( struct event_args_s *args );
 void EV_SnarkFire( struct event_args_s *args );
 void EV_FireDosh( struct event_args_s *args );
@@ -73,7 +73,7 @@ void Game_HookEvents( void )
 	gEngfuncs.pfnHookEvent( "events/crowbar.sc",				EV_Crowbar );
 	gEngfuncs.pfnHookEvent( "events/boombox.sc",				EV_Boombox );
 	gEngfuncs.pfnHookEvent( "events/rpg.sc",					EV_FireRpg );
-	gEngfuncs.pfnHookEvent( "events/firehornet.sc",				EV_HornetGunFire );
+	gEngfuncs.pfnHookEvent( "events/soda.sc",					EV_SodaDrink );
 	gEngfuncs.pfnHookEvent( "events/tripfire.sc",				EV_TripmineFire );
 	gEngfuncs.pfnHookEvent( "events/snarkfire.sc",				EV_SnarkFire );
 	gEngfuncs.pfnHookEvent( "events/dosh.sc",					EV_FireDosh );
