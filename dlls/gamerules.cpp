@@ -25,6 +25,7 @@
 #include	"teamplay_gamerules.h"
 #include	"shytplay_gamerules.h"
 #include	"heavyrain_gamerules.h"
+#include	"coop_gamerules.h"
 #include	"cod_gamerules.h"
 #include	"test_gamerules.h"
 #include	"skill.h"
@@ -375,6 +376,11 @@ CGameRules *InstallGameRules( void )
 		{
 			g_gameplay = HS_COD;
 			return new CCodplay;
+		}
+		if ( gameplay.value == HS_COOP )
+		{
+			g_gameplay = HS_COOP;
+			return new CCoopplay;
 		}
 		if ( gameplay.value == HS_TESTMODE )
 		{

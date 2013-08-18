@@ -886,6 +886,10 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath=".\coop_gamerules.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\creeper.cpp"
 				>
 			</File>
@@ -3461,6 +3465,10 @@
 			</File>
 			<File
 				RelativePath=".\cod_gamerules.h"
+				>
+			</File>
+			<File
+				RelativePath=".\coop_gamerules.h"
 				>
 			</File>
 			<File

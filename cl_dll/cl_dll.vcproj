@@ -803,6 +803,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\mp3.h"
+				>
+			</File>
+			<File
 				RelativePath="overview.cpp"
 				>
 				<FileConfiguration
@@ -2077,10 +2081,6 @@
 				>
 			</File>
 			<File
-				RelativePath=".\mp3.h"
-				>
-			</File>
-			<File
 				RelativePath="overview.h"
 				>
 			</File>
@@ -2177,14 +2177,22 @@
 				>
 			</File>
 			<Filter
-				Name="audiere"
+				Name="FMOD"
 				>
 				<File
-					RelativePath=".\audiere.h"
+					RelativePath=".\fmod.h"
 					>
 				</File>
 				<File
-					RelativePath=".\audiere.lib"
+					RelativePath=".\fmod_errors.h"
+					>
+				</File>
+				<File
+					RelativePath=".\fmoddyn.h"
+					>
+				</File>
+				<File
+					RelativePath=".\fmodvc.lib"
 					>
 				</File>
 			</Filter>

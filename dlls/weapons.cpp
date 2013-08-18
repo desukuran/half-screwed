@@ -34,7 +34,6 @@
 extern CGraph	WorldGraph;
 extern int gEvilImpulse101;
 
-
 #define NOT_USED 255
 
 DLL_GLOBAL	short	g_sModelIndexLaser;// holds the index for the laser beam
@@ -420,7 +419,7 @@ void W_Precache(void)
 
 
 #if !defined( OEM_BUILD ) && !defined( HLDEMO_BUILD )
-	if ( g_pGameRules->IsDeathmatch() )
+	if ( g_pGameRules->IsDeathmatch() || g_pGameRules->IsCoOp() )
 	{
 		UTIL_PrecacheOther( "weaponbox" );// container for dropped deathmatch weapons
 	}
@@ -660,6 +659,8 @@ void CBasePlayerItem::DefaultTouch( CBaseEntity *pOther )
 	if (pOther->AddPlayerItem( this ))
 	{
 		AttachToPlayer( pPlayer );
+
+		if(!g_pGameRules->IsCOD())
 		EMIT_SOUND(ENT(pPlayer->pev), CHAN_ITEM, "items/gunpickup2.wav", 1, ATTN_NORM);
 	}
 

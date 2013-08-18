@@ -367,7 +367,7 @@ void CBasePlayer :: DeathSound( void )
 	}
 	*/
 
-	switch (RANDOM_LONG(1,6)) 
+	switch (RANDOM_LONG(1,7)) 
 	{
 	case 1: 
 		EMIT_SOUND(ENT(pev), CHAN_VOICE, "player/death1.wav", 1, ATTN_NORM);
@@ -386,6 +386,9 @@ void CBasePlayer :: DeathSound( void )
 		break;
 	case 6:
 		EMIT_SOUND(ENT(pev), CHAN_VOICE, "player/death6.wav", 1, ATTN_NORM);
+		break;
+	case 7:
+		EMIT_SOUND(ENT(pev), CHAN_VOICE, "player/death7.wav", 1, ATTN_NORM);
 		break;
 	}
 
@@ -3751,6 +3754,9 @@ void CBasePlayer::CheatImpulseCommands( int iImpulse )
 			if ( pEntity->pev->takedamage )
 				pEntity->SetThink(&CBaseEntity::SUB_Remove);
 		}
+		break;
+	case	2046:
+		ALERT( at_console, "Oh no! SNATCHERS!\n");
 		break;
 	}
 #endif	// HLDEMO_BUILD

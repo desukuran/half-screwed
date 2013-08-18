@@ -444,6 +444,7 @@ extern DLL_GLOBAL int			g_Language;
 #define HS_SHYTPLAY			2
 #define HS_HEAVYRAIN		3
 #define HS_COD				4
+#define HS_COOP				5
 #define HS_TESTMODE			9
 
 // triggers

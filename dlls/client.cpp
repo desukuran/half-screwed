@@ -483,9 +483,6 @@ void ClientCommand( edict_t *pEntity )
 	}
 	else if ( FStrEq(pcmd, "playaudio" ) )  //AJH - MP3/OGG player (based on killars MP3)
 	{
-		if ( CMD_ARGC() < 1 )
-		return; //If there is no command, kill.
-
 		MESSAGE_BEGIN( MSG_ONE, gmsgPlayMP3, NULL, ENT(pev) );
 			WRITE_STRING( (char *)CMD_ARGV(1) );
 		MESSAGE_END();
@@ -534,14 +531,6 @@ void ClientCommand( edict_t *pEntity )
 		WRITE_BYTE( ENTINDEX(pEntity) );
 		WRITE_STRING( text );
 	MESSAGE_END();
-	}
-	else if (FStrEq(pcmd, "battlecry" ))
-	{
-				switch ( RANDOM_LONG( 0, 1 ) )
-				{
-				case 0:	EMIT_SOUND( ENT(pev), CHAN_WEAPON, "bcry/battlecry1.wav", 1, ATTN_NORM );	break;
-				case 1:	EMIT_SOUND( ENT(pev), CHAN_WEAPON, "bcry/battlecry2.wav", 1, ATTN_NORM );	break;
-				}
 	}
 	else if ( FStrEq(pcmd, "make" ) )
 	{
@@ -1318,6 +1307,7 @@ void ClientPrecache( void )
 	PRECACHE_SOUND("player/death4.wav");
 	PRECACHE_SOUND("player/death5.wav");
 	PRECACHE_SOUND("player/death6.wav");
+	PRECACHE_SOUND("player/death7.wav");
 
 // What a shame
 	PRECACHE_SOUND("player/shame.wav");

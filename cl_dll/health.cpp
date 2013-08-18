@@ -65,6 +65,7 @@ int CHudHealth::Init(void)
 	m_fAttackFront = m_fAttackRear = m_fAttackRight = m_fAttackLeft = 0;
 	giDmgHeight = 0;
 	giDmgWidth = 0;
+	item_mstar = 0;
 
 	memset(m_dmg, 0, sizeof(DAMAGE_IMAGE) * NUM_DMG_TYPES);
 
@@ -77,6 +78,7 @@ void CHudHealth::Reset( void )
 	// make sure the pain compass is cleared when the player respawns
 	m_fAttackFront = m_fAttackRear = m_fAttackRight = m_fAttackLeft = 0;
 
+	item_mstar = 0;
 
 	// force all the flashing damage icons to expire
 	m_bitsDamage = 0;
