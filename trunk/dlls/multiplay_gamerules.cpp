@@ -336,13 +336,13 @@ void CHalfLifeMultiplay :: Think ( void )
 	}
 
 	// Updates once per second
-	if ( timeleft.value != last_time )
-	{
-		g_engfuncs.pfnCvar_DirectSet( &timeleft, UTIL_VarArgs( "%i", time_remaining ) );
-		MESSAGE_BEGIN( MSG_ALL, gmsgTimer, NULL);
-		WRITE_LONG( time_remaining );
-		MESSAGE_END();
-	}
+	//if ( timeleft.value != last_time )
+	//{
+	//	g_engfuncs.pfnCvar_DirectSet( &timeleft, UTIL_VarArgs( "%i", time_remaining ) );
+	//	MESSAGE_BEGIN( MSG_ALL, gmsgTimer, NULL);
+	//	WRITE_LONG( time_remaining );
+	//	MESSAGE_END();
+	//}
 
 	last_frags = frags_remaining;
 	last_time  = time_remaining;

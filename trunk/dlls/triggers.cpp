@@ -1576,7 +1576,11 @@ void CChangeLevel :: ChangeLevelNow( CBaseEntity *pActivator )
 	}
 //	ALERT( at_console, "Level touches %d levels\n", ChangeList( levels, 16 ) );
 	ALERT( at_console, "CHANGE LEVEL: %s %s\n", st_szNextMap, st_szNextSpot );
-	CHANGE_LEVEL( st_szNextMap, st_szNextSpot );
+
+	if (g_pGameRules->IsCoOp())
+		CHANGE_LEVEL( st_szNextMap, NULL );
+	else
+		CHANGE_LEVEL( st_szNextMap, st_szNextSpot );
 }
 
 //
@@ -2010,7 +2014,7 @@ LINK_ENTITY_TO_CLASS( trigger_autosave, CTriggerSave );
 
 void CTriggerSave::Spawn( void )
 {
-	if ( g_pGameRules->IsDeathmatch() )
+	if ( g_pGameRules->IsDeathmatch() || g_pGameRules->IsCoOp() )
 	{
 		REMOVE_ENTITY( ENT(pev) );
 		return;
@@ -2064,7 +2068,7 @@ void CTriggerEndSection::EndSectionUse( CBaseEntity *pActivator, CBaseEntity *pC
 
 void CTriggerEndSection::Spawn( void )
 {
-	if ( g_pGameRules->IsDeathmatch() )
+	if ( g_pGameRules->IsDeathmatch() || g_pGameRules->IsCoOp() )
 	{
 		REMOVE_ENTITY( ENT(pev) );
 		return;

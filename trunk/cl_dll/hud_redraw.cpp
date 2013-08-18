@@ -118,7 +118,6 @@ int CHud :: Redraw( float flTime, int intermission )
 			int ranmus;
 
 			ranmus = gEngfuncs.pfnRandomLong( 0, 9 );
-
 			char * songchoice;
 
 			switch( ranmus )
