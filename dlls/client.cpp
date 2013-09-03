@@ -1273,6 +1273,8 @@ void ClientPrecache( void )
 	PRECACHE_SOUND("player/pl_wade3.wav");
 	PRECACHE_SOUND("player/pl_wade4.wav");
 
+	PRECACHE_SOUND("player/plyrjmp8.wav");
+
 	PRECACHE_SOUND("debris/wood1.wav");			// hit wood texture
 	PRECACHE_SOUND("debris/wood2.wav");
 	PRECACHE_SOUND("debris/wood3.wav");
