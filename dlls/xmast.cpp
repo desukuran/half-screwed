@@ -24,6 +24,7 @@
 #include	"monsters.h"
 #include	"schedule.h"
 #include	"gamerules.h"
+#include	"time.h"
 
 //=========================================================
 // Monster's Anim Events Go Here
@@ -31,6 +32,8 @@
 #define	XMAST_AE_ATTACK_RIGHT		0x01
 #define	XMAST_AE_ATTACK_LEFT			0x02
 #define	XMAST_AE_ATTACK_BOTH			0x03
+
+LPSYSTEMTIME sysDate;
 
 //#define XMAST_FLINCH_DELAY			1		// at most one flinch every n secs
 
@@ -277,11 +280,17 @@ else
 	SET_MODEL(ENT(pev), "models/xmastreem.mdl");
 	UTIL_SetSize( pev, VEC_HUMAN_HULL_MIN, VEC_HUMAN_HULL_MAX );
 
+	sysDate = (LPSYSTEMTIME) malloc(sizeof(SYSTEMTIME));
+	GetLocalTime(sysDate);
+
 	pev->solid			= SOLID_SLIDEBOX;
 	pev->movetype		= MOVETYPE_STEP;
 	m_bloodColor		= BLOOD_COLOR_RED;
-	pev->health			= gSkillData.xmastHealth;
 	pev->view_ofs		= VEC_VIEW;// position of the eyes relative to monster's origin.
+	if (sysDate->wMonth == 12 && sysDate->wDay == 25 )
+		pev->health			= gSkillData.xmastHealth*2;
+	else
+		pev->health			= gSkillData.xmastHealth;
 	m_flFieldOfView		= VIEW_FIELD_WIDE;// indicates the width of this monster's forward view cone ( as a dotproduct result )
 	m_MonsterState		= MONSTERSTATE_NONE;
 	m_afCapability		= bits_CAP_HEAR | bits_CAP_OPEN_DOORS | bits_CAP_AUTO_DOORS | bits_CAP_DOORS_GROUP;

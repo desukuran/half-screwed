@@ -46,6 +46,7 @@ cvar_t	testmonsters = {"test_monsters_enable","1", FCVAR_SERVER };
 cvar_t	scipgvel	 = {"test_scipg_vel","800", FCVAR_SERVER };
 cvar_t	pausebots	 = {"test_pause_bots","0", FCVAR_SERVER };
 cvar_t	enablebots	 = {"addbot_enable","0", FCVAR_SERVER };
+cvar_t	bottaunt	 = {"bot_taunt","0", FCVAR_SERVER };
 cvar_t	shtugn	= {"shotgun_enable","1", FCVAR_SERVER };
 cvar_t	cwc ={"chris_bravery","0", FCVAR_SERVER };
 
@@ -585,6 +586,7 @@ void GameDLLInit( void )
 	CVAR_REGISTER (&scipgvel);
 	CVAR_REGISTER (&pausebots);
 	CVAR_REGISTER (&enablebots);
+	CVAR_REGISTER (&bottaunt);
 	CVAR_REGISTER (&shtugn);
 	CVAR_REGISTER (&cwc);
 //	CVAR_REGISTER (&shtogn);

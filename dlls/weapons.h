@@ -1038,7 +1038,7 @@ public:
 	void Spawn( void );
 	void Precache( void );
 	void Reload( void );
-	int iItemSlot( void ) { return 5; }
+	int iItemSlot( void ) { return 3; }
 	int GetItemInfo(ItemInfo *p);
 	int AddToPlayer( CBasePlayer *pPlayer );
 

@@ -49,8 +49,7 @@ int CHudCOD::VidInit(void)
 	m_HUD_codrank2 = gHUD.GetSpriteIndex( "cod1" );
 	m_prc2 = &gHUD.GetSpriteRect(m_HUD_codrank2);
 	m_iHeight = m_prc2->bottom - m_prc2->top;
-	m_iWidth = m_prc2->right - m_prc2->left;
-	m_iWidth = m_iWidth/2;
+	m_iWidth = (m_prc2->right - m_prc2->left)/2;
 	m_fFade = 0;
 
 	int dev = CVAR_GET_FLOAT( "developer" );
