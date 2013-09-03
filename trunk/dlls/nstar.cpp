@@ -262,7 +262,7 @@ int CNStar::GetItemInfo(ItemInfo *p)
 	p->iMaxAmmo2 = -1;
 	p->iMaxClip = NSTAR_MAX_CLIP;
 	p->iSlot = 3;
-	p->iPosition = 4;
+	p->iPosition = 3;
 	p->iId = WEAPON_NSTAR;
 	p->iFlags = 0;
 	p->iWeight = NSTAR_WEIGHT;

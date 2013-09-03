@@ -281,7 +281,7 @@ int CSciPG::GetItemInfo(ItemInfo *p)
 	p->iMaxAmmo2 = -1;
 	p->iMaxClip = BOW_MAX_CLIP;
 	p->iSlot = 3;
-	p->iPosition = 3;
+	p->iPosition = 2;
 	p->iId = WEAPON_SCIENTIST;
 	p->iFlags = 0;
 	p->iWeight = CROWBAR_WEIGHT;

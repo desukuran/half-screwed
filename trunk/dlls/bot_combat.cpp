@@ -22,6 +22,7 @@
 
 extern int f_Observer;  // flag to indicate if player is in observer mode
 extern cvar_t pausebots; //Pause the bots in test mode
+extern cvar_t bottaunt;
 
 // weapon firing delay based on skill (min and max delay for each weapon)
 float primary_fire_delay[WEAPON_SNARK+1][5][2] = {
@@ -132,10 +133,25 @@ CBaseEntity * CBot::BotFindEnemy( void )
       {
          if (!pBotEnemy->IsAlive())  // is the enemy dead?, assume bot killed it
          {
-            // the enemy is dead, jump for joy about 10% of the time
-            if (RANDOM_LONG(1, 100) <= 10)
-               pev->button |= IN_JUMP;
+            
+			if (bottaunt.value > 0)
+			{
+				 //TODO: POPULATE AN ARRAY TO HAVE CUSTOM BOT OWNAGE
+				if (RANDOM_LONG(1, 100) <= 10)
+				{
+					char text[1024];
+					switch(RANDOM_LONG(0,4))
+					{
+						case 0: sprintf( text, "%s: DONE!\n", STRING(pev->netname) ); break;
+						case 1: sprintf( text, "%s: BULLDOZED!\n", STRING(pev->netname) ); break;
+						case 2: sprintf( text, "%s: Taking out the trash; all 9000 pounds!\n", STRING(pev->netname) ); break;
+						case 3: sprintf( text, "%s: I KEEP A RECORD OF MY K/D THANK YOU!\n", STRING(pev->netname) ); break;
+						case 4: sprintf( text, "%s: lol gonna fuk ur mother lmao!\n", STRING(pev->netname) ); break;
+					}
 
+					UTIL_SayTextAll( text, pBotEnemy );
+				}
+			}
 			//Scream 15% of the time
 			if (RANDOM_LONG(1,100) <= 15)
 			{
