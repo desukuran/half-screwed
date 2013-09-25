@@ -459,7 +459,7 @@ void CBasePlayer :: TraceAttack( entvars_t *pevAttacker, float flDamage, Vector 
 
 		if ( CVAR_GET_FLOAT("ultraviolence") != 0)
 		{
-		UTIL_BloodStream( ptr->vecEndPos, UTIL_RandomBloodVector(), 330, RANDOM_LONG(50,150));
+			UTIL_BloodStream( ptr->vecEndPos, UTIL_RandomBloodVector(), 330, RANDOM_LONG(50,150));
 		}
 
 		SpawnBlood(ptr->vecEndPos, BloodColor(), flDamage);// a little surface blood.

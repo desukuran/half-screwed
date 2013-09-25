@@ -1340,6 +1340,9 @@ void ClientPrecache( void )
 	PRECACHE_SOUND("player/geiger3.wav");
 	PRECACHE_SOUND("player/geiger2.wav");
 	PRECACHE_SOUND("player/geiger1.wav");
+
+	PRECACHE_SOUND ("bcry/battlecry1.wav");
+	PRECACHE_SOUND ("bcry/battlecry2.wav");
 	
 	PRECACHE_SOUND("common/jingle1.wav");
 
@@ -1405,9 +1408,6 @@ void ClientPrecache( void )
       PRECACHE_SOUND (DV_TNT3);
       PRECACHE_SOUND (DV_TNT4);
       PRECACHE_SOUND (DV_TNT5);
-
-	  PRECACHE_SOUND ("bcry/battlecry1.wav");
-	  PRECACHE_SOUND ("bcry/battlecry2.wav");
 
       PRECACHE_SOUND (USE_TEAMPLAY_SND);
       PRECACHE_SOUND (USE_TEAMPLAY_LATER_SND);

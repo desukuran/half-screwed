@@ -278,11 +278,10 @@ int CHudDeathNotice :: MsgFunc_DeathMsg( const char *pszName, int iSize, void *p
 		else
 		{
 
-			ConsolePrint( "One dude: " );
+			ConsolePrint( "One man. " );
 			ConsolePrint( rgDeathNoticeList[i].szVictim );
-			ConsolePrint( " got a reservation at dorsia while " );
+			ConsolePrint( " FUCKING DESTROYED " );
 			ConsolePrint( rgDeathNoticeList[i].szKiller );
-			ConsolePrint( ", (mostly jealous), kills him to \"Hip to be Square.\"" );
 
 		}
 
