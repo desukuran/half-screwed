@@ -588,14 +588,10 @@ void CScientist :: RunTask( Task_t *pTask )
 //=========================================================
 int	CScientist :: Classify ( void )
 {
-if (g_pGameRules->IsTest() && testmonsters.value <= 0)
-	{
-	return	CLASS_NONE;
-	}
+	if (g_pGameRules->IsTest() && testmonsters.value <= 0)
+			return	CLASS_NONE;
 	else
-	{
-	return	CLASS_HUMAN_PASSIVE;
-	}
+			return	CLASS_HUMAN_PASSIVE;
 }
 
 

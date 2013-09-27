@@ -234,8 +234,8 @@ void ClientKill( edict_t *pEntity )
 
 	switch(RANDOM_LONG (0,1))
 	{
-	case 0:pl->Killed( pev, GIB_NEVER ); break;
-	case 1:pl->Killed( pev, GIB_ALWAYS ); break;
+		case 0:pl->Killed( pev, GIB_NEVER ); break;
+		case 1:pl->Killed( pev, GIB_ALWAYS ); break;
 	}
 //	pev->modelindex = g_ulModelIndexPlayer;
 //	pev->frags -= 2;		// extra penalty
@@ -1368,6 +1368,8 @@ void ClientPrecache( void )
 		UTIL_PrecacheOther("monster_sinistar");
 
 		UTIL_PrecacheOther("monster_chrischan");
+
+		UTIL_PrecacheOther("monster_homestuck");
 
 
    // START BOT
