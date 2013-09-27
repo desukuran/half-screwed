@@ -29,6 +29,7 @@
 #include "animation.h"
 #include "weapons.h"
 #include "func_break.h"
+#include "gamerules.h"
 #include "time.h"
 
 extern DLL_GLOBAL Vector		g_vecAttackDir;
@@ -702,6 +703,15 @@ void CBaseMonster :: Killed( entvars_t *pevAttacker, int iGib )
 	}
 	else if ( pev->flags & FL_MONSTER )
 	{
+		if (g_pGameRules->IsMonster())
+		{
+					char buf[1024];
+					
+					sprintf( buf, "%s: %s kill!\n", STRING(pevAttacker->netname), STRING(pev->classname) );
+
+					UTIL_SayTextAllHS( buf );
+		}
+
 		SetTouch( NULL );
 		BecomeDead();
 	}
