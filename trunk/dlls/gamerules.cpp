@@ -25,6 +25,7 @@
 #include	"teamplay_gamerules.h"
 #include	"shytplay_gamerules.h"
 #include	"heavyrain_gamerules.h"
+#include	"monhunt_gamerules.h"
 #include	"coop_gamerules.h"
 #include	"cod_gamerules.h"
 #include	"test_gamerules.h"
@@ -381,6 +382,11 @@ CGameRules *InstallGameRules( void )
 		{
 			g_gameplay = HS_COOP;
 			return new CCoopplay;
+		}
+		if ( gameplay.value == HS_MONSTER )
+		{
+			g_gameplay = HS_MONSTER;
+			return new CMonsterplay;
 		}
 		if ( gameplay.value == HS_TESTMODE )
 		{

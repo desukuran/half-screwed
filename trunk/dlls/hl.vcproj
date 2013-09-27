@@ -29,6 +29,7 @@
 			/>
 			<Tool
 				Name="VCCustomBuildTool"
+				Description=""
 				CommandLine=""
 				Outputs=""
 			/>
@@ -115,7 +116,8 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine=""
+				Description="Copying Server DLLs now!"
+				CommandLine="copy &quot;$(TargetPath)&quot; &quot;F:\Games\Steam\SteamApps\common\Half-Life\half-screwed\dlls&quot;"
 			/>
 		</Configuration>
 		<Configuration
@@ -1996,6 +1998,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\monhunt_gamerules.cpp"
+				>
+			</File>
+			<File
 				RelativePath="monstermaker.cpp"
 				>
 				<FileConfiguration
@@ -3529,6 +3535,10 @@
 			</File>
 			<File
 				RelativePath="items.h"
+				>
+			</File>
+			<File
+				RelativePath=".\monhunt_gamerules.h"
 				>
 			</File>
 			<File
