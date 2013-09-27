@@ -48,7 +48,7 @@ cvar_t	pausebots	 = {"test_pause_bots","0", FCVAR_SERVER };
 cvar_t	enablebots	 = {"addbot_enable","0", FCVAR_SERVER };
 cvar_t	bottaunt	 = {"bot_taunt","0", FCVAR_SERVER };
 cvar_t	shtugn	= {"shotgun_enable","1", FCVAR_SERVER };
-cvar_t	cwc ={"chris_bravery","0", FCVAR_SERVER };
+cvar_t	cwc = {"chris_bravery","0", FCVAR_SERVER };
 
 cvar_t	mp3player = { "mp3player", "1", FCVAR_SERVER };
 cvar_t	mp3volume = { "mp3volume", "1", FCVAR_SERVER };

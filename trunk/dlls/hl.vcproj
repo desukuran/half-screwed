@@ -1724,6 +1724,10 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath=".\homestuck.cpp"
+				>
+			</File>
+			<File
 				RelativePath="hornet.cpp"
 				>
 				<FileConfiguration
