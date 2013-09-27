@@ -76,7 +76,7 @@ void CHeavyRainplay::PlayerKilled( CBasePlayer *pVictim, entvars_t *pKiller, ent
 	if ( pVictim->pev == pKiller )  
 	{  // killed self
 		pVictim->pev->frags -= 10;
-		char victext[1024] = "You killed yourself looking for Jason\nYou sacrificed your life for Jason\nYou lose 10 Jasons for revival costs.\n";
+		char victext[1024] = "You sacrificed your life for Jason\nYou lose 10 Jasons for revival costs.\n";
 		UTIL_SayText( victext, pVictim );
 		return;
 	}
@@ -102,7 +102,7 @@ void CHeavyRainplay::PlayerKilled( CBasePlayer *pVictim, entvars_t *pKiller, ent
 	{
 		CBasePlayer *PK = (CBasePlayer*)ep;
 
-		char kiltext[1024] = "You stole your victim's Jasons and it is now added to your score.\nNo douct hes out for blood, watch out ;)\n";
+		char kiltext[1024] = "You stole your victim's Jasons and it is now added to your score.\nNo doubt hes out for blood, watch out ;)\n";
 		UTIL_SayText( kiltext, PK );
 
 		MESSAGE_BEGIN( MSG_ALL, gmsgScoreInfo );

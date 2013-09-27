@@ -893,6 +893,13 @@ void UTIL_SayTextAll( const char *pText, CBaseEntity *pEntity )
 	MESSAGE_END();
 }
 
+void UTIL_SayTextAllHS( const char *pText )		//TODO: Probably Avoid this?
+{
+	MESSAGE_BEGIN( MSG_ALL, gmsgSayText, NULL );
+		WRITE_BYTE( 1 );
+		WRITE_STRING( pText );
+	MESSAGE_END();
+}
 
 char *UTIL_dtos1( int d )
 {
