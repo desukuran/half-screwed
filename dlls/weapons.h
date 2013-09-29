@@ -723,7 +723,7 @@ public:
 	int AddToPlayer( CBasePlayer *pPlayer );
 
 	void PrimaryAttack( void );
-	void SecondaryAttack( void );
+	//void SecondaryAttack( void );
 	BOOL Deploy( );
 	void Reload( void );
 	void WeaponIdle( void );

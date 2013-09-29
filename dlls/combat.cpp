@@ -676,6 +676,26 @@ void CBaseMonster :: Killed( entvars_t *pevAttacker, int iGib )
 					
 					sprintf( buf, "%s: %s gibbed and killed!\n", STRING(pevAttacker->netname), STRING(pev->classname) );
 
+					pevAttacker->frags += 1;
+
+					CBaseEntity *ep = CBaseEntity::Instance( pevAttacker );
+					if ( ep && ep->Classify() == CLASS_PLAYER )
+					{
+						CBasePlayer *PK = (CBasePlayer*)ep;
+
+						MESSAGE_BEGIN( MSG_ALL, gmsgScoreInfo );
+							WRITE_BYTE( ENTINDEX(PK->edict()) );
+							WRITE_SHORT( PK->pev->frags );
+							WRITE_SHORT( PK->m_iDeaths );
+							WRITE_SHORT( 0 );
+							WRITE_SHORT( g_pGameRules->GetTeamIndex( PK->m_szTeamName) + 1 );
+						MESSAGE_END();
+
+						// let the killer paint another decal as soon as he'd like.
+						PK->m_flNextDecalTime = gpGlobals->time;
+						PK->m_flNextShame = gpGlobals->time;
+					}
+
 					UTIL_SayTextAllHS( buf );
 		}
 		CallGibMonster();
@@ -687,27 +707,28 @@ void CBaseMonster :: Killed( entvars_t *pevAttacker, int iGib )
 		{
 					char buf[1024];
 					
-					sprintf( buf, "%s: %s kill!\n", STRING(pevAttacker->netname), STRING(pev->classname) );
+					sprintf( buf, "%s: %s kill!\n", STRING(pevAttacker->netname), STRING(pev->classname) ); //TODO: Death Notice.
 
 					pevAttacker->frags += 1;
 
-	CBaseEntity *ep = CBaseEntity::Instance( pevAttacker );
-	if ( ep && ep->Classify() == CLASS_PLAYER )
-	{
-		CBasePlayer *PK = (CBasePlayer*)ep;
+					CBaseEntity *ep = CBaseEntity::Instance( pevAttacker );
+					if ( ep && ep->Classify() == CLASS_PLAYER )
+					{
+						CBasePlayer *PK = (CBasePlayer*)ep;
 
-		MESSAGE_BEGIN( MSG_ALL, gmsgScoreInfo );
-			WRITE_BYTE( ENTINDEX(PK->edict()) );
-			WRITE_SHORT( PK->pev->frags );
-			WRITE_SHORT( PK->m_iDeaths );
-			WRITE_SHORT( 0 );
-			WRITE_SHORT( g_pGameRules->GetTeamIndex( PK->m_szTeamName) + 1 );
-		MESSAGE_END();
+						MESSAGE_BEGIN( MSG_ALL, gmsgScoreInfo );
+							WRITE_BYTE( ENTINDEX(PK->edict()) );
+							WRITE_SHORT( PK->pev->frags );
+							WRITE_SHORT( PK->m_iDeaths );
+							WRITE_SHORT( 0 );
+							WRITE_SHORT( g_pGameRules->GetTeamIndex( PK->m_szTeamName) + 1 );
+						MESSAGE_END();
 
-		// let the killer paint another decal as soon as he'd like.
-		PK->m_flNextDecalTime = gpGlobals->time;
-		PK->m_flNextShame = gpGlobals->time;
-	}
+						// let the killer paint another decal as soon as he'd like.
+						PK->m_flNextDecalTime = gpGlobals->time;
+						PK->m_flNextShame = gpGlobals->time;
+					}
+
 					UTIL_SayTextAllHS( buf );
 		}
 

@@ -100,6 +100,7 @@ typedef void (CBaseEntity::*USEPTR)( CBaseEntity *pActivator, CBaseEntity *pCall
 #define CLASS_ALIEN_BIOWEAPON	13 // hornets and snarks.launched by the alien menace
 #define CLASS_GAYGLENN			14 // I'm gay
 #define CLASS_CWC				15 // trolls
+#define CLASS_MONSTERHUNT		16
 #define	CLASS_BARNACLE			99 // special because no one pays attention to it, and it eats a wide cross-section of creatures.
 
 class CBaseEntity;
