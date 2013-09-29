@@ -308,6 +308,8 @@ void CTripmineGrenade :: BeamBreakThink( void  )
 		return;
 	}
 
+	m_pBeam->SetColor( RANDOM_FLOAT(0,255), RANDOM_FLOAT(0,255), RANDOM_FLOAT(0,255));
+
 	pev->nextthink = gpGlobals->time + 0.1;
 }
 

@@ -263,13 +263,17 @@ int CBarney :: ISoundMask ( void)
 //=========================================================
 int	CBarney :: Classify ( void )
 {
-if (g_pGameRules->IsTest() && testmonsters.value <= 0)
+	if (g_pGameRules->IsTest() && testmonsters.value <= 0)
 	{
-	return	CLASS_NONE;
+		return	CLASS_NONE;
+	}
+	else if (g_pGameRules->IsMonster())
+	{
+		return	CLASS_MONSTERHUNT;
 	}
 	else
 	{
-	return	CLASS_PLAYER_ALLY;
+		return	CLASS_PLAYER_ALLY;
 	}
 }
 

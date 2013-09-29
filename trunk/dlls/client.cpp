@@ -1289,6 +1289,8 @@ void ClientPrecache( void )
 
 	PRECACHE_SOUND("starman.wav");
 
+	PRECACHE_SOUND("item/cv2_get.wav");
+
 	PRECACHE_SOUND( SOUND_FLASHLIGHT_ON );
 	PRECACHE_SOUND( SOUND_FLASHLIGHT_OFF );
 

@@ -992,6 +992,7 @@ void CHalfLifeMultiplay::DeathNotice( CBasePlayer *pVictim, entvars_t *pKiller, 
 //=========================================================
 void CHalfLifeMultiplay :: PlayerGotWeapon( CBasePlayer *pPlayer, CBasePlayerItem *pWeapon )
 {
+	EMIT_SOUND( ENT(pPlayer->pev), CHAN_ITEM, "item/cv2_get.wav", 1, ATTN_NORM );
 }
 
 //=========================================================

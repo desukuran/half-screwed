@@ -5,6 +5,8 @@
 // $NoKeywords: $																					  //
 //====================================================================================================//
 
+//THIS IS CURRENTLY BROKEN IN THE DLL SIDE. IT CAUSED LOTS OF LAG.
+
 #include "hud.h"
 #include "cl_util.h"
 #include "parsemsg.h"
