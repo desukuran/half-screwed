@@ -11,4 +11,6 @@ public:
 	virtual void PlayerSpawn( CBasePlayer *pPlayer );
 	virtual void PlayerKilled( CBasePlayer *pVictim, entvars_t *pKiller, entvars_t *pInflictor );
 	virtual int JasonsStolen( int jason );
+
+	virtual int iKillforMonster( void );
 };

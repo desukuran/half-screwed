@@ -30,6 +30,7 @@
 #include "weapons.h"
 #include "func_break.h"
 #include "gamerules.h"
+#include	"player.h"
 #include "time.h"
 
 extern DLL_GLOBAL Vector		g_vecAttackDir;
@@ -37,6 +38,8 @@ extern DLL_GLOBAL int			g_iSkillLevel;
 
 extern Vector VecBModelOrigin( entvars_t* pevBModel );
 extern entvars_t *g_pevLastInflictor;
+
+extern int gmsgScoreInfo;
 
 #define GERMAN_GIB_COUNT		4
 #define	HUMAN_GIB_COUNT			6
@@ -667,17 +670,44 @@ void CBaseMonster :: Killed( entvars_t *pevAttacker, int iGib )
 
 	if	( ShouldGibMonster( iGib ) )
 	{
+		if (g_pGameRules->IsMonster()) //Monster Hunt Mode
+		{
+					char buf[1024];
+					
+					sprintf( buf, "%s: %s gibbed and killed!\n", STRING(pevAttacker->netname), STRING(pev->classname) );
+
+					UTIL_SayTextAllHS( buf );
+		}
 		CallGibMonster();
 		return;
 	}
 	else if ( pev->flags & FL_MONSTER )
 	{
-		if (g_pGameRules->IsMonster())
+		if (g_pGameRules->IsMonster()) //Monster Hunt Mode
 		{
 					char buf[1024];
 					
 					sprintf( buf, "%s: %s kill!\n", STRING(pevAttacker->netname), STRING(pev->classname) );
 
+					pevAttacker->frags += 1;
+
+	CBaseEntity *ep = CBaseEntity::Instance( pevAttacker );
+	if ( ep && ep->Classify() == CLASS_PLAYER )
+	{
+		CBasePlayer *PK = (CBasePlayer*)ep;
+
+		MESSAGE_BEGIN( MSG_ALL, gmsgScoreInfo );
+			WRITE_BYTE( ENTINDEX(PK->edict()) );
+			WRITE_SHORT( PK->pev->frags );
+			WRITE_SHORT( PK->m_iDeaths );
+			WRITE_SHORT( 0 );
+			WRITE_SHORT( g_pGameRules->GetTeamIndex( PK->m_szTeamName) + 1 );
+		MESSAGE_END();
+
+		// let the killer paint another decal as soon as he'd like.
+		PK->m_flNextDecalTime = gpGlobals->time;
+		PK->m_flNextShame = gpGlobals->time;
+	}
 					UTIL_SayTextAllHS( buf );
 		}
 
@@ -685,13 +715,12 @@ void CBaseMonster :: Killed( entvars_t *pevAttacker, int iGib )
 		BecomeDead();
 	}
 	
-	// don't let the status bar glitch for players.with <0 health.
+	// don't let the status bar glitch for players with <0 health.
 	if (pev->health < -99)
 	{
 		pev->health = 0;
 	}
 	
-	//pev->enemy = ENT( pevAttacker );//why? (sjb)
 	
 	m_IdealMonsterState = MONSTERSTATE_DEAD;
 }
