@@ -667,6 +667,10 @@ void CScientist :: Spawn( void )
 	pev->solid			= SOLID_SLIDEBOX;
 	pev->movetype		= MOVETYPE_STEP;
 	m_bloodColor		= BLOOD_COLOR_RED;
+
+	if (g_pGameRules->IsMonster())
+	pev->health			= gSkillData.scientistHealth*30;
+	else
 	pev->health			= gSkillData.scientistHealth;
 	pev->view_ofs		= Vector ( 0, 0, 50 );// position of the eyes relative to monster's origin.
 	m_flFieldOfView		= VIEW_FIELD_WIDE; // NOTE: we need a wide field of view so scientists will notice player and say hello

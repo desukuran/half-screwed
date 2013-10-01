@@ -10,6 +10,9 @@ public:
 	virtual BOOL IsMonster( void );
 	virtual void PlayerSpawn( CBasePlayer *pPlayer );
 	virtual void PlayerKilled( CBasePlayer *pVictim, entvars_t *pKiller, entvars_t *pInflictor );
+	virtual int PlayerRelationship( CBaseEntity *pPlayer, CBaseEntity *pTarget );
+	virtual BOOL FPlayerCanTakeDamage( CBasePlayer *pPlayer, CBaseEntity *pAttacker );
+
 	virtual int JasonsStolen( int jason );
 
 	virtual int iKillforMonster( void );

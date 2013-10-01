@@ -73,6 +73,30 @@ void CMonsterplay::PlayerKilled( CBasePlayer *pVictim, entvars_t *pKiller, entva
 		
 }
 
+int CMonsterplay::PlayerRelationship( CBaseEntity *pPlayer, CBaseEntity *pTarget )
+{
+	if ( !pPlayer || !pTarget || !pTarget->IsPlayer() )
+		return GR_NOTTEAMMATE;
+
+	// monster hunt has only teammates
+	return GR_TEAMMATE;
+}
+
+BOOL CMonsterplay::FPlayerCanTakeDamage( CBasePlayer *pPlayer, CBaseEntity *pAttacker )
+{
+	if ( pAttacker && PlayerRelationship( pPlayer, pAttacker ) == GR_TEAMMATE )
+	{
+		// my teammate hit me.
+		if ( (friendlyfire.value == 0) && (pAttacker != pPlayer) )
+		{
+			// friendly fire is off, and this hit came from someone other than myself,  then don't get hurt
+			return FALSE;
+		}
+	}
+
+	return CHalfLifeMultiplay::FPlayerCanTakeDamage( pPlayer, pAttacker );
+}
+
 int CMonsterplay::iKillforMonster()
 {
 	return 1; //TODO: Filter by monster for different points.
@@ -80,5 +104,5 @@ int CMonsterplay::iKillforMonster()
 
 int CMonsterplay::JasonsStolen(int jason)
 {
-return jason; //JASON! I found you!
+	return jason; //JASON! I found you!
 }
