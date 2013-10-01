@@ -655,6 +655,7 @@ void CHalfLifeMultiplay :: PlayerSpawn( CBasePlayer *pPlayer )
 	  ClientPrint(pPlayer->pev, HUD_PRINTCENTER, "MERRY CHRISTMAS!\nHave a shotgun and a bow!"); //digamos al cliente
 	  pPlayer->GiveNamedItem( "weapon_shotgun" );
 	  pPlayer->GiveNamedItem( "weapon_bow" );
+	  //CLIENT_COMMAND(ENT(pPlayer->pev), "spk \"have some presence\"\n");
 	}
 
 	if (sysDate->wMonth == 10 && sysDate->wDay == 31 ) {

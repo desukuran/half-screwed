@@ -672,6 +672,8 @@ void CBaseMonster :: Killed( entvars_t *pevAttacker, int iGib )
 	{
 		if (g_pGameRules->IsMonster()) //Monster Hunt Mode
 		{
+
+						//TODO: Make function to simplify this
 					char buf[1024];
 					
 					sprintf( buf, "%s: %s gibbed and killed!\n", STRING(pevAttacker->netname), STRING(pev->classname) );
@@ -690,6 +692,12 @@ void CBaseMonster :: Killed( entvars_t *pevAttacker, int iGib )
 							WRITE_SHORT( 0 );
 							WRITE_SHORT( g_pGameRules->GetTeamIndex( PK->m_szTeamName) + 1 );
 						MESSAGE_END();
+
+//						MESSAGE_BEGIN( MSG_ALL, gmsgDeathMsg );
+//							WRITE_BYTE( killer_index );						// the killer
+//							WRITE_BYTE( ENTINDEX(pVictim->edict()) );		// the victim
+//							WRITE_STRING( killer_weapon_name );		// what they were killed by (should this be a string?)
+//						MESSAGE_END();
 
 						// let the killer paint another decal as soon as he'd like.
 						PK->m_flNextDecalTime = gpGlobals->time;

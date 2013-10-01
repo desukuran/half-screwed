@@ -51,7 +51,7 @@ public:
 
 	void PainSound( void );
 	void AlertSound( void );
-	void IdleSound( void );
+	//void IdleSound( void );
 	void AttackSound( void );
 
 	static const char *pAttackSounds[];
@@ -108,13 +108,13 @@ const char *CXmast::pPainSounds[] =
 //=========================================================
 int	CXmast :: Classify ( void )
 {
-if (g_pGameRules->IsTest() && testmonsters.value <= 0)
+	if (g_pGameRules->IsTest() && testmonsters.value <= 0)
 	{
-	return	CLASS_NONE;
+		return	CLASS_NONE;
 	}
 	else
 	{
-	return	CLASS_ALIEN_MONSTER;
+		return	CLASS_ALIEN_MONSTER;
 	}
 }
 
@@ -168,14 +168,6 @@ void CXmast :: AlertSound( void )
 	int pitch = 95 + RANDOM_LONG(0,9);
 
 	EMIT_SOUND_DYN ( ENT(pev), CHAN_VOICE, pAlertSounds[ RANDOM_LONG(0,ARRAYSIZE(pAlertSounds)-1) ], 1.0, ATTN_NORM, 0, pitch );
-}
-
-void CXmast :: IdleSound( void )
-{
-	int pitch = 95 + RANDOM_LONG(0,9);
-
-	// Play a random idle sound
-	//EMIT_SOUND_DYN ( ENT(pev), CHAN_VOICE, pIdleSounds[ RANDOM_LONG(0,ARRAYSIZE(pIdleSounds)-1) ], 1.0, ATTN_NORM, 0, 100 + RANDOM_LONG(-5,5) );
 }
 
 void CXmast :: AttackSound( void )
