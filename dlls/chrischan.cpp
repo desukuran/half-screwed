@@ -173,8 +173,8 @@ void CChrisChan :: Spawn()
 	pev->solid			= SOLID_SLIDEBOX;
 	pev->movetype		= MOVETYPE_STEP;
 	m_bloodColor		= BLOOD_COLOR_LAVENDER; //There's part of why I chose this.
-	pev->health			= 251;
-	pev->view_ofs		= Vector ( 0, 0, 0 );// position of the eyes relative to monster's origin.
+	pev->health			= CBaseMonster::GetHealth( 251, 3 );
+	pev->view_ofs		= Vector ( 0, 0, 0 );// poBsition of the eyes relative to monster's origin.
 	m_flFieldOfView		= 0.5;// indicates the width of this monster's forward view cone ( as a dotproduct result )
 	m_MonsterState		= MONSTERSTATE_NONE;
 

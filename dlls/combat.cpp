@@ -673,10 +673,40 @@ void CBaseMonster :: Killed( entvars_t *pevAttacker, int iGib )
 		if (g_pGameRules->IsMonster()) //Monster Hunt Mode
 		{
 
+	const char *monster_name = STRING(pev->classname);
+
+	// Hack to fix name change
+	char *gayglenn = "Gay Glenn";
+	char *barney = "Barney";
+	char *scientist = "Scientist";
+	char *xmast = "X-Mas Tree";
+	char *sinistar = "Sinistar";
+	char *cwc = "Chris-Chan";
+	char *zombie = "Zombie";
+
+	if ( strncmp( monster_name, "monster_", 8 ) == 0 )
+		monster_name += 8;
+
+	// replace the code names with the 'real' names
+	if ( !strcmp( monster_name, "gay" ) )
+		monster_name = gayglenn;
+	else if ( !strcmp( monster_name, "barney" ) )
+		monster_name = barney;
+	else if ( !strcmp( monster_name, "xmast" ) )
+		monster_name = xmast;
+	else if ( !strcmp( monster_name, "scientist" ) )
+		monster_name = scientist;
+	else if ( !strcmp( monster_name, "sinistar" ) )
+		monster_name = sinistar;
+	else if ( !strcmp( monster_name, "cwc" ) )
+		monster_name = cwc;
+	else if ( !strcmp( monster_name, "zombie" ) )
+		monster_name = zombie;
+
 						//TODO: Make function to simplify this
 					char buf[1024];
 					
-					sprintf( buf, "%s: %s gibbed and killed!\n", STRING(pevAttacker->netname), STRING(pev->classname) );
+					sprintf( buf, "%s: %s gibbed and killed!\n", STRING(pevAttacker->netname), monster_name );
 
 					pevAttacker->frags += 1;
 
@@ -713,9 +743,40 @@ void CBaseMonster :: Killed( entvars_t *pevAttacker, int iGib )
 	{
 		if (g_pGameRules->IsMonster()) //Monster Hunt Mode
 		{
+
+		const char *monster_name = STRING(pev->classname);
+
+		// Hack to fix name change
+		char *gayglenn = "Gay Glenn";
+		char *barney = "Barney";
+		char *scientist = "Scientist";
+		char *xmast = "X-Mas Tree";
+		char *sinistar = "Sinistar";
+		char *cwc = "Chris-Chan";
+		char *zombie = "Zombie";
+
+		if ( strncmp( monster_name, "monster_", 8 ) == 0 )
+			monster_name += 8;
+
+		// replace the code names with the 'real' names
+		if ( !strcmp( monster_name, "gay" ) )
+			monster_name = gayglenn;
+		else if ( !strcmp( monster_name, "barney" ) )
+			monster_name = barney;
+		else if ( !strcmp( monster_name, "xmast" ) )
+			monster_name = xmast;
+		else if ( !strcmp( monster_name, "scientist" ) )
+			monster_name = scientist;
+		else if ( !strcmp( monster_name, "sinistar" ) )
+			monster_name = sinistar;
+		else if ( !strcmp( monster_name, "cwc" ) )
+			monster_name = cwc;
+		else if ( !strcmp( monster_name, "zombie" ) )
+			monster_name = zombie;
+
 					char buf[1024];
 					
-					sprintf( buf, "%s: %s kill!\n", STRING(pevAttacker->netname), STRING(pev->classname) ); //TODO: Death Notice.
+					sprintf( buf, "%s: %s kill!\n", STRING(pevAttacker->netname), monster_name ); //TODO: Death Notice.
 
 					pevAttacker->frags += 1;
 
@@ -749,7 +810,6 @@ void CBaseMonster :: Killed( entvars_t *pevAttacker, int iGib )
 	{
 		pev->health = 0;
 	}
-	
 	
 	m_IdealMonsterState = MONSTERSTATE_DEAD;
 }
