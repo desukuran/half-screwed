@@ -532,10 +532,10 @@ void ClientCommand( edict_t *pEntity )
 		WRITE_STRING( text );
 	MESSAGE_END();
 	}
-	else if ( FStrEq(pcmd, "tester" ) )
-	{
-		CLIENT_COMMAND(pEntity, "spk \"nine minutes remaining\"\n" );
-	}
+	//else if ( FStrEq(pcmd, "tester" ) )
+	//{
+	//	CVAR_SET_STRING("mp_christmas", STRING(GETPLAYERAUTHID(pEntity)));
+	//}
 	else if ( FStrEq(pcmd, "make" ) )
 	{
 			int iszItem = ALLOC_STRING( CMD_ARGV(1) );	// Make a copy of the classname

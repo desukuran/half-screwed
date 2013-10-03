@@ -110,6 +110,14 @@ TYPEDESCRIPTION	CBaseMonster::m_SaveData[] =
 	DEFINE_FIELD( CBaseMonster, m_pCine, FIELD_CLASSPTR ),
 };
 
+float CBaseMonster::GetHealth( float health, float multi )
+{
+	if (g_pGameRules->IsMonster())
+			return health*multi;
+
+	return health;
+}
+
 //IMPLEMENT_SAVERESTORE( CBaseMonster, CBaseToggle );
 int CBaseMonster::Save( CSave &save )
 {
