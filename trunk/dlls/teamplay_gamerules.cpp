@@ -29,6 +29,8 @@ static char team_names[MAX_TEAMS][MAX_TEAMNAME_LENGTH];
 static int team_scores[MAX_TEAMS];
 static int num_teams = 0;
 
+extern int gmsgTimer;
+
 extern DLL_GLOBAL BOOL		g_fGameOver;
 
 CHalfLifeTeamplay :: CHalfLifeTeamplay()
@@ -133,6 +135,9 @@ void CHalfLifeTeamplay :: Think ( void )
 	if ( timeleft.value != last_time )
 	{
 		g_engfuncs.pfnCvar_DirectSet( &timeleft, UTIL_VarArgs( "%i", time_remaining ) );
+		//MESSAGE_BEGIN( MSG_ALL, gmsgTimer, NULL);
+		//WRITE_LONG( time_remaining );
+		//MESSAGE_END();
 	}
 
 	last_frags = frags_remaining;
