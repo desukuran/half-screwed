@@ -265,33 +265,6 @@ void CHalfLifeMultiplay :: Think ( void )
 	float flFragLimit = fraglimit.value;
 
 	time_remaining = (int)(flTimeLimit ? ( flTimeLimit - gpGlobals->time ) : 0);
-	
-/*	if ( flTimeLimit != 0 && changer != 1 )
-	{
-		ltime = timelimit.value; //Change to the value for safe keeping
-		MESSAGE_BEGIN( MSG_ALL, gmsgTimer, NULL);
-		WRITE_LONG( flTimeLimit );
-		MESSAGE_END();
-
-		ALERT ( at_console, "Time is %f\n", flTimeLimit );
-		changer = 1;
-	}
-
-	if ( ltime != timelimit.value && changer == 1 )
-	{
-		ltime = timelimit.value; //Change to the value for safe keeping
-		MESSAGE_BEGIN( MSG_ALL, gmsgTimer, NULL);
-		WRITE_LONG( flTimeLimit );
-		MESSAGE_END();
-	}
-
-	if ( timelimit.value == 0 && check == 0 )
-	{
-		MESSAGE_BEGIN( MSG_ALL, gmsgTimer, NULL);
-		WRITE_LONG( -1 );
-		MESSAGE_END();
-		check = 23123;
-	}*/
 
 	if ( flTimeLimit != 0 && gpGlobals->time >= flTimeLimit )
 	{
@@ -336,13 +309,13 @@ void CHalfLifeMultiplay :: Think ( void )
 	}
 
 	// Updates once per second
-	//if ( timeleft.value != last_time )
-	//{
-	//	g_engfuncs.pfnCvar_DirectSet( &timeleft, UTIL_VarArgs( "%i", time_remaining ) );
+	if ( timeleft.value != last_time )
+	{
+		g_engfuncs.pfnCvar_DirectSet( &timeleft, UTIL_VarArgs( "%i", time_remaining ) );
 	//	MESSAGE_BEGIN( MSG_ALL, gmsgTimer, NULL);
 	//	WRITE_LONG( time_remaining );
 	//	MESSAGE_END();
-	//}
+	}
 
 	last_frags = frags_remaining;
 	last_time  = time_remaining;
