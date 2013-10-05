@@ -69,6 +69,7 @@ void CTestplay::PlayerSpawn( CBasePlayer *pPlayer )
 		pPlayer->GiveNamedItem( "weapon_bow" );
 		pPlayer->GiveNamedItem( "weapon_jason" );
 		pPlayer->GiveNamedItem( "weapon_jihad" );
+		pPlayer->GiveNamedItem( "weapon_jackal" );
 		pPlayer->GiveNamedItem( "weapon_nstar" );
 		pPlayer->GiveNamedItem( "weapon_mw2" );
 		pPlayer->GiveNamedItem( "weapon_zapper" );

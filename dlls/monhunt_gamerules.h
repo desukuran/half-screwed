@@ -13,7 +13,5 @@ public:
 	virtual int PlayerRelationship( CBaseEntity *pPlayer, CBaseEntity *pTarget );
 	virtual BOOL FPlayerCanTakeDamage( CBasePlayer *pPlayer, CBaseEntity *pAttacker );
 
-	virtual int JasonsStolen( int jason );
-
-	virtual int iKillforMonster( void );
+	static int iKillforMonster( const char *classname );
 };
