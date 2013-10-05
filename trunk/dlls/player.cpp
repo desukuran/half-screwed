@@ -1776,6 +1776,20 @@ void CBasePlayer::UpdateStatusBar()
 
 				m_flStatusBarDisappearDelay = gpGlobals->time + 1.0;
 			}
+			else if (pEntity->pev->flags & FL_MONSTER)
+			{
+				//newSBarState[ SBAR_ID_TARGETNAME ] = ENTINDEX(pEntity->edict());
+				strcpy( sbuf1, "1 %p1\n2 Health: %i2%%\n3 Armor: %i3%%" );
+
+				// allies and medics get to see the targets health
+				if ( g_pGameRules->IsMonster() )
+				{
+					newSBarState[ SBAR_ID_TARGETHEALTH ] = 100 * (pEntity->pev->health / pEntity->pev->max_health);
+					//newSBarState[ SBAR_ID_TARGETARMOR ] = pEntity->pev->armorvalue; //No need to get it % based since 100 it's the max.
+				}
+
+				m_flStatusBarDisappearDelay = gpGlobals->time + 1.0;
+			}
 		}
 		else if ( m_flStatusBarDisappearDelay > gpGlobals->time )
 		{

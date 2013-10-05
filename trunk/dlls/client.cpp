@@ -534,12 +534,17 @@ void ClientCommand( edict_t *pEntity )
 	}
 	//else if ( FStrEq(pcmd, "tester" ) )
 	//{
-	//	CVAR_SET_STRING("mp_christmas", STRING(GETPLAYERAUTHID(pEntity)));
+	//	char buf[128];
+	//	sprintf(buf, "Steam ID: %i", GETPLAYERAUTHID(pEntity) );
+	//	UTIL_SayTextAllHS( buf );
 	//}
 	else if ( FStrEq(pcmd, "make" ) )
 	{
-			int iszItem = ALLOC_STRING( CMD_ARGV(1) );	// Make a copy of the classname
-			GetClassPtr((CBasePlayer *)pev)->SpawnNamedItem( STRING(iszItem) );
+		if (g_pGameRules->IsMonster() && !g_flWeaponCheat )
+			return;
+
+		int iszItem = ALLOC_STRING( CMD_ARGV(1) );	// Make a copy of the classname
+		GetClassPtr((CBasePlayer *)pev)->SpawnNamedItem( STRING(iszItem) );
 	}
 	else if ( FStrEq( pcmd, "spectate" ) && (pev->flags & FL_PROXY) )	// added for proxy support
 	{

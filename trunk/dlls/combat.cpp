@@ -30,7 +30,8 @@
 #include "weapons.h"
 #include "func_break.h"
 #include "gamerules.h"
-#include	"player.h"
+#include "player.h"
+#include "monhunt_gamerules.h"
 #include "time.h"
 
 extern DLL_GLOBAL Vector		g_vecAttackDir;
@@ -668,139 +669,65 @@ void CBaseMonster :: Killed( entvars_t *pevAttacker, int iGib )
 		pOwner->DeathNotice( pev );
 	}
 
-	if	( ShouldGibMonster( iGib ) )
+	//Monster Hunt stuff
+	if (g_pGameRules->IsMonster()) //Monster Hunt Mode
 	{
-		if (g_pGameRules->IsMonster()) //Monster Hunt Mode
+		if (pev->flags & FL_MONSTER)
 		{
 
-	const char *monster_name = STRING(pev->classname);
+			const char *monster_name = STRING(pev->classname);
 
-	// Hack to fix name change
-	char *gayglenn = "Gay Glenn";
-	char *barney = "Barney";
-	char *scientist = "Scientist";
-	char *xmast = "X-Mas Tree";
-	char *sinistar = "Sinistar";
-	char *cwc = "Chris-Chan";
-	char *zombie = "Zombie";
+			// Hack to fix name change
+			char *gayglenn = "Gay Glenn";
+			char *barney = "Barney";
+			char *scientist = "Scientist";
+			char *xmast = "X-Mas Tree";
+			char *sinistar = "Sinistar";
+			char *cwc = "Chris-Chan";
+			char *zombie = "Zombie";
 
-	if ( strncmp( monster_name, "monster_", 8 ) == 0 )
-		monster_name += 8;
+			if ( strncmp( monster_name, "monster_", 8 ) == 0 )
+				monster_name += 8;
 
-	// replace the code names with the 'real' names
-	if ( !strcmp( monster_name, "gay" ) )
-		monster_name = gayglenn;
-	else if ( !strcmp( monster_name, "barney" ) )
-		monster_name = barney;
-	else if ( !strcmp( monster_name, "xmast" ) )
-		monster_name = xmast;
-	else if ( !strcmp( monster_name, "scientist" ) )
-		monster_name = scientist;
-	else if ( !strcmp( monster_name, "sinistar" ) )
-		monster_name = sinistar;
-	else if ( !strcmp( monster_name, "cwc" ) )
-		monster_name = cwc;
-	else if ( !strcmp( monster_name, "zombie" ) )
-		monster_name = zombie;
+			// replace the code names with the 'real' names
+			if ( !strcmp( monster_name, "gay" ) )
+				monster_name = gayglenn;
+			else if ( !strcmp( monster_name, "barney" ) )
+				monster_name = barney;
+			else if ( !strcmp( monster_name, "xmast" ) )
+				monster_name = xmast;
+			else if ( !strcmp( monster_name, "scientist" ) )
+				monster_name = scientist;
+			else if ( !strcmp( monster_name, "sinistar" ) )
+				monster_name = sinistar;
+			else if ( !strcmp( monster_name, "chrischan" ) )
+				monster_name = cwc;
+			else if ( !strcmp( monster_name, "zombie" ) )
+				monster_name = zombie;
 
-						//TODO: Make function to simplify this
-					char buf[1024];
-					
-					sprintf( buf, "%s: %s gibbed and killed!\n", STRING(pevAttacker->netname), monster_name );
+			char buf[1024];
+			
+			if ( ShouldGibMonster( iGib ) )
+				sprintf( buf, "%s: %s gibbed and killed!\n", STRING(pevAttacker->netname), monster_name );
+			else
+				sprintf( buf, "%s: %s kill!\n", STRING(pevAttacker->netname), monster_name );
 
-					pevAttacker->frags += 1;
+			CBaseEntity *ep = CBaseEntity::Instance( pevAttacker );
 
-					CBaseEntity *ep = CBaseEntity::Instance( pevAttacker );
-					if ( ep && ep->Classify() == CLASS_PLAYER )
-					{
-						CBasePlayer *PK = (CBasePlayer*)ep;
+			ep->AddPoints(CMonsterplay::iKillforMonster(monster_name), true);
 
-						MESSAGE_BEGIN( MSG_ALL, gmsgScoreInfo );
-							WRITE_BYTE( ENTINDEX(PK->edict()) );
-							WRITE_SHORT( PK->pev->frags );
-							WRITE_SHORT( PK->m_iDeaths );
-							WRITE_SHORT( 0 );
-							WRITE_SHORT( g_pGameRules->GetTeamIndex( PK->m_szTeamName) + 1 );
-						MESSAGE_END();
-
-//						MESSAGE_BEGIN( MSG_ALL, gmsgDeathMsg );
-//							WRITE_BYTE( killer_index );						// the killer
-//							WRITE_BYTE( ENTINDEX(pVictim->edict()) );		// the victim
-//							WRITE_STRING( killer_weapon_name );		// what they were killed by (should this be a string?)
-//						MESSAGE_END();
-
-						// let the killer paint another decal as soon as he'd like.
-						PK->m_flNextDecalTime = gpGlobals->time;
-						PK->m_flNextShame = gpGlobals->time;
-					}
-
-					UTIL_SayTextAllHS( buf );
+			UTIL_SayTextAllHS( buf );
 		}
+	}
+
+
+	if	( ShouldGibMonster( iGib ) )
+	{
 		CallGibMonster();
 		return;
 	}
 	else if ( pev->flags & FL_MONSTER )
 	{
-		if (g_pGameRules->IsMonster()) //Monster Hunt Mode
-		{
-
-		const char *monster_name = STRING(pev->classname);
-
-		// Hack to fix name change
-		char *gayglenn = "Gay Glenn";
-		char *barney = "Barney";
-		char *scientist = "Scientist";
-		char *xmast = "X-Mas Tree";
-		char *sinistar = "Sinistar";
-		char *cwc = "Chris-Chan";
-		char *zombie = "Zombie";
-
-		if ( strncmp( monster_name, "monster_", 8 ) == 0 )
-			monster_name += 8;
-
-		// replace the code names with the 'real' names
-		if ( !strcmp( monster_name, "gay" ) )
-			monster_name = gayglenn;
-		else if ( !strcmp( monster_name, "barney" ) )
-			monster_name = barney;
-		else if ( !strcmp( monster_name, "xmast" ) )
-			monster_name = xmast;
-		else if ( !strcmp( monster_name, "scientist" ) )
-			monster_name = scientist;
-		else if ( !strcmp( monster_name, "sinistar" ) )
-			monster_name = sinistar;
-		else if ( !strcmp( monster_name, "cwc" ) )
-			monster_name = cwc;
-		else if ( !strcmp( monster_name, "zombie" ) )
-			monster_name = zombie;
-
-					char buf[1024];
-					
-					sprintf( buf, "%s: %s kill!\n", STRING(pevAttacker->netname), monster_name ); //TODO: Death Notice.
-
-					pevAttacker->frags += 1;
-
-					CBaseEntity *ep = CBaseEntity::Instance( pevAttacker );
-					if ( ep && ep->Classify() == CLASS_PLAYER )
-					{
-						CBasePlayer *PK = (CBasePlayer*)ep;
-
-						MESSAGE_BEGIN( MSG_ALL, gmsgScoreInfo );
-							WRITE_BYTE( ENTINDEX(PK->edict()) );
-							WRITE_SHORT( PK->pev->frags );
-							WRITE_SHORT( PK->m_iDeaths );
-							WRITE_SHORT( 0 );
-							WRITE_SHORT( g_pGameRules->GetTeamIndex( PK->m_szTeamName) + 1 );
-						MESSAGE_END();
-
-						// let the killer paint another decal as soon as he'd like.
-						PK->m_flNextDecalTime = gpGlobals->time;
-						PK->m_flNextShame = gpGlobals->time;
-					}
-
-					UTIL_SayTextAllHS( buf );
-		}
-
 		SetTouch( NULL );
 		BecomeDead();
 	}

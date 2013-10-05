@@ -63,14 +63,51 @@ void CMonsterplay::PlayerSpawn( CBasePlayer *pPlayer )
 	if ( addDefault )
 	{
 		pPlayer->GiveNamedItem( "weapon_fotn" );
-		//pPlayer->GiveAmmo( 15, "gold", GOLDENGUN_MAX_CARRY );
-			//SERVER_COMMAND("mp3 play media/jayson.mp3\n");
+		pPlayer->GiveNamedItem( "weapon_9mmhandgun" );
+		pPlayer->GiveNamedItem( "ammo_9mmclip" );
+		pPlayer->GiveNamedItem( "weapon_shotgun" );
+		pPlayer->GiveNamedItem( "ammo_buckshot" );
+		pPlayer->GiveNamedItem( "weapon_9mmAR" );
+		pPlayer->GiveNamedItem( "ammo_9mmAR" );
+		pPlayer->GiveNamedItem( "ammo_ARgrenades" );
+		pPlayer->GiveNamedItem( "weapon_handgrenade" );
+		pPlayer->GiveNamedItem( "weapon_tripmine" );
+		pPlayer->GiveNamedItem( "weapon_rpg" );
+		pPlayer->GiveNamedItem( "ammo_rpgclip" );
+		pPlayer->GiveNamedItem( "weapon_satchel" );
+		pPlayer->GiveNamedItem( "weapon_snark" );
+		pPlayer->GiveNamedItem( "weapon_soda" );
+		pPlayer->GiveNamedItem( "weapon_dosh" );
+		pPlayer->GiveNamedItem( "weapon_beamkatana" );
+		pPlayer->GiveNamedItem( "weapon_ak47" );
+		pPlayer->GiveNamedItem( "weapon_bow" );
+		pPlayer->GiveNamedItem( "weapon_jason" );
+		pPlayer->GiveNamedItem( "weapon_jihad" );
+		pPlayer->GiveNamedItem( "weapon_jackal" );
+		pPlayer->GiveNamedItem( "weapon_nstar" );
+		pPlayer->GiveNamedItem( "weapon_mw2" );
+		pPlayer->GiveNamedItem( "weapon_zapper" );
+		pPlayer->GiveNamedItem( "weapon_goldengun" );
+		pPlayer->GiveNamedItem( "weapon_boombox" );
+		pPlayer->GiveNamedItem( "weapon_scientist" );
+		pPlayer->GiveNamedItem( "weapon_modman" );
 	}
 }
 
 void CMonsterplay::PlayerKilled( CBasePlayer *pVictim, entvars_t *pKiller, entvars_t *pInflictor )
 {
-		
+		CBaseEntity *pKira = CBaseEntity::Instance(pKiller);
+
+		if (pKira->Classify() != CLASS_PLAYER && pKira->pev->flags & FL_MONSTER)
+		{
+			char buf[128];
+
+			sprintf(buf, "%s: killed by %s!", STRING(pVictim->pev->netname), STRING(pKira->pev->classname));
+
+			UTIL_SayTextAllHS( buf );
+		}
+		else
+			return;
 }
 
 int CMonsterplay::PlayerRelationship( CBaseEntity *pPlayer, CBaseEntity *pTarget )
@@ -97,12 +134,22 @@ BOOL CMonsterplay::FPlayerCanTakeDamage( CBasePlayer *pPlayer, CBaseEntity *pAtt
 	return CHalfLifeMultiplay::FPlayerCanTakeDamage( pPlayer, pAttacker );
 }
 
-int CMonsterplay::iKillforMonster()
+int CMonsterplay::iKillforMonster(const char *classname)
 {
-	return 1; //TODO: Filter by monster for different points.
-}
-
-int CMonsterplay::JasonsStolen(int jason)
-{
-	return jason; //JASON! I found you!
+	if ( !strcmp( classname, "Gay Glenn" ) )
+		return 1;
+	else if ( !strcmp( classname, "Barney" ) )
+		return 2;
+	else if ( !strcmp( classname, "X-Mas Tree" ) )
+		return 5;
+	else if ( !strcmp( classname, "Scientist" ) )
+		return 1;
+	else if ( !strcmp( classname, "Sinistar" ) )
+		return 3;
+	else if ( !strcmp( classname, "Chris-Chan" ) )
+		return 0;
+	else if ( !strcmp( classname, "Zombie" ) )
+		return 2;
+	else
+		return 1;
 }
