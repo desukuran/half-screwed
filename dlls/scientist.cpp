@@ -590,6 +590,8 @@ int	CScientist :: Classify ( void )
 {
 	if (g_pGameRules->IsTest() && testmonsters.value <= 0)
 			return	CLASS_NONE;
+	else if (g_pGameRules->IsMonster())
+			return	CLASS_MONSTERHUNT;
 	else
 			return	CLASS_HUMAN_PASSIVE;
 }

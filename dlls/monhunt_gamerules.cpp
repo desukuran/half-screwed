@@ -107,7 +107,7 @@ void CMonsterplay::PlayerKilled( CBasePlayer *pVictim, entvars_t *pKiller, entva
 			UTIL_SayTextAllHS( buf );
 		}
 		else
-			return;
+			return CHalfLifeMultiplay::PlayerKilled(pVictim, pKiller, pInflictor);
 }
 
 int CMonsterplay::PlayerRelationship( CBaseEntity *pPlayer, CBaseEntity *pTarget )

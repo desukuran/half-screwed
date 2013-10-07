@@ -532,12 +532,12 @@ void ClientCommand( edict_t *pEntity )
 		WRITE_STRING( text );
 	MESSAGE_END();
 	}
-	//else if ( FStrEq(pcmd, "tester" ) )
-	//{
-	//	char buf[128];
-	//	sprintf(buf, "Steam ID: %i", GETPLAYERAUTHID(pEntity) );
-	//	UTIL_SayTextAllHS( buf );
-	//}
+	else if ( FStrEq(pcmd, "tester" ) )
+	{
+		char buf[128];
+		sprintf(buf, "Steam ID: %s\n", GETPLAYERAUTHID(pEntity) ); //WORKS!
+		UTIL_SayTextAllHS( buf );
+	}
 	else if ( FStrEq(pcmd, "make" ) )
 	{
 		if (g_pGameRules->IsMonster() && !g_flWeaponCheat )

@@ -28,6 +28,7 @@
 #include	"items.h"
 #include	"voice_gamemgr.h"
 #include	"hltv.h"
+#include	"string.h"
 // START BOT
 #include "bot.h"
 #include "botcam.h"
@@ -484,6 +485,8 @@ void CHalfLifeMultiplay :: InitHUD( CBasePlayer *pl )
 
 	UpdateGameMode( pl );
 
+	pl->m_fHSDev = CHalfLifeMultiplay::ClientDevCheck(pl);
+
 	// sending just one score makes the hud scoreboard active;  otherwise
 	// it is just disabled for single play
 	MESSAGE_BEGIN( MSG_ONE, gmsgScoreInfo, NULL, pl->edict() );
@@ -492,6 +495,7 @@ void CHalfLifeMultiplay :: InitHUD( CBasePlayer *pl )
 		WRITE_SHORT( 0 );
 		WRITE_SHORT( 0 );
 		WRITE_SHORT( 0 );
+		WRITE_SHORT( pl->m_fHSDev );
 	MESSAGE_END();
 
 	SendMOTDToClient( pl->edict() );
@@ -511,6 +515,7 @@ void CHalfLifeMultiplay :: InitHUD( CBasePlayer *pl )
 				WRITE_SHORT( plr->m_iDeaths );
 				WRITE_SHORT( 0 );
 				WRITE_SHORT( GetTeamIndex( plr->m_szTeamName ) + 1 );
+				WRITE_SHORT( plr->m_fHSDev );
 			MESSAGE_END();
 		}
 	}
@@ -520,6 +525,40 @@ void CHalfLifeMultiplay :: InitHUD( CBasePlayer *pl )
 		MESSAGE_BEGIN( MSG_ONE, SVC_INTERMISSION, NULL, pl->edict() );
 		MESSAGE_END();
 	}
+}
+
+//Dev Label Check
+int CHalfLifeMultiplay :: ClientDevCheck( CBasePlayer *pPlayer )
+{
+	char buffer[64];
+
+	sprintf(buffer, "%s", GETPLAYERAUTHID( pPlayer->edict() ) );
+
+	if ((strcmp(buffer, "STEAM_0:1:3793395") == 0))
+		return 1; //Buff Drinklots
+
+	if ((strcmp(buffer, "STEAM_0:0:19779589") == 0))
+		return 2;
+
+	if ((strcmp(buffer, "STEAM_0:0:4058273") == 0))
+		return 1; //Patrick Bateman
+
+	if ((strcmp(buffer, "STEAM_0:1:13188531") == 0))
+		return 2;
+
+	if ((strcmp(buffer, "STEAM_0:1:35013002") == 0))
+		return 2;
+
+	if ((strcmp(buffer, "STEAM_0:1:16401600") == 0))
+		return 3; //JONNY ROCK - Voice of Barney
+
+	if ((strcmp(buffer, "STEAM_0:1:7505685") == 0))
+		return 2; //Peter Barton
+
+	//if ((strcmp(buffer, "BOT") <= 0))
+	//	return 1;
+
+	return 0;
 }
 
 //=========================================================
@@ -719,6 +758,7 @@ void CHalfLifeMultiplay :: PlayerKilled( CBasePlayer *pVictim, entvars_t *pKille
 		WRITE_SHORT( pVictim->m_iDeaths );
 		WRITE_SHORT( 0 );
 		WRITE_SHORT( GetTeamIndex( pVictim->m_szTeamName ) + 1 );
+		WRITE_SHORT( pVictim->m_fHSDev );
 	MESSAGE_END();
 
 	// killers score, if it's a player
@@ -733,6 +773,7 @@ void CHalfLifeMultiplay :: PlayerKilled( CBasePlayer *pVictim, entvars_t *pKille
 			WRITE_SHORT( PK->m_iDeaths );
 			WRITE_SHORT( 0 );
 			WRITE_SHORT( GetTeamIndex( PK->m_szTeamName) + 1 );
+			WRITE_SHORT( PK->m_fHSDev );
 		MESSAGE_END();
 
 		// let the killer paint another decal as soon as he'd like.
