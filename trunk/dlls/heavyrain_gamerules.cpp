@@ -95,6 +95,7 @@ void CHeavyRainplay::PlayerKilled( CBasePlayer *pVictim, entvars_t *pKiller, ent
 		WRITE_SHORT( pVictim->m_iDeaths );
 		WRITE_SHORT( 0 );
 		WRITE_SHORT( g_pGameRules->GetTeamIndex( pVictim->m_szTeamName ) + 1 );
+		WRITE_SHORT( pVictim->m_fHSDev );
 		MESSAGE_END();
 
 	CBaseEntity *ep = CBaseEntity::Instance( pKiller );
@@ -111,6 +112,7 @@ void CHeavyRainplay::PlayerKilled( CBasePlayer *pVictim, entvars_t *pKiller, ent
 			WRITE_SHORT( PK->m_iDeaths );
 			WRITE_SHORT( 0 );
 			WRITE_SHORT( GetTeamIndex( PK->m_szTeamName) + 1 );
+			WRITE_SHORT( PK->m_fHSDev );
 		MESSAGE_END();
 
 		// let the killer paint another decal as soon as he'd like.

@@ -97,6 +97,7 @@ void CCodplay::PlayerKilled( CBasePlayer *pVictim, entvars_t *pKiller, entvars_t
 		WRITE_SHORT( pVictim->m_iDeaths );
 		WRITE_SHORT( 0 );
 		WRITE_SHORT( GetTeamIndex( pVictim->m_szTeamName ) + 1 );
+		WRITE_SHORT( pVictim->m_fHSDev );
 	MESSAGE_END();
 
 	// killers score, if it's a player
@@ -111,6 +112,7 @@ void CCodplay::PlayerKilled( CBasePlayer *pVictim, entvars_t *pKiller, entvars_t
 			WRITE_SHORT( PK->m_iDeaths );
 			WRITE_SHORT( 0 );
 			WRITE_SHORT( GetTeamIndex( PK->m_szTeamName) + 1 );
+			WRITE_SHORT( PK->m_fHSDev );
 		MESSAGE_END();
 
 		MESSAGE_BEGIN( MSG_ONE, gmsgCOD, NULL, PK->pev );

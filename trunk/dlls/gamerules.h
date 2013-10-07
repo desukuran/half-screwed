@@ -286,6 +286,9 @@ public:
 	virtual void ClientDisconnected( edict_t *pClient );
 	virtual void UpdateGameMode( CBasePlayer *pPlayer );  // the client needs to be informed of the current game mode
 
+// Client Steam ID
+	virtual int ClientDevCheck( CBasePlayer *pPlayer );
+
 // Client damage rules
 	virtual float FlPlayerFallDamage( CBasePlayer *pPlayer );
 	virtual BOOL  FPlayerCanTakeDamage( CBasePlayer *pPlayer, CBaseEntity *pAttacker );

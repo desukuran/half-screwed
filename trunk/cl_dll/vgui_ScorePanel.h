@@ -24,12 +24,12 @@
 // Scoreboard cells
 #define COLUMN_TRACKER	0
 #define COLUMN_NAME		1
-#define COLUMN_CLASS	2
+#define COLUMN_CLASS	7
 #define COLUMN_KILLS	3
 #define COLUMN_DEATHS	4
 #define COLUMN_LATENCY	5
 #define COLUMN_VOICE	6
-#define COLUMN_BLANK	7
+#define COLUMN_BLANK	2
 #define NUM_COLUMNS		8
 #define NUM_ROWS		(MAX_PLAYERS + (MAX_SCOREBOARD_TEAMS * 2))
 

@@ -211,7 +211,8 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine=""
+				Description="Coping over Client DLLs!"
+				CommandLine="copy &quot;$(TargetPath)&quot; &quot;F:\Games\Steam\SteamApps\common\Half-Life\half-screwed\cl_dlls&quot;"
 			/>
 		</Configuration>
 	</Configurations>

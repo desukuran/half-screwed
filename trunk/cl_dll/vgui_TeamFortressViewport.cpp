@@ -2264,6 +2264,7 @@ int TeamFortressViewport::MsgFunc_ScoreInfo( const char *pszName, int iSize, voi
 	short deaths = READ_SHORT();
 	short playerclass = READ_SHORT();
 	short teamnumber = READ_SHORT();
+	short hs_dev = READ_SHORT();
 
 	if ( cl > 0 && cl <= MAX_PLAYERS )
 	{
@@ -2271,6 +2272,7 @@ int TeamFortressViewport::MsgFunc_ScoreInfo( const char *pszName, int iSize, voi
 		g_PlayerExtraInfo[cl].deaths = deaths;
 		g_PlayerExtraInfo[cl].playerclass = playerclass;
 		g_PlayerExtraInfo[cl].teamnumber = teamnumber;
+		g_PlayerExtraInfo[cl].hsdev = hs_dev;
 
 		//Dont go bellow 0!
 		if ( g_PlayerExtraInfo[cl].teamnumber < 0 )

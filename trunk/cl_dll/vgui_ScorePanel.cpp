@@ -58,7 +58,7 @@ SBColumnInfo g_ColumnInfo[NUM_COLUMNS] =
 {
 	{NULL,			24,			Label::a_east},
 	{NULL,			140,		Label::a_east},		// name
-	{"#TOFRAG",		56,			Label::a_east},		// to frag limit
+	{NULL,			56,			Label::a_east},
 	{"#SCORE",		40,			Label::a_east},
 	{"#DEATHS",		46,			Label::a_east},
 	{"#LATENCY",	46,			Label::a_east},
@@ -721,6 +721,9 @@ void ScorePanel::FillGrid()
 						pLabel->setFont2(smallfont);
 					}
 					break;
+				case COLUMN_BLANK:
+
+					break;
 				case COLUMN_VOICE:
 					break;
 				case COLUMN_CLASS:
@@ -789,6 +792,14 @@ void ScorePanel::FillGrid()
 					}
 					break;
 
+				case COLUMN_BLANK:
+					if (g_PlayerExtraInfo[ m_iSortedRows[row] ].hsdev == 1)
+						sprintf(sz, "HS Dev");
+					else if (g_PlayerExtraInfo[ m_iSortedRows[row] ].hsdev == 2)
+						sprintf(sz, "Beta Tester");
+					else if (g_PlayerExtraInfo[ m_iSortedRows[row] ].hsdev == 3)
+						sprintf(sz, "BarneyVoice");
+					break;
 				case COLUMN_TRACKER:
 					break;
 				case COLUMN_KILLS:
