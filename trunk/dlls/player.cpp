@@ -2795,7 +2795,7 @@ edict_t *EntSelectSpawnPoint( CBaseEntity *pPlayer )
 		if ( !FNullEnt(pSpot) )
 			goto ReturnSpot;
 		pSpot = UTIL_FindEntityByClassname( g_pLastSpawn, "info_player_start");
-		if ( !FNullEnt(pSpot) ) 
+		if ( !FNullEnt(pSpot) )	
 			goto ReturnSpot;
 	}
 	else if ( g_pGameRules->IsDeathmatch() )
@@ -2861,8 +2861,24 @@ edict_t *EntSelectSpawnPoint( CBaseEntity *pPlayer )
 ReturnSpot:
 	if ( FNullEnt( pSpot ) )
 	{
-		ALERT(at_error, "PutClientInServer: no info_player_start on level");
-		return INDEXENT(0);
+		switch (RANDOM_LONG(0,1)) // DoD compability
+		{
+			case 1:	pSpot = UTIL_FindEntityByClassname(NULL, "info_player_allies"); break; 
+			case 2: pSpot = UTIL_FindEntityByClassname(NULL, "info_player_axis"); break;
+		}
+		if ( FNullEnt( pSpot )) //if failed...
+		{
+			switch (RANDOM_LONG(0,1)) // CS compability
+			{
+				case 1:	pSpot = UTIL_FindEntityByClassname(NULL, "info_player_terrorist"); break; 
+				case 2: pSpot = UTIL_FindEntityByClassname(NULL, "info_player_counterterrorist"); break;
+			}
+			if ( FNullEnt( pSpot )) //if failed..
+			{
+				ALERT(at_error, "PutClientInServer: no info_player_start on level");
+				return INDEXENT(0); //Foreign or unknown spawns.
+			}
+		}
 	}
 
 	g_pLastSpawn = pSpot;
