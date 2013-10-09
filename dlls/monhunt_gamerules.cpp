@@ -21,6 +21,7 @@
 #include	"player.h"
 #include	"weapons.h"
 #include	"gamerules.h"
+#include	"voice_gamemgr.h"
 #include	"monhunt_gamerules.h"
 #include	"game.h"
 //#include	"mp3.h"
@@ -28,6 +29,148 @@
 extern DLL_GLOBAL BOOL		g_fGameOver;
 extern int gmsgScoreInfo;
 extern int gmsgPlayMP3; //AJH - Killars MP3player
+
+extern cvar_t timeleft, fragsleft;
+
+extern cvar_t mp_chattime;
+
+void CMonsterplay::Think( void )
+{
+	// longest the intermission can last, in seconds
+	#define MAX_INTERMISSION_TIME		120
+	CVoiceGameMgr	g_VoiceGameMgr;
+	float g_flIntermissionStartTime = 0;
+
+	g_VoiceGameMgr.Update(gpGlobals->frametime);
+
+	///// Check game rules /////
+	static int last_frags;
+	static int last_time;
+
+	int frags_remaining = 0;
+	int time_remaining = 0;
+
+	int ltime = 0; //Check to see if the times have changed
+
+	if ( g_fGameOver )   // someone else quit the game already
+	{
+		// bounds check
+		int time = (int)CVAR_GET_FLOAT( "mp_chattime" );
+		if ( time < 1 )
+			CVAR_SET_STRING( "mp_chattime", "1" );
+		else if ( time > MAX_INTERMISSION_TIME )
+			CVAR_SET_STRING( "mp_chattime", UTIL_dtos1( MAX_INTERMISSION_TIME ) );
+
+		m_flIntermissionEndTime = g_flIntermissionStartTime + mp_chattime.value;
+
+		// check to see if we should change levels now
+		if ( m_flIntermissionEndTime < gpGlobals->time )
+		{
+			if ( m_iEndIntermissionButtonHit  // check that someone has pressed a key, or the max intermission time is over
+				|| ( ( g_flIntermissionStartTime + MAX_INTERMISSION_TIME ) < gpGlobals->time) ) 
+				ChangeLevel(); // intermission is over
+		}
+
+		return;
+	}
+
+	float flTimeLimit = timelimit.value * 60;
+	float flFragLimit = fraglimit.value;
+
+	time_remaining = (int)(flTimeLimit ? ( flTimeLimit - gpGlobals->time ) : 0);
+
+	if ( flTimeLimit != 0 && gpGlobals->time >= flTimeLimit )
+	{
+		GoToIntermission();
+		return;
+	}
+
+	if ( flFragLimit )
+	{
+		int bestfrags = 9999;
+		int remain;
+
+		// check if any player is over the frag limit
+		for ( int i = 1; i <= gpGlobals->maxClients; i++ )
+		{
+			CBaseEntity *pPlayer = UTIL_PlayerByIndex( i );
+
+			if ( pPlayer && pPlayer->pev->frags >= flFragLimit )
+			{
+				GoToIntermission();
+				return;
+			}
+
+
+			if ( pPlayer )
+			{
+				remain = flFragLimit - pPlayer->pev->frags;
+				if ( remain < bestfrags )
+				{
+					bestfrags = remain;
+				}
+			}
+
+		}
+		frags_remaining = bestfrags;
+	}
+
+	// Updates when frags change
+	if ( frags_remaining != last_frags )
+	{
+		g_engfuncs.pfnCvar_DirectSet( &fragsleft, UTIL_VarArgs( "%i", frags_remaining ) );
+	}
+
+	// Updates once per second
+	if ( timeleft.value != last_time )
+	{
+		g_engfuncs.pfnCvar_DirectSet( &timeleft, UTIL_VarArgs( "%i", time_remaining ) );
+	}
+
+	last_frags = frags_remaining;
+	last_time  = time_remaining;
+
+	//fMonHuntNextSpawn = gpGlobals->time + 6;
+
+	/*if (bMonsterCheck < 1)
+	{
+		CBaseEntity *pMonsterCheck;
+		pMonsterCheck = UTIL_FindEntityByClassname(NULL, "monstermaker");
+		if ( !FNullEnt( pMonsterCheck->edict() ))
+			bMonsterMakers = true;
+
+		fMonHuntNextSpawn = gpGlobals->time + 6;
+		UTIL_SayTextAllHS( "MONSTER CHECKED" );
+		bMonsterCheck = 1;
+	}*/
+
+	//If there is no Monster Makers.
+	//if (/*!bMonsterMakers && (*/gpGlobals->time > fMonHuntNextSpawn/*)*/)
+	/*{
+		CBaseEntity *pMonsterSpawner;
+		pMonsterSpawner = UTIL_FindEntityByClassname(NULL, "info_player_deathmatch");
+
+		CBaseEntity *pMonster = CBaseEntity::Create("monster_barney", pMonsterSpawner->pev->origin, pMonsterSpawner->pev->angles);
+
+		UTIL_SayTextAllHS( "CALLED" );
+
+		fMonHuntNextSpawn = gpGlobals->time + 6; //TODO: CVAR SET FUCK
+	}*/
+
+		//if ( RANDOM_LONG(0,10) > 9)
+		//{
+		//	CBaseEntity *pMonsterSpawner;
+
+		//	for ( int i = RANDOM_LONG(1,5); i > 0; i-- )
+		//	pMonsterSpawner = UTIL_FindEntityByClassname(NULL, "info_player_deathmatch");
+
+		//	CBaseEntity *pMonster = CBaseEntity::Create("monster_barney", pMonsterSpawner->pev->origin, pMonsterSpawner->pev->angles);
+
+		//	UTIL_SayTextAllHS( "CALLED" );
+
+		//	fMonHuntNextSpawn = gpGlobals->time + 6; //TODO: CVAR SET FUCK
+		//}
+}
 
 CMonsterplay :: CMonsterplay()
 {
@@ -103,8 +246,20 @@ void CMonsterplay::PlayerKilled( CBasePlayer *pVictim, entvars_t *pKiller, entva
 			char buf[128];
 
 			sprintf(buf, "%s: killed by %s!", STRING(pVictim->pev->netname), STRING(pKira->pev->classname));
-
 			UTIL_SayTextAllHS( buf );
+
+			pVictim->m_iDeaths += 1;
+
+			// update the scores
+			// killed scores
+			MESSAGE_BEGIN( MSG_ALL, gmsgScoreInfo );
+				WRITE_BYTE( ENTINDEX(pVictim->edict()) );
+				WRITE_SHORT( pVictim->pev->frags );
+				WRITE_SHORT( pVictim->m_iDeaths );
+				WRITE_SHORT( 0 );
+				WRITE_SHORT( GetTeamIndex( pVictim->m_szTeamName ) + 1 );
+				WRITE_SHORT( pVictim->m_fHSDev );
+			MESSAGE_END();
 		}
 		else
 			return CHalfLifeMultiplay::PlayerKilled(pVictim, pKiller, pInflictor);
@@ -134,6 +289,11 @@ BOOL CMonsterplay::FPlayerCanTakeDamage( CBasePlayer *pPlayer, CBaseEntity *pAtt
 	return CHalfLifeMultiplay::FPlayerCanTakeDamage( pPlayer, pAttacker );
 }
 
+BOOL CMonsterplay::FAllowMonsters( void )
+{
+		return TRUE;
+}
+
 int CMonsterplay::iKillforMonster(const char *classname)
 {
 	if ( !strcmp( classname, "Gay Glenn" ) )
@@ -150,6 +310,8 @@ int CMonsterplay::iKillforMonster(const char *classname)
 		return 0;
 	else if ( !strcmp( classname, "Zombie" ) )
 		return 2;
+	else if ( !strcmp( classname, "snark" ) )
+		return 0;
 	else
 		return 1;
 }
