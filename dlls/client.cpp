@@ -931,7 +931,8 @@ void StartFrame( void )
          pause_time = gpGlobals->time;
 
          index = 0;
-         cmd_line[index] = 0;  // null out command line      }
+         cmd_line[index] = 0;  // null out command line      
+	  }
 
       // if the bot.cfg file is still open and time to execute command...
       while ((pFileList && *pFileList) && (pause_time <= gpGlobals->time))
