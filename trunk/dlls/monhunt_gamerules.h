@@ -21,4 +21,5 @@ public:
 	int bMonsterCheck; //Check for MonsterMaker ents
 
 	static int iKillforMonster( const char *classname );
+	static const char *PrepareMonsterName( const char *monster_name );
 };
