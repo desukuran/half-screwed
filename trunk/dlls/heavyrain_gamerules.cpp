@@ -23,11 +23,11 @@
 #include	"gamerules.h"
 #include	"heavyrain_gamerules.h"
 #include	"game.h"
-//#include	"mp3.h"
 
 extern DLL_GLOBAL BOOL		g_fGameOver;
 extern int gmsgScoreInfo;
 extern int gmsgPlayMP3; //AJH - Killars MP3player
+extern int gmsgStopMP3;
 
 CHeavyRainplay :: CHeavyRainplay()
 {
@@ -47,10 +47,6 @@ void CHeavyRainplay::PlayerSpawn( CBasePlayer *pPlayer )
 	pPlayer->pev->weapons |= (1<<WEAPON_SUIT);
 	
 	addDefault = TRUE;
-	
-	//entvars_t *pev = &pEntity->v;
-
-//	CBasePlayer	*pPlayer;
 
 	edict_t *pClient = g_engfuncs.pfnPEntityOfEntIndex( 1 );
 
@@ -65,7 +61,9 @@ void CHeavyRainplay::PlayerSpawn( CBasePlayer *pPlayer )
 		pPlayer->GiveNamedItem( "weapon_jason" );
 		pPlayer->GiveNamedItem( "weapon_goldengun" );
 		pPlayer->GiveAmmo( 15, "gold", GOLDENGUN_MAX_CARRY );
-			//SERVER_COMMAND("mp3 play media/jayson.mp3\n");
+		MESSAGE_BEGIN( MSG_ONE, gmsgPlayMP3, NULL, pPlayer->edict() );
+			WRITE_STRING( "media/jayson.mp3" );
+		MESSAGE_END();
 	}
 }
 

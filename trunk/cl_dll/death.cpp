@@ -288,6 +288,8 @@ int CHudDeathNotice :: MsgFunc_DeathMsg( const char *pszName, int iSize, void *p
 			ConsolePrint( " fucking took out his mate " );
 			ConsolePrint( rgDeathNoticeList[i].szVictim );
 		}
+		else if ((char)victim == -1) //Don't display kills done by the player on NPCs. Show only deaths on the player caused by NPCs.
+			return 1;
 		else
 		{
 
