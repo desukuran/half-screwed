@@ -29,6 +29,7 @@
 extern DLL_GLOBAL BOOL		g_fGameOver;
 extern int gmsgScoreInfo;
 extern int gmsgPlayMP3; //AJH - Killars MP3player
+extern int gmsgDeathMsg;
 
 extern cvar_t timeleft, fragsleft;
 
@@ -243,10 +244,11 @@ void CMonsterplay::PlayerKilled( CBasePlayer *pVictim, entvars_t *pKiller, entva
 
 		if (pKira->Classify() != CLASS_PLAYER && pKira->pev->flags & FL_MONSTER)
 		{
-			char buf[128];
-
-			sprintf(buf, "%s: killed by %s!", STRING(pVictim->pev->netname), STRING(pKira->pev->classname));
-			UTIL_SayTextAllHS( buf );
+			MESSAGE_BEGIN( MSG_ALL, gmsgDeathMsg );
+				WRITE_BYTE( -1 );																			// the killer
+				WRITE_BYTE( ENTINDEX(pVictim->edict()) );													// the victim
+				WRITE_STRING( PrepareMonsterName( STRING(pKiller->classname) ) );							// what they were killed by (should this be a string?)
+			MESSAGE_END();
 
 			pVictim->m_iDeaths += 1;
 
@@ -314,4 +316,38 @@ int CMonsterplay::iKillforMonster(const char *classname)
 		return 0;
 	else
 		return 1;
+}
+
+//What for? To strip "monster_" and give it a proper name.
+const char *CMonsterplay::PrepareMonsterName( const char *monster_name )
+{
+	// Hack to fix name change
+			char *gayglenn = "Gay Glenn";
+			char *barney = "Barney";
+			char *scientist = "Scientist";
+			char *xmast = "X-Mas Tree";
+			char *sinistar = "Sinistar";
+			char *cwc = "Chris-Chan";
+			char *zombie = "Zombie";
+
+			//if ( strncmp( monster_name, "monster_", 8 ) == 0 )
+				monster_name += 8;
+
+			// replace the code names with the 'real' names
+			if ( !strcmp( monster_name, "gay" ) )
+				monster_name = gayglenn;
+			else if ( !strcmp( monster_name, "barney" ) )
+				monster_name = barney;
+			else if ( !strcmp( monster_name, "xmast" ) )
+				monster_name = xmast;
+			else if ( !strcmp( monster_name, "scientist" ) )
+				monster_name = scientist;
+			else if ( !strcmp( monster_name, "sinistar" ) )
+				monster_name = sinistar;
+			else if ( !strcmp( monster_name, "chrischan" ) )
+				monster_name = cwc;
+			else if ( !strcmp( monster_name, "zombie" ) )
+				monster_name = zombie;
+
+			return monster_name;
 }

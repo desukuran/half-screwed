@@ -41,6 +41,7 @@ extern Vector VecBModelOrigin( entvars_t* pevBModel );
 extern entvars_t *g_pevLastInflictor;
 
 extern int gmsgScoreInfo;
+extern int gmsgDeathMsg;
 
 #define GERMAN_GIB_COUNT		4
 #define	HUMAN_GIB_COUNT			6
@@ -674,49 +675,16 @@ void CBaseMonster :: Killed( entvars_t *pevAttacker, int iGib )
 	{
 		if (pev->flags & FL_MONSTER)
 		{
-
-			const char *monster_name = STRING(pev->classname);
-
-			// Hack to fix name change
-			char *gayglenn = "Gay Glenn";
-			char *barney = "Barney";
-			char *scientist = "Scientist";
-			char *xmast = "X-Mas Tree";
-			char *sinistar = "Sinistar";
-			char *cwc = "Chris-Chan";
-			char *zombie = "Zombie";
-
-			if ( strncmp( monster_name, "monster_", 8 ) == 0 )
-				monster_name += 8;
-
-			// replace the code names with the 'real' names
-			if ( !strcmp( monster_name, "gay" ) )
-				monster_name = gayglenn;
-			else if ( !strcmp( monster_name, "barney" ) )
-				monster_name = barney;
-			else if ( !strcmp( monster_name, "xmast" ) )
-				monster_name = xmast;
-			else if ( !strcmp( monster_name, "scientist" ) )
-				monster_name = scientist;
-			else if ( !strcmp( monster_name, "sinistar" ) )
-				monster_name = sinistar;
-			else if ( !strcmp( monster_name, "chrischan" ) )
-				monster_name = cwc;
-			else if ( !strcmp( monster_name, "zombie" ) )
-				monster_name = zombie;
-
-			char buf[1024];
-			
-			if ( ShouldGibMonster( iGib ) )
-				sprintf( buf, "%s: %s gibbed and killed!\n", STRING(pevAttacker->netname), monster_name );
-			else
-				sprintf( buf, "%s: %s kill!\n", STRING(pevAttacker->netname), monster_name );
+			const char *monster_name = CMonsterplay::PrepareMonsterName( STRING(pev->classname) );
 
 			CBaseEntity *ep = CBaseEntity::Instance( pevAttacker );
-
 			ep->AddPoints(CMonsterplay::iKillforMonster(monster_name), true);
 
-			UTIL_SayTextAllHS( buf );
+			MESSAGE_BEGIN( MSG_ALL, gmsgDeathMsg );
+				WRITE_BYTE( ENTINDEX(ep->edict()) );						// the killer
+				WRITE_BYTE( -1 );											// the victim
+				WRITE_STRING( monster_name );								// what they were killed by (should this be a string?)
+			MESSAGE_END();
 		}
 	}
 

@@ -190,8 +190,12 @@ int CHudDeathNotice :: MsgFunc_DeathMsg( const char *pszName, int iSize, void *p
 	if (gViewPort)
 		gViewPort->GetAllPlayersInfo();
 
+	char *killer_name = NULL;
+
 	// Get the Killer's name
-	char *killer_name = g_PlayerInfoList[ killer ].name;
+	if ( (char)killer != -1)
+		killer_name = g_PlayerInfoList[ killer ].name;
+	//Borrowing from victim == -1 below. If the killer is -1, it's an NPC.
 	if ( !killer_name )
 	{
 		killer_name = "";
@@ -202,6 +206,15 @@ int CHudDeathNotice :: MsgFunc_DeathMsg( const char *pszName, int iSize, void *p
 		rgDeathNoticeList[i].KillerColor = GetClientColor( killer );
 		strncpy( rgDeathNoticeList[i].szKiller, killer_name, MAX_PLAYER_NAME_LENGTH );
 		rgDeathNoticeList[i].szKiller[MAX_PLAYER_NAME_LENGTH-1] = 0;
+	}
+
+	// Is it a non-player object kill?
+	if ( ((char)killer) == -1 )
+	{
+		//rgDeathNoticeList[i].iNonPlayerKill = TRUE;
+
+		// Store the object's name in the Victim slot (skip the d_ bit)
+		strcpy( rgDeathNoticeList[i].szKiller, killedwith+2 );
 	}
 
 	// Get the Victim's name
@@ -224,7 +237,7 @@ int CHudDeathNotice :: MsgFunc_DeathMsg( const char *pszName, int iSize, void *p
 	// Is it a non-player object kill?
 	if ( ((char)victim) == -1 )
 	{
-		rgDeathNoticeList[i].iNonPlayerKill = TRUE;
+		//rgDeathNoticeList[i].iNonPlayerKill = TRUE;
 
 		// Store the object's name in the Victim slot (skip the d_ bit)
 		strcpy( rgDeathNoticeList[i].szVictim, killedwith+2 );
