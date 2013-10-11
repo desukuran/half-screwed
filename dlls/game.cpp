@@ -1083,7 +1083,7 @@ void GameDLLInit( void )
 	CVAR_REGISTER ( &cvar_bot );
 //END BOT
 
-	SERVER_COMMAND( "echo HALF-SCREWED DEATH AND REBIRTH" );
+	SERVER_COMMAND( "echo HALF-SCREWED DEATH AND REBIRTH\n" );
 	SERVER_COMMAND( "exec skill.cfg\n" );
 }
 

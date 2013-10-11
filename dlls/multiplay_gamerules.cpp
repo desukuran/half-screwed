@@ -43,6 +43,8 @@ extern int gmsgMOTD;
 extern int gmsgServerName;
 extern int gmsgItemPickup;
 extern int gmsgTimer;
+extern int gmsgPlayMP3;
+extern int gmsgStopMP3;
 
 extern int g_gameplay;
 int check = 0;
@@ -688,6 +690,17 @@ void CHalfLifeMultiplay :: PlayerSpawn( CBasePlayer *pPlayer )
 		pPlayer->GiveNamedItem( "weapon_nstar" );
 		pPlayer->GiveNamedItem( "weapon_zapper" );
 		pPlayer->GiveNamedItem( "weapon_boombox" );
+
+		//if (CVAR_GET_FLOAT("hud_bgm") != 0)
+		//{
+		//	char buf[256];
+
+		//	sprintf( buf, "media/maps/%s.bsp", gpGlobals->mapname);
+		//	ALERT(at_console, "Music: %s\n", STRING(buf));
+		//	MESSAGE_BEGIN( MSG_ONE, gmsgPlayMP3, NULL, pPlayer->edict() );
+		//		WRITE_STRING( buf );
+		//	MESSAGE_END();
+		//}
 	}
 }
 
