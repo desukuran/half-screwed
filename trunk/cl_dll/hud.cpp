@@ -127,6 +127,10 @@ int __MsgFunc_PlayMP3(const char *pszName, int iSize, void *pbuf )
 {
 	return gHUD.MsgFunc_PlayMP3( pszName, iSize, pbuf );
 }
+int __MsgFunc_PlayBGM(const char *pszName, int iSize, void *pbuf )
+{
+	return gHUD.MsgFunc_PlayBGM( pszName, iSize, pbuf );
+}
 int __MsgFunc_StopMP3(const char *pszName, int iSize, void *pbuf )
 {
 	return gHUD.MsgFunc_StopMP3( pszName, iSize, pbuf );
@@ -301,6 +305,7 @@ void CHud :: Init( void )
 	if(gMP3.Initialize())
 	{
 		HOOK_MESSAGE( PlayMP3 );
+		HOOK_MESSAGE( PlayBGM );
 		HOOK_MESSAGE( StopMP3 );
 		HOOK_COMMAND( "stopaudio", StopMP3 );
 	}

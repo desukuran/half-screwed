@@ -159,7 +159,7 @@ int gmsgResetHUD = 0;
 int gmsgInitHUD = 0;
 int gmsgShowGameTitle = 0;
 int gmsgPlayMP3 = 0; //Killar
-int gmsgPlayMapBGM = 0;
+int gmsgPlayBGM = 0;
 int gmsgStopMP3 = 0;
 int gmsgCurWeapon = 0;
 int gmsgHealth = 0;
@@ -221,6 +221,7 @@ void LinkUserMessages( void )
 	gmsgTrain = REG_USER_MSG( "Train", 1);
 	gmsgTimer = REG_USER_MSG( "Timer", -1);
 	gmsgPlayMP3 = REG_USER_MSG( "PlayMP3", -1);
+	gmsgPlayBGM = REG_USER_MSG( "PlayBGM", -1);
 	gmsgStopMP3 = REG_USER_MSG( "StopMP3", -1);
 	gmsgHudText = REG_USER_MSG( "HudText", -1 );
 	gmsgSayText = REG_USER_MSG( "SayText", -1 );

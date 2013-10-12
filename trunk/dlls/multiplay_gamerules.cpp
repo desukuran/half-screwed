@@ -43,7 +43,7 @@ extern int gmsgMOTD;
 extern int gmsgServerName;
 extern int gmsgItemPickup;
 extern int gmsgTimer;
-extern int gmsgPlayMP3;
+extern int gmsgPlayBGM;
 extern int gmsgStopMP3;
 
 extern int g_gameplay;
@@ -500,6 +500,14 @@ void CHalfLifeMultiplay :: InitHUD( CBasePlayer *pl )
 		WRITE_SHORT( pl->m_fHSDev );
 	MESSAGE_END();
 
+			char buf[256];
+
+			sprintf( buf, "media/maps/%s.mp3", STRING(gpGlobals->mapname));
+			ALERT(at_console, buf);
+			MESSAGE_BEGIN( MSG_ONE, gmsgPlayBGM, NULL, pl->edict() );
+				WRITE_STRING( buf );
+			MESSAGE_END();
+
 	SendMOTDToClient( pl->edict() );
 
 
@@ -549,6 +557,9 @@ int CHalfLifeMultiplay :: ClientDevCheck( CBasePlayer *pPlayer )
 		return 2;
 
 	if ((strcmp(buffer, "STEAM_0:1:35013002") == 0))
+		return 2;
+
+	if ((strcmp(buffer, "STEAM_0:0:2515846") == 0))
 		return 2;
 
 	if ((strcmp(buffer, "STEAM_0:1:16401600") == 0))
@@ -690,17 +701,6 @@ void CHalfLifeMultiplay :: PlayerSpawn( CBasePlayer *pPlayer )
 		pPlayer->GiveNamedItem( "weapon_nstar" );
 		pPlayer->GiveNamedItem( "weapon_zapper" );
 		pPlayer->GiveNamedItem( "weapon_boombox" );
-
-		//if (CVAR_GET_FLOAT("hud_bgm") != 0)
-		//{
-		//	char buf[256];
-
-		//	sprintf( buf, "media/maps/%s.bsp", gpGlobals->mapname);
-		//	ALERT(at_console, "Music: %s\n", STRING(buf));
-		//	MESSAGE_BEGIN( MSG_ONE, gmsgPlayMP3, NULL, pPlayer->edict() );
-		//		WRITE_STRING( buf );
-		//	MESSAGE_END();
-		//}
 	}
 }
 
@@ -1281,6 +1281,10 @@ void CHalfLifeMultiplay :: GoToIntermission( void )
 {
 	if ( g_fGameOver )
 		return;  // intermission has already been triggered, so ignore.
+
+	//Turn off any Map BGM.
+	MESSAGE_BEGIN(MSG_ALL, gmsgStopMP3);
+	MESSAGE_END();
 
 	MESSAGE_BEGIN(MSG_ALL, SVC_INTERMISSION);
 	MESSAGE_END();
