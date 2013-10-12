@@ -125,6 +125,15 @@ int CHud :: MsgFunc_PlayMP3( const char *pszName, int iSize, void *pbuf ) //AJH 
 
 	return 1;
 }
+int CHud :: MsgFunc_PlayBGM( const char *pszName, int iSize, void *pbuf ) //AJH -Killar MP3
+{
+	BEGIN_READ( pbuf, iSize );
+
+	if (CVAR_GET_FLOAT("hud_bgm") > 0)
+		gMP3.PlayMP3( READ_STRING() );
+
+	return 1;
+}
 int CHud :: MsgFunc_StopMP3( const char *pszName, int iSize, void *pbuf ) //AJH -Killar MP3
 {
 	gMP3.StopMP3();

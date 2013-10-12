@@ -666,6 +666,7 @@ public:
 	int _cdecl MsgFunc_SetFOV(const char *pszName,  int iSize, void *pbuf);
 	int  _cdecl MsgFunc_Concuss( const char *pszName, int iSize, void *pbuf );
 	int  _cdecl MsgFunc_PlayMP3( const char *pszName, int iSize, void *pbuf );		//KILLAR
+	int  _cdecl MsgFunc_PlayBGM( const char *pszName, int iSize, void *pbuf );		//KILLAR
 	int  _cdecl MsgFunc_StopMP3( const char *pszName, int iSize, void *pbuf );		//KILLAR
 	int  _cdecl MsgFunc_AddELight( const char *pszName, int iSize, void *pbuf );
 

@@ -62,6 +62,7 @@ extern DLL_GLOBAL ULONG		g_ulFrameCount;
 
 extern void CopyToBodyQue(entvars_t* pev);
 extern int gmsgSayText;
+extern int gmsgStopMP3;
 
 extern int g_gameplay;
 
@@ -72,7 +73,7 @@ void LinkUserMessages( void );
  * ROBIN: Moved here from player.cpp, to allow multiple player models
  */
 void set_suicide_frame(entvars_t* pev)
-{       
+{
 	if (!FStrEq(STRING(pev->model), "models/player.mdl"))
 		return; // allready gibbed
 
@@ -534,6 +535,7 @@ void ClientCommand( edict_t *pEntity )
 	}
 	else if ( FStrEq(pcmd, "tester" ) )
 	{
+		CBasePlayer * pPlayer = GetClassPtr((CBasePlayer *)pev);
 		char buf[128];
 		sprintf(buf, "Steam ID: %s\n", GETPLAYERAUTHID(pEntity) ); //WORKS!
 		UTIL_SayTextAllHS( buf );
