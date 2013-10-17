@@ -208,52 +208,82 @@ CBaseEntity * CBot::BotFindEnemy( void )
    float nearestdistance = 1000;
    CBaseEntity *pNewEnemy = NULL;
 
-   // search the world for players...
-   for (i = 1; i <= gpGlobals->maxClients; i++)
+   if (!g_pGameRules->IsMonster())
    {
-      CBaseEntity *pPlayer = UTIL_PlayerByIndex( i );
+	   // search the world for players...
+	   for (i = 1; i <= gpGlobals->maxClients; i++)
+	   {
+		  CBaseEntity *pPlayer = UTIL_PlayerByIndex( i );
 
-      // skip invalid players and skip self (i.e. this bot)
-      if ((!pPlayer) || (pPlayer == this))
-         continue;
+		  // skip invalid players and skip self (i.e. this bot)
+		  if ((!pPlayer) || (pPlayer == this))
+			 continue;
 
-      // skip this player if not alive (i.e. dead or dying)
-      if (pPlayer->pev->deadflag != DEAD_NO)
-         continue;
+		  // skip this player if not alive (i.e. dead or dying)
+		  if (pPlayer->pev->deadflag != DEAD_NO)
+			 continue;
 
-      // skip players that are not bots in observer mode...
-      if (pPlayer->IsNetClient() && f_Observer)
-         continue;
+		  // skip players that are not bots in observer mode...
+		  if (pPlayer->IsNetClient() && f_Observer)
+			 continue;
 
-      // skip players that are in botcam mode...
-      if (pPlayer->pev->effects & EF_NODRAW)
-         continue;
+		  // skip players that are in botcam mode...
+		  if (pPlayer->pev->effects & EF_NODRAW)
+			 continue;
 
-// BigGuy - START
-      // is team play enabled?
-      if (g_pGameRules->IsTeamplay())
-      {
-         // don't target your teammates if team names match...
-         if (UTIL_TeamsMatch(g_pGameRules->GetTeamID(this),
-                             g_pGameRules->GetTeamID(pPlayer)))
-            continue;
-      }
-// BigGuy - END
+	// BigGuy - START
+		  // is team play enabled?
+		  if (g_pGameRules->IsTeamplay())
+		  {
+			 // don't target your teammates if team names match...
+			 if (UTIL_TeamsMatch(g_pGameRules->GetTeamID(this),
+								 g_pGameRules->GetTeamID(pPlayer)))
+				continue;
+		  }
+	// BigGuy - END
 
-      vecEnd = pPlayer->EyePosition();
+		  vecEnd = pPlayer->EyePosition();
 
-      // see if bot can see the player...
-      if (FInViewCone( &vecEnd ) && FVisible( vecEnd ))
-      {
-         float distance = (pPlayer->pev->origin - pev->origin).Length();
-         if (distance < nearestdistance)
-         {
-            nearestdistance = distance;
-            pNewEnemy = pPlayer;
+		  // see if bot can see the player...
+		  if (FInViewCone( &vecEnd ) && FVisible( vecEnd ))
+		  {
+			 float distance = (pPlayer->pev->origin - pev->origin).Length();
+			 if (distance < nearestdistance)
+			 {
+				nearestdistance = distance;
+				pNewEnemy = pPlayer;
 
-            pBotUser = NULL;  // don't follow user when enemy found
-         }
-      }
+				pBotUser = NULL;  // don't follow user when enemy found
+			 }
+		  }
+	   }
+   }
+   else
+   {
+
+	   //This worked. Except when the target dies, it calls the taunting 1000 times when the target is dead
+	   //TODO: Fix.
+
+	   //For now, let him wander in his own little world.
+
+		//  CBaseEntity *pMonster = NULL;
+		//while(pMonster = UTIL_FindEntityByClassname(pMonster, "monster_scientist"))
+		//{
+		//  vecEnd = pMonster->EyePosition();
+
+		//  // see if bot can see the player...
+		//  if (FInViewCone( &vecEnd ) && FVisible( vecEnd ))
+		//  {
+		//	 float distance = (pMonster->pev->origin - pev->origin).Length();
+		//	 if (distance < nearestdistance)
+		//	 {
+		//		nearestdistance = distance;
+		//		pNewEnemy = pMonster;
+
+		//		pBotUser = NULL;  // don't follow user when enemy found
+		//	 }
+		//  }
+		//}
    }
 
    if (pNewEnemy)
