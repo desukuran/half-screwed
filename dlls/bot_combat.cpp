@@ -182,6 +182,7 @@ CBaseEntity * CBot::BotFindEnemy( void )
          }
 
          // don't have an enemy anymore so null out the pointer...
+		 //UTIL_SayTextAll( "Called", pBotEnemy );
          pBotEnemy = NULL;
       }
       else if (FInViewCone( &vecEnd ) && FVisible( vecEnd ))
@@ -266,24 +267,28 @@ CBaseEntity * CBot::BotFindEnemy( void )
 
 	   //For now, let him wander in his own little world.
 
-		//  CBaseEntity *pMonster = NULL;
-		//while(pMonster = UTIL_FindEntityByClassname(pMonster, "monster_scientist"))
-		//{
-		//  vecEnd = pMonster->EyePosition();
+		  CBaseEntity *pMonster = NULL;
+		while(pMonster = UTIL_FindEntityByClassname(pMonster, "monster_scientist"))
+		{
+		  vecEnd = pMonster->EyePosition();
 
-		//  // see if bot can see the player...
-		//  if (FInViewCone( &vecEnd ) && FVisible( vecEnd ))
-		//  {
-		//	 float distance = (pMonster->pev->origin - pev->origin).Length();
-		//	 if (distance < nearestdistance)
-		//	 {
-		//		nearestdistance = distance;
-		//		pNewEnemy = pMonster;
+		  // see if bot can see the player...
+		  if (FInViewCone( &vecEnd ) && FVisible( vecEnd ))
+		  {
+			 if (!pMonster->IsAlive())
+				continue;
 
-		//		pBotUser = NULL;  // don't follow user when enemy found
-		//	 }
-		//  }
-		//}
+			 float distance = (pMonster->pev->origin - pev->origin).Length();
+			 if (distance < nearestdistance)
+			 {
+				nearestdistance = distance;
+				pNewEnemy = pMonster;
+
+				pBotUser = NULL;  // don't follow user when enemy found
+				continue;
+			 }
+		 }
+		}
    }
 
    if (pNewEnemy)
