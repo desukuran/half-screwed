@@ -19,6 +19,7 @@
 #include "weapons.h"
 #include "nodes.h"
 #include "player.h"
+#include "explode.h"
 
 
 #define	JIHAD_PRIMARY_VOLUME		450
@@ -111,7 +112,12 @@ void CJihad::PrimaryAttack()
 		SendWeaponAnim( JIHAD_SHOOT3 );
 		lolalo = FALSE;
 		m_pPlayer->m_flNextAttack = UTIL_WeaponTimeBase() + 2;
-		CGrenade::ShootJihad( m_pPlayer->pev, vecSrc, vecThrow, 0 );
+		#ifdef CLIENT_DLL
+		//Genuflect
+		#else
+		ExplosionCreate( m_pPlayer->Center(), m_pPlayer->pev->angles, m_pPlayer->edict(), 1080, TRUE ); // BOOM!
+		#endif
+		//CGrenade::ShootJihad( m_pPlayer->pev, vecSrc, vecThrow, 0 );
 	}
 	else
 	{
