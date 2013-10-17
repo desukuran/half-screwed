@@ -625,6 +625,69 @@ void ClientCommand( edict_t *pEntity )
       else
          CLIENT_PRINTF( pEntity, print_console, "botdontshoot not allowed from client!\n" );
    }
+   else if (FStrEq(pcmd, "botcam" ))
+   {
+      CBasePlayer *pPlayer = GetClassPtr((CBasePlayer *)pev);
+      CBasePlayer *pBot = NULL;
+      char botname[BOT_NAME_LEN+1];
+      int index;
+
+      botname[0] = 0;
+
+      if (CMD_ARGC() > 1)  // is there an argument to the command?
+      {
+         if (strstr(CMD_ARGV(1), "\"") == NULL)
+            strcpy(botname, CMD_ARGV(1));
+         else
+            sscanf(CMD_ARGV(1), "\"%s\"", &botname[0]);
+
+         index = 0;
+
+         while (index < 32)
+         {
+            if ((bot_respawn[index].is_used) &&
+                (stricmp(bot_respawn[index].name, botname) == 0))
+               break;
+            else
+               index++;
+         }
+
+         if (index < 32)
+            pBot = bot_respawn[index].pBot;
+      }
+      else
+      {
+         index = 0;
+
+         while ((bot_respawn[index].is_used == FALSE) && (index < 32))
+            index++;
+
+         if (index < 32)
+            pBot = bot_respawn[index].pBot;
+      }
+
+      if (pBot == NULL)
+      {
+         if (botname[0])
+            CLIENT_PRINTF( pEntity, print_console, UTIL_VarArgs("there is no bot named \"%s\"!\n", botname) );
+         else
+            CLIENT_PRINTF( pEntity, print_console, UTIL_VarArgs("there are no bots!\n") );
+      }
+      else
+      {
+         if (pPlayer->pBotCam)  // if botcam in use, disconnect first...
+            pPlayer->pBotCam->Disconnect();
+
+         pPlayer->pBotCam = CBotCam::Create(pPlayer, pBot);
+      }
+   }
+   else if (FStrEq(pcmd, "nobotcam" ))
+   {
+      CBasePlayer *pPlayer = GetClassPtr((CBasePlayer *)pev);
+
+      if (pPlayer->pBotCam)
+         pPlayer->pBotCam->Disconnect();
+   }
 	else if ( FStrEq(pcmd, "use_starman" ) )
     {
             GetClassPtr((CBasePlayer *)pev)->UseMarioStar();
