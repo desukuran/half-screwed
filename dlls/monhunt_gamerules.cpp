@@ -330,8 +330,7 @@ const char *CMonsterplay::PrepareMonsterName( const char *monster_name )
 			char *cwc = "Chris-Chan";
 			char *zombie = "Zombie";
 
-			//if ( strncmp( monster_name, "monster_", 8 ) == 0 )
-				monster_name += 8;
+			monster_name += 8;
 
 			// replace the code names with the 'real' names
 			if ( !strcmp( monster_name, "gay" ) )
