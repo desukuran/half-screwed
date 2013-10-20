@@ -282,7 +282,7 @@ else
 	if (sysDate->wMonth == 12 && sysDate->wDay == 25 )
 		pev->health			= gSkillData.xmastHealth*5;
 	else
-	pev->health			= CBaseMonster::GetHealth( gSkillData.xmastHealth, 5 );
+		pev->health			= CBaseMonster::GetHealth( gSkillData.xmastHealth, 5 );
 	m_flFieldOfView		= VIEW_FIELD_WIDE;// indicates the width of this monster's forward view cone ( as a dotproduct result )
 	m_MonsterState		= MONSTERSTATE_NONE;
 	m_afCapability		= bits_CAP_HEAR | bits_CAP_OPEN_DOORS | bits_CAP_AUTO_DOORS | bits_CAP_DOORS_GROUP;

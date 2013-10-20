@@ -261,33 +261,27 @@ CBaseEntity * CBot::BotFindEnemy( void )
    }
    else
    {
-
-	   //This worked. Except when the target dies, it calls the taunting 1000 times when the target is dead
-	   //TODO: Fix.
-
-	   //For now, let him wander in his own little world.
-
 		  CBaseEntity *pMonster = NULL;
-		while(pMonster = UTIL_FindEntityByClassname(pMonster, "monster_scientist"))
+		while(pMonster = UTIL_FindEntityByClassname(pMonster, CVAR_GET_STRING("bot_target_ent"))) //For now, bots only hunt for Gay Glenn.
 		{
 		  vecEnd = pMonster->EyePosition();
 
-		  // see if bot can see the player...
-		  if (FInViewCone( &vecEnd ) && FVisible( vecEnd ))
-		  {
-			 if (!pMonster->IsAlive())
-				continue;
+			  // see if bot can see the player...
+			  if (FInViewCone( &vecEnd ) && FVisible( vecEnd ))
+			  {
+				 if (!pMonster->IsAlive())
+					continue;
 
-			 float distance = (pMonster->pev->origin - pev->origin).Length();
-			 if (distance < nearestdistance)
-			 {
-				nearestdistance = distance;
-				pNewEnemy = pMonster;
+				 float distance = (pMonster->pev->origin - pev->origin).Length();
+				 if (distance < nearestdistance)
+				 {
+					nearestdistance = distance;
+					pNewEnemy = pMonster;
 
-				pBotUser = NULL;  // don't follow user when enemy found
-				continue;
+					pBotUser = NULL;  // don't follow user when enemy found
+					continue;
+				 }
 			 }
-		 }
 		}
    }
 

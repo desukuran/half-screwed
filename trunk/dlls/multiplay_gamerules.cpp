@@ -503,7 +503,7 @@ void CHalfLifeMultiplay :: InitHUD( CBasePlayer *pl )
 			char buf[256];
 
 			sprintf( buf, "media/maps/%s.mp3", STRING(gpGlobals->mapname));
-			ALERT(at_console, buf);
+			//ALERT(at_console, buf);
 			MESSAGE_BEGIN( MSG_ONE, gmsgPlayBGM, NULL, pl->edict() );
 				WRITE_STRING( buf );
 			MESSAGE_END();
