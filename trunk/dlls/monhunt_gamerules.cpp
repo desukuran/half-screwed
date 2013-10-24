@@ -330,6 +330,8 @@ const char *CMonsterplay::PrepareMonsterName( const char *monster_name )
 			char *cwc = "Chris-Chan";
 			char *zombie = "Zombie";
 			char *controller = "Alien Controller";
+			char *bullsquid = "Bull Squid";
+			char *grinman = "Grinman";
 
 			monster_name += 8;
 
@@ -350,6 +352,10 @@ const char *CMonsterplay::PrepareMonsterName( const char *monster_name )
 				monster_name = zombie;
 			else if ( !strcmp( monster_name, "alien_controller") )
 				monster_name = controller;
+			else if ( !strcmp( monster_name, "bullsquid") )
+				monster_name = bullsquid;
+			else if ( !strcmp( monster_name, "grinman") )
+				monster_name = grinman;
 
 			return monster_name;
 }
