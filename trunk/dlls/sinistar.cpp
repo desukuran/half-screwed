@@ -204,7 +204,7 @@ void CSinistar :: HandleAnimEvent( MonsterEvent_t *pEvent )
 				{
 					pHurt->pev->punchangle.z = -18;
 					pHurt->pev->punchangle.x = 5;
-					pHurt->pev->velocity = pHurt->pev->velocity - gpGlobals->v_right * 100;
+					pHurt->pev->velocity = pHurt->pev->velocity - gpGlobals->v_right * 1000;
 				}
 				// Play a random attack hit sound
 				EMIT_SOUND_DYN ( ENT(pev), CHAN_WEAPON, pAttackHitSounds[ RANDOM_LONG(0,ARRAYSIZE(pAttackHitSounds)-1) ], 1.0, ATTN_NORM, 0, 100 + RANDOM_LONG(-5,5) );
@@ -228,7 +228,7 @@ void CSinistar :: HandleAnimEvent( MonsterEvent_t *pEvent )
 				{
 					pHurt->pev->punchangle.z = 18;
 					pHurt->pev->punchangle.x = 5;
-					pHurt->pev->velocity = pHurt->pev->velocity + gpGlobals->v_right * 100;
+					pHurt->pev->velocity = pHurt->pev->velocity + gpGlobals->v_right * 1000;
 				}
 				EMIT_SOUND_DYN ( ENT(pev), CHAN_WEAPON, pAttackHitSounds[ RANDOM_LONG(0,ARRAYSIZE(pAttackHitSounds)-1) ], 1.0, ATTN_NORM, 0, 100 + RANDOM_LONG(-5,5) );
 			}
@@ -249,7 +249,7 @@ void CSinistar :: HandleAnimEvent( MonsterEvent_t *pEvent )
 				if ( pHurt->pev->flags & (FL_MONSTER|FL_CLIENT) )
 				{
 					pHurt->pev->punchangle.x = 5;
-					pHurt->pev->velocity = pHurt->pev->velocity + gpGlobals->v_forward * -100;
+					pHurt->pev->velocity = pHurt->pev->velocity + gpGlobals->v_forward * -1000;
 				}
 				EMIT_SOUND_DYN ( ENT(pev), CHAN_WEAPON, pAttackHitSounds[ RANDOM_LONG(0,ARRAYSIZE(pAttackHitSounds)-1) ], 1.0, ATTN_NORM, 0, 100 + RANDOM_LONG(-5,5) );
 			}
@@ -281,9 +281,7 @@ else
 	UTIL_SetSize( pev, VEC_HUMAN_HULL_MIN, VEC_HUMAN_HULL_MAX );
 
 	pev->solid			= SOLID_SLIDEBOX;
-	//pev->movetype		= MOVETYPE_STEP;
-	pev->movetype		= MOVETYPE_FLY;
-	pev->flags			|= FL_FLY;	
+	pev->movetype		= MOVETYPE_STEP;
 	pev->renderfx		= kRenderFxGlowShell;
 	pev->rendercolor.x  = 255;
 	m_bloodColor		= BLOOD_COLOR_GREEN;

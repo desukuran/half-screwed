@@ -33,6 +33,10 @@ public:
 	void Precache( void );
 	void SetYawSpeed( void );
 	int  Classify ( void );
+
+	void IdleSound( void );
+	void PainSound( void );
+
 	void HandleAnimEvent( MonsterEvent_t *pEvent );
 };
 LINK_ENTITY_TO_CLASS( monster_homestuck, CHomestuckFan );
@@ -105,10 +109,20 @@ void CHomestuckFan :: Spawn()
 //=========================================================
 void CHomestuckFan :: Precache()
 {
-	//PRECACHE_SOUND("homestuck/lemmetellyou.wav");
+	PRECACHE_SOUND("homestuck/lemmetellyou.wav");
 
 	PRECACHE_MODEL("models/homosuck.mdl");
 }	
+
+void CHomestuckFan::IdleSound( void )
+{
+	EMIT_SOUND_DYN( ENT(pev), CHAN_VOICE, "homestuck/lemmetellyou.wav", 1, ATTN_NORM, 0, 100 );
+}
+
+void CHomestuckFan::PainSound( void )
+{
+	EMIT_SOUND_DYN( ENT(pev), CHAN_VOICE, "homestuck/lemmetellyou.wav", 1, ATTN_NORM, 0, 100 );
+}
 
 //=========================================================
 // AI Schedules Specific to this monster
