@@ -345,6 +345,7 @@ void CHud :: Init( void )
   //CVAR_CREATE( "hud_purple", "999", FCVAR_ARCHIVE );			// Hud Color PURPLE, wait..
 
 	CVAR_CREATE( "hud_bgm", "1", FCVAR_ARCHIVE );				// Play Map BGM
+	CVAR_CREATE( "hud_game", "0", FCVAR_ARCHIVE );				// HUD Mimicking Command...
 
 	m_iLogo = 0;
 	m_iFOV = 0;
