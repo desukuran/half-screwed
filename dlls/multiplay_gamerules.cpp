@@ -49,6 +49,10 @@ extern int gmsgStopMP3;
 extern int g_gameplay;
 int check = 0;
 
+//Half-Screwed Dev Defines
+#define HS_DEV 1
+#define HS_BETATEST 2
+#define HS_BARNEYVOICE 3
 
 #define ITEM_RESPAWN_TIME	30
 #define WEAPON_RESPAWN_TIME	20
@@ -545,28 +549,28 @@ int CHalfLifeMultiplay :: ClientDevCheck( CBasePlayer *pPlayer )
 	sprintf(buffer, "%s", GETPLAYERAUTHID( pPlayer->edict() ) );
 
 	if ((strcmp(buffer, "STEAM_0:1:3793395") == 0))
-		return 1; //Buff Drinklots
+		return HS_DEV; //Buff Drinklots
 
 	if ((strcmp(buffer, "STEAM_0:0:19779589") == 0))
-		return 2;
+		return HS_BETATEST;
 
 	if ((strcmp(buffer, "STEAM_0:0:4058273") == 0))
-		return 1; //Patrick Bateman
+		return HS_DEV; //Patrick Bateman
 
 	if ((strcmp(buffer, "STEAM_0:1:13188531") == 0))
-		return 2;
+		return HS_BETATEST;
 
 	if ((strcmp(buffer, "STEAM_0:1:35013002") == 0))
-		return 2;
+		return HS_BETATEST;
 
 	if ((strcmp(buffer, "STEAM_0:0:2515846") == 0))
-		return 2;
+		return HS_BETATEST;
 
 	if ((strcmp(buffer, "STEAM_0:1:16401600") == 0))
-		return 3; //JONNY ROCK - Voice of Barney
+		return HS_BARNEYVOICE; //JONNY ROCK - Voice of Barney
 
 	if ((strcmp(buffer, "STEAM_0:1:7505685") == 0))
-		return 2; //Peter Barton
+		return HS_BETATEST; //Peter Barton
 
 	//if ((strcmp(buffer, "BOT") <= 0))
 	//	return 1;
