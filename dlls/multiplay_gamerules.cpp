@@ -271,6 +271,14 @@ void CHalfLifeMultiplay :: Think ( void )
 	float flTimeLimit = timelimit.value * 60;
 	float flFragLimit = fraglimit.value;
 
+	if (m_fLastTimeLimit == 0)
+		m_fLastTimeLimit = flTimeLimit;
+
+	//Has the time limit changed since last reported?
+	//If so, reset the timer count.
+	if (m_fLastTimeLimit != flTimeLimit)
+		btimerSent = false;
+
 	time_remaining = (int)(flTimeLimit ? ( flTimeLimit - gpGlobals->time ) : 0);
 
 	if ( flTimeLimit != 0 && gpGlobals->time >= flTimeLimit )
@@ -318,10 +326,15 @@ void CHalfLifeMultiplay :: Think ( void )
 	// Updates once per second
 	if ( timeleft.value != last_time )
 	{
+		if (!btimerSent)
+		{
+			MESSAGE_BEGIN( MSG_ALL, gmsgTimer, NULL);
+				WRITE_LONG( time_remaining );
+			MESSAGE_END();
+			btimerSent = true;
+		}
 		g_engfuncs.pfnCvar_DirectSet( &timeleft, UTIL_VarArgs( "%i", time_remaining ) );
-	//	MESSAGE_BEGIN( MSG_ALL, gmsgTimer, NULL);
-	//	WRITE_LONG( time_remaining );
-	//	MESSAGE_END();
+
 	}
 
 	last_frags = frags_remaining;
@@ -452,6 +465,7 @@ BOOL CHalfLifeMultiplay :: GetNextBestWeapon( CBasePlayer *pPlayer, CBasePlayerI
 BOOL CHalfLifeMultiplay :: ClientConnected( edict_t *pEntity, const char *pszName, const char *pszAddress, char szRejectReason[ 128 ] )
 {
 	g_VoiceGameMgr.ClientConnected(pEntity);
+	btimerSent = false;
 	return TRUE;
 }
 
