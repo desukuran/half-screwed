@@ -346,6 +346,7 @@ void CHud :: Init( void )
 
 	CVAR_CREATE( "hud_bgm", "1", FCVAR_ARCHIVE );				// Play Map BGM
 	CVAR_CREATE( "hud_game", "0", FCVAR_ARCHIVE );				// HUD Mimicking Command...
+	CVAR_CREATE( "hud_timer", "1", FCVAR_ARCHIVE );				// Timer Enable/Disable
 
 	m_iLogo = 0;
 	m_iFOV = 0;

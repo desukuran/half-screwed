@@ -32,6 +32,9 @@ DECLARE_MESSAGE(m_Health, Health )
 DECLARE_MESSAGE(m_Health, Damage )
 DECLARE_MESSAGE(m_Health, Items)
 
+#define HUD_MGS3 0
+#define HUD_HOTLINE 1
+
 #define PAIN_NAME "sprites/%d_pain.spr"
 #define DAMAGE_NAME "sprites/%d_dmg.spr"
 
@@ -211,42 +214,76 @@ int CHudHealth::Draw(float flTime)
 	// Only draw health if we have the suit.
 	if (gHUD.m_iWeaponBits & (1<<(WEAPON_SUIT)))
 	{
-		int MGSX = (gHUD.GetSpriteRect(m_HUD_mgs3life).right - gHUD.GetSpriteRect(m_HUD_mgs3life).left)/5; //Needs 20. It's 104
-		int MGSY = ScreenHeight-((gHUD.GetSpriteRect(m_HUD_mgs3name).bottom - gHUD.GetSpriteRect(m_HUD_mgs3name).top)*2.5); // needs ScreenHeight-40. It's 
-
-		//Kojima would be proud
-
-		SPR_Set(gHUD.GetSprite(m_HUD_mgs3name), 255, 255, 255); 
-		SPR_DrawHoles(0, MGSX, MGSY, &gHUD.GetSpriteRect(m_HUD_mgs3name));   //Draw the name
-
-		int iOffset = m_iWidth * (1.0 - m_flHealth);	//32 * (1 - 1) = 0
-
-		if (iOffset < m_iWidth)
+		if (CVAR_GET_FLOAT("hud_game") == HUD_MGS3)
 		{
-			rc = *m_prc2;
-			rc.left += iOffset;
+			int MGSX = (gHUD.GetSpriteRect(m_HUD_mgs3life).right - gHUD.GetSpriteRect(m_HUD_mgs3life).left)/5; //Needs 20. It's 104
+			int MGSY = ScreenHeight-((gHUD.GetSpriteRect(m_HUD_mgs3name).bottom - gHUD.GetSpriteRect(m_HUD_mgs3name).top)*2.5); // needs ScreenHeight-40. It's 
 
-			SPR_Set(gHUD.GetSprite(m_HUD_mgs3life), 255, 255, 255 );
-			SPR_Draw(0, MGSX+2, MGSY+18, &rc);
+			//Kojima would be proud
+
+			SPR_Set(gHUD.GetSprite(m_HUD_mgs3name), 255, 255, 255); 
+			SPR_DrawHoles(0, MGSX, MGSY, &gHUD.GetSpriteRect(m_HUD_mgs3name));   //Draw the name
+
+			int iOffset = m_iWidth * (1.0 - m_flHealth);	//32 * (1 - 1) = 0
+
+			if (iOffset < m_iWidth)
+			{
+				rc = *m_prc2;
+				rc.left += iOffset;
+
+				SPR_Set(gHUD.GetSprite(m_HUD_mgs3life), 255, 255, 255 );
+				SPR_Draw(0, MGSX+2, MGSY+18, &rc);
+			}
 		}
-	}
+		else if (CVAR_GET_FLOAT("hud_game") == HUD_HOTLINE)
+		{
+			HotlineThink();
+			int y = gHUD.GetSpriteRect(gHUD.m_HUD_number_0).bottom - gHUD.GetSpriteRect(gHUD.m_HUD_number_0).top;
+			gHUD.DrawHudString(5, ScreenHeight-(y*2.5), 320, "HEALTH:", hotline_r, hotline_g, 255);
+			gHUD.DrawHudNumber(5, ScreenHeight-(y+y/2), m_iFlags | DHN_3DIGITS, m_iHealth, hotline_r, hotline_g, 255);
+		}
+		else
+		{
+			int MGSX = (gHUD.GetSpriteRect(m_HUD_mgs3life).right - gHUD.GetSpriteRect(m_HUD_mgs3life).left)/5; //Needs 20. It's 104
+			int MGSY = ScreenHeight-((gHUD.GetSpriteRect(m_HUD_mgs3name).bottom - gHUD.GetSpriteRect(m_HUD_mgs3name).top)*2.5); // needs ScreenHeight-40. It's 
 
-	int x,y;
+			//Kojima would be proud
 
-	int cardheight = gHUD.GetSpriteRect(m_HUD_mstar).bottom - gHUD.GetSpriteRect(m_HUD_mstar).top;
-	int cardwidth = (gHUD.GetSpriteRect(m_HUD_mstar).right - gHUD.GetSpriteRect(m_HUD_mstar).left)+5;
+			SPR_Set(gHUD.GetSprite(m_HUD_mgs3name), 255, 255, 255); 
+			SPR_DrawHoles(0, MGSX, MGSY, &gHUD.GetSpriteRect(m_HUD_mgs3name));   //Draw the name
 
-	if (item_mstar)
-	{
-		x = ScreenWidth - cardwidth;
-		y = ScreenHeight - (cardheight*4+5);
+			int iOffset = m_iWidth * (1.0 - m_flHealth);	//32 * (1 - 1) = 0
 
-		SPR_Set(gHUD.GetSprite(m_HUD_mstar), 255, 255, 255);
-		SPR_DrawHoles(0, x, y, &gHUD.GetSpriteRect(m_HUD_mstar));
+			if (iOffset < m_iWidth)
+			{
+				rc = *m_prc2;
+				rc.left += iOffset;
+
+				SPR_Set(gHUD.GetSprite(m_HUD_mgs3life), 255, 255, 255 );
+				SPR_Draw(0, MGSX+2, MGSY+18, &rc);			
+			}
+		}
 	}
 
 	DrawDamage(flTime);
 	return DrawPain(flTime);
+}
+
+void CHudHealth::HotlineThink()
+{
+	        if (cosSin >= 1)
+                colorInvert = true;
+            else if (cosSin <= 0)
+                colorInvert = false;
+
+            if (!colorInvert)
+                cosSin += 0.01;
+            else if (colorInvert)
+                cosSin -= 0.01;
+
+            hotline_r = (float)sin(cosSin) * 255;
+            hotline_g = (float)cos(cosSin) * 255;
+			hotline_b = 255;
 }
 
 void CHudHealth::CalcDamageDirection(vec3_t vecFrom)

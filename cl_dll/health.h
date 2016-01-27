@@ -117,6 +117,10 @@ public:
 	int m_HUD_mgs3name; //MGS3-styled name
 						//To find the stanima, look in battery.cpp
 
+	int hotline_r, hotline_g, hotline_b;
+	double cosSin;
+	bool colorInvert;
+
 	float m_fAttackFront, m_fAttackRear, m_fAttackLeft, m_fAttackRight;
 	void GetPainColor( int &r, int &g, int &b );
 	float m_fFade;
@@ -135,6 +139,7 @@ private:
 	int DrawPain(float fTime);
 	int DrawDamage(float fTime);
 	void CalcDamageDirection(vec3_t vecFrom);
+	void HotlineThink( void );
 	void UpdateTiles(float fTime, long bits);
 };	
 
