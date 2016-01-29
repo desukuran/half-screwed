@@ -20,7 +20,7 @@
 #include "nodes.h"
 #include "player.h"
 #include "gamerules.h"
-#include "time.h"
+//#include "time.h"
 
 LINK_ENTITY_TO_CLASS( weapon_boombox, CBoombox );
 
@@ -41,7 +41,8 @@ const char *CBoombox::pBoomboxSongs[] =
 "bbox/song4.wav",
 "bbox/song5.wav",
 "bbox/song6.wav",
-"bbox/song7.wav"
+"bbox/song7.wav",
+"bbox/song8.wav"
 };
 
 void CBoombox::Spawn( )
@@ -106,12 +107,7 @@ void CBoombox::Holster( int skiplocal /* = 0 */ )
 
 void CBoombox::PrimaryAttack()
 {	
-	LPSYSTEMTIME sysDate;
-
-	sysDate = (LPSYSTEMTIME) malloc(sizeof(SYSTEMTIME));
-	GetLocalTime(sysDate);
-
-	if (sysDate->wMonth == 12 && sysDate->wDay == 25 ) {
+	if (IsChristmas(true)) {
 		EMIT_SOUND(ENT(m_pPlayer->pev), CHAN_WEAPON, "bbox/xmassong.wav", 1, ATTN_NORM);
 		m_pPlayer->m_flNextAttack = UTIL_WeaponTimeBase() + 0.5;
 		return;

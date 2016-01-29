@@ -192,54 +192,52 @@ void CGib :: SpawnRandomGibs( entvars_t *pevVictim, int cGibs, int human )
 {
 	int cSplat;
 
-	LPSYSTEMTIME sysDate;
-
-	sysDate = (LPSYSTEMTIME) malloc(sizeof(SYSTEMTIME));
-	GetLocalTime(sysDate);
 	for ( cSplat = 0 ; cSplat < cGibs ; cSplat++ )
 	{
 		CGib *pGib = GetClassPtr( (CGib *)NULL );
 
 		if ( g_Language == LANGUAGE_GERMAN )
 		{
-		if ((sysDate->wMonth == 12 && sysDate->wDay == 25 ) || (sysDate->wMonth == 3 && sysDate->wDay == 31 ) || (CVAR_GET_FLOAT("mp_christmas") == 1  )) {
-			pGib->Spawn( "models/pgibs.mdl" );
-			pGib->pev->body = RANDOM_LONG(0,PRESENT_GIB_COUNT-1);
-		}
-		else {
-			pGib->Spawn( "models/germangibs.mdl" );
-			pGib->pev->body = RANDOM_LONG(0,GERMAN_GIB_COUNT-1);
-		}
+			if (IsChristmas(false) || (IsMarch31st()) || (CVAR_GET_FLOAT("mp_christmas") == 1) )
+			{
+				pGib->Spawn( "models/pgibs.mdl" );
+				pGib->pev->body = RANDOM_LONG(0,PRESENT_GIB_COUNT-1);
+			}
+			else 
+			{
+				pGib->Spawn( "models/germangibs.mdl" );
+				pGib->pev->body = RANDOM_LONG(0,GERMAN_GIB_COUNT-1);
+			}
 		}
 		else
 		{
 			if ( human )
 			{
-		if ((sysDate->wMonth == 12 && ((sysDate->wDay == 23 ) || (sysDate->wDay == 24 ) || (sysDate->wDay == 25 ))) || (sysDate->wMonth == 3 && sysDate->wDay == 31 ) || (CVAR_GET_FLOAT("mp_christmas") == 1  )) {
-			pGib->Spawn( "models/pgibs.mdl" );
-			pGib->pev->body = RANDOM_LONG(0,PRESENT_GIB_COUNT-1);
-		}
-		else if (CVAR_GET_FLOAT("mp_christmas") == 1 ) {
-			pGib->Spawn( "models/pgibs.mdl" );
-			pGib->pev->body = RANDOM_LONG(0,PRESENT_GIB_COUNT-1);
-		}
-		else {
-				// human pieces
-				pGib->Spawn( "models/hgibs.mdl" );
-				pGib->pev->body = RANDOM_LONG(1,HUMAN_GIB_COUNT-1);// start at one to avoid throwing random amounts of skulls (0th gib)
+				if (IsChristmas(false) || (IsMarch31st()) || (CVAR_GET_FLOAT("mp_christmas") == 1) ) 
+				{
+					pGib->Spawn( "models/pgibs.mdl" );
+					pGib->pev->body = RANDOM_LONG(0,PRESENT_GIB_COUNT-1);
+				}
+				else 
+				{
+					// human pieces
+					pGib->Spawn( "models/hgibs.mdl" );
+					pGib->pev->body = RANDOM_LONG(1,HUMAN_GIB_COUNT-1);// start at one to avoid throwing random amounts of skulls (0th gib)
 				}
 			}
 			else
 			{
-			if ((sysDate->wMonth == 12 && ((sysDate->wDay == 23 ) || (sysDate->wDay == 24 ) || (sysDate->wDay == 25 ))) || (sysDate->wMonth == 3 && sysDate->wDay == 31 ) || (CVAR_GET_FLOAT("mp_christmas") == 1  )) {
-				pGib->Spawn( "models/pgibs.mdl" );
-				pGib->pev->body = RANDOM_LONG(0,PRESENT_GIB_COUNT-1);
-			}
-			else {
-				// aliens
-				pGib->Spawn( "models/agibs.mdl" );
-				pGib->pev->body = RANDOM_LONG(0,ALIEN_GIB_COUNT-1);
-			}
+				if (IsChristmas(false) || (IsMarch31st()) || (CVAR_GET_FLOAT("mp_christmas") == 1) ) 
+				{
+					pGib->Spawn( "models/pgibs.mdl" );
+					pGib->pev->body = RANDOM_LONG(0,PRESENT_GIB_COUNT-1);
+				}
+				else 
+				{
+					// aliens
+					pGib->Spawn( "models/agibs.mdl" );
+					pGib->pev->body = RANDOM_LONG(0,ALIEN_GIB_COUNT-1);
+				}
 			}
 		}
 
@@ -341,12 +339,8 @@ void CBaseMonster :: GibMonster( void )
 	TraceResult	tr;
 	BOOL		gibbed = FALSE;
 
-	LPSYSTEMTIME sysDate;
-	sysDate = (LPSYSTEMTIME) malloc(sizeof(SYSTEMTIME));
-	GetLocalTime(sysDate);
 
-
-	if ((sysDate->wMonth == 12 && ((sysDate->wDay == 23 ) || (sysDate->wDay == 24 ) || (sysDate->wDay == 25 ))) || (sysDate->wMonth == 3 && sysDate->wDay == 31 ) || (CVAR_GET_FLOAT("mp_christmas") == 1  )) {
+	if (IsChristmas(false) || IsMarch31st() || (CVAR_GET_FLOAT("mp_christmas") == 1  )) {
 		EMIT_SOUND(ENT(pev), CHAN_WEAPON, "misc/party2.wav", 1, ATTN_NORM);
 	}
 	else {

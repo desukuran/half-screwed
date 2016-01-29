@@ -27,7 +27,7 @@
 #include	"scripted.h"
 #include	"weapons.h"
 #include	"soundent.h"
-#include	"time.h"
+//#include	"time.h"
 #include	"gamerules.h"
 
 //=========================================================
@@ -419,14 +419,8 @@ void CBarney :: HandleAnimEvent( MonsterEvent_t *pEvent )
 void CBarney :: Spawn()
 {
 	Precache( );
-	
-	LPSYSTEMTIME sysDate;
 
-	sysDate = (LPSYSTEMTIME) malloc(sizeof(SYSTEMTIME));
-	GetLocalTime(sysDate);
-
-	//This looks ugly - GOAHEAD
-	if ((sysDate->wMonth == 12 && sysDate->wDay == 25 ) || (sysDate->wMonth == 12 && sysDate->wDay == 24 ) || (sysDate->wMonth == 12 && sysDate->wDay == 23 ) || (CVAR_GET_FLOAT("mp_christmas") == 1 )) {
+	if (IsChristmas(false) || (CVAR_GET_FLOAT("mp_christmas") == 1 )) {
 		SET_MODEL(ENT(pev), "models/barneyxmas.mdl");
 	}
 	else {
