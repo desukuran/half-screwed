@@ -117,7 +117,7 @@ public:
 	int m_HUD_mgs3name; //MGS3-styled name
 						//To find the stanima, look in battery.cpp
 
-	int hotline_r, hotline_g, hotline_b;
+	static int hotline_r, hotline_g, hotline_b;
 	double cosSin;
 	bool colorInvert;
 

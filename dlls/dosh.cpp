@@ -206,8 +206,8 @@ int CDosh::GetItemInfo(ItemInfo *p)
 	p->pszAmmo2 = NULL;
 	p->iMaxAmmo2 = -1;
 	p->iMaxClip = DOSH_MAX_CLIP;
-	p->iSlot = 3;
-	p->iPosition = 4;
+	p->iSlot = 5;
+	p->iPosition = 0;
 	p->iId = m_iId = WEAPON_DOSH;
 	p->iFlags = 0;
 	p->iWeight = DOSH_WEIGHT;

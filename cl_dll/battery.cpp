@@ -25,6 +25,9 @@
 #include <string.h>
 #include <stdio.h>
 
+#define HUD_MGS3 0
+#define HUD_HOTLINE 1
+
 DECLARE_MESSAGE(m_Battery, Battery)
 
 int CHudBattery::Init(void)
@@ -93,27 +96,55 @@ int CHudBattery::Draw(float flTime)
 	if (!(gHUD.m_iWeaponBits & (1<<(WEAPON_SUIT)) ))
 		return 1;
 	
-		int iOffset = (m_prc1->bottom - m_prc1->top)/6;
-
-		int MGSX = (gHUD.GetSpriteRect(m_HUD_mgs3suitbar).right - gHUD.GetSpriteRect(m_HUD_mgs3suitbar).left)/10; //Needs 20. It's 104
-		int MGSY = ScreenHeight-45; 
-
-		int iOffset2 = m_iWidth * (1.0 - m_flBat);	//32 * (1 - 1) = 0
-
-		if (iOffset2 < m_iWidth)
+		if (CVAR_GET_FLOAT("hud_game") == HUD_MGS3)
 		{
-			rc = *m_prc3;
-			rc.left += iOffset2;
+			int iOffset = (m_prc1->bottom - m_prc1->top)/6;
 
-			SPR_Set(gHUD.GetSprite(m_HUD_mgs3suitbar), 255, 255, 255 );
-			SPR_Draw(0, MGSX+5, MGSY+28, &rc);
+			int MGSX = (gHUD.GetSpriteRect(m_HUD_mgs3suitbar).right - gHUD.GetSpriteRect(m_HUD_mgs3suitbar).left)/10; //Needs 20. It's 104
+			int MGSY = ScreenHeight-45; 
 
-			SPR_Set(gHUD.GetSprite(m_HUD_mgs3suitdiv), 255, 255, 255 );
-			SPR_DrawHoles(0, MGSX+5, MGSY+28, &gHUD.GetSpriteRect(m_HUD_mgs3suitdiv));
+			int iOffset2 = m_iWidth * (1.0 - m_flBat);	//32 * (1 - 1) = 0
+
+			if (iOffset2 < m_iWidth)
+			{
+				rc = *m_prc3;
+				rc.left += iOffset2;
+
+				SPR_Set(gHUD.GetSprite(m_HUD_mgs3suitbar), 255, 255, 255 );
+				SPR_Draw(0, MGSX+5, MGSY+28, &rc);
+
+				SPR_Set(gHUD.GetSprite(m_HUD_mgs3suitdiv), 255, 255, 255 );
+				SPR_DrawHoles(0, MGSX+5, MGSY+28, &gHUD.GetSpriteRect(m_HUD_mgs3suitdiv));
+			}
 		}
+		else if (CVAR_GET_FLOAT("hud_game") == HUD_HOTLINE)
+		{
+			//HotlineThink();
+			int y = gHUD.GetSpriteRect(gHUD.m_HUD_number_0).bottom - gHUD.GetSpriteRect(gHUD.m_HUD_number_0).top;
+			gHUD.DrawHudString(5+150, ScreenHeight-(y*2.5), 320, "ARMOR:", CHudHealth::hotline_r, CHudHealth::hotline_g, 255);
+			gHUD.DrawHudNumber(5+150, ScreenHeight-(y+y/2), m_iFlags | DHN_3DIGITS, m_iBat, CHudHealth::hotline_r, CHudHealth::hotline_g, 255);
+		}
+		else
+		{
+			int iOffset = (m_prc1->bottom - m_prc1->top)/6;
 
-	//x += (m_prc1->right - m_prc1->left);
-	//x = gHUD.DrawHudNumber(x, y, DHN_3DIGITS | DHN_DRAWZERO, m_iBat, r, g, b);
+			int MGSX = (gHUD.GetSpriteRect(m_HUD_mgs3suitbar).right - gHUD.GetSpriteRect(m_HUD_mgs3suitbar).left)/10; //Needs 20. It's 104
+			int MGSY = ScreenHeight-45; 
 
-	return 1;
+			int iOffset2 = m_iWidth * (1.0 - m_flBat);	//32 * (1 - 1) = 0
+
+			if (iOffset2 < m_iWidth)
+			{
+				rc = *m_prc3;
+				rc.left += iOffset2;
+
+				SPR_Set(gHUD.GetSprite(m_HUD_mgs3suitbar), 255, 255, 255 );
+				SPR_Draw(0, MGSX+5, MGSY+28, &rc);
+
+				SPR_Set(gHUD.GetSprite(m_HUD_mgs3suitdiv), 255, 255, 255 );
+				SPR_DrawHoles(0, MGSX+5, MGSY+28, &gHUD.GetSpriteRect(m_HUD_mgs3suitdiv));
+			}
+			
+		}
+		return 1;
 }

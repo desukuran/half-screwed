@@ -39,6 +39,7 @@ DECLARE_MESSAGE(m_Health, Items)
 #define DAMAGE_NAME "sprites/%d_dmg.spr"
 
 int giDmgHeight, giDmgWidth;
+int CHudHealth::hotline_r, CHudHealth::hotline_g, CHudHealth::hotline_b = 0;
 
 int giDmgFlags[NUM_DMG_TYPES] = 
 {
