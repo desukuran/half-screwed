@@ -45,6 +45,7 @@ void EV_FireGOLDENGUN( struct event_args_s *args  );
 void EV_FireJackal( struct event_args_s *args  );
 void EV_Jihad( struct event_args_s *args  );
 void EV_FireZAPPER( struct event_args_s *args  );
+void EV_FireNerf( struct event_args_s *args  );
 void EV_TrainPitchAdjust( struct event_args_s *args );
 }
 
@@ -90,5 +91,6 @@ void Game_HookEvents( void )
 	gEngfuncs.pfnHookEvent( "events/jackal.sc",					EV_FireJackal );
 	gEngfuncs.pfnHookEvent( "events/jihad.sc",					EV_Jihad );
 	gEngfuncs.pfnHookEvent( "events/zapper.sc",					EV_FireZAPPER );
+	gEngfuncs.pfnHookEvent( "events/nerfgun.sc",					EV_FireNerf );
 
 }

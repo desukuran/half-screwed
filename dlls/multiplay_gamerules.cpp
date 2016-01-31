@@ -715,6 +715,7 @@ void CHalfLifeMultiplay :: PlayerSpawn( CBasePlayer *pPlayer )
 		pPlayer->GiveNamedItem( "weapon_nstar" );
 		pPlayer->GiveNamedItem( "weapon_zapper" );
 		pPlayer->GiveNamedItem( "weapon_boombox" );
+		pPlayer->GiveNamedItem( "weapon_nerfgun" );
 	}
 }
 

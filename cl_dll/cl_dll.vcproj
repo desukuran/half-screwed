@@ -1790,6 +1790,10 @@
 					>
 				</File>
 				<File
+					RelativePath="..\dlls\nerf_gun.cpp"
+					>
+				</File>
+				<File
 					RelativePath="..\dlls\nstar.cpp"
 					>
 				</File>

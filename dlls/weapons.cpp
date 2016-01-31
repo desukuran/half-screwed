@@ -386,6 +386,9 @@ void W_Precache(void)
 	// Ninja Star
 	UTIL_PrecacheOtherWeapon( "weapon_nstar" );
 
+	// Ninja Star
+	UTIL_PrecacheOtherWeapon( "weapon_nerfgun" );
+
 	// Super Serious Gun
 	UTIL_PrecacheOtherWeapon( "weapon_mw2" );
 

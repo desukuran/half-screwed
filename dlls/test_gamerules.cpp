@@ -77,6 +77,7 @@ void CTestplay::PlayerSpawn( CBasePlayer *pPlayer )
 		pPlayer->GiveNamedItem( "weapon_boombox" );
 		pPlayer->GiveNamedItem( "weapon_scientist" );
 		pPlayer->GiveNamedItem( "weapon_modman" );
+		pPlayer->GiveNamedItem( "weapon_nerfgun" );
 	}
 		//char welcometext[1024] = "Welcome to Test Gamemode!\n";
 		//UTIL_SayText( welcometext, pPlayer );

@@ -82,6 +82,7 @@ void EV_FireBow( struct event_args_s *args  );
 void EV_FireScientist( struct event_args_s *args );
 void EV_FireNStar( struct event_args_s *args	);
 void EV_FireMW2( struct event_args_s *args  );
+void EV_FireNerf( struct event_args_s *args  );
 
 void EV_TrainPitchAdjust( struct event_args_s *args );
 }
@@ -1551,6 +1552,42 @@ void EV_FireNStar( event_args_t *args )
 		V_PunchAxis( 0, -0.5 );
 	}
 }
+
+//======================
+//	  STAR START
+//======================
+enum nerf_e {
+	NERF_IDLE = 0,	// full
+	NERF_FIRE,		// full
+	NERF_DRAW,		// full
+};
+
+void EV_FireNerf( event_args_t *args )
+{
+	int idx;
+	vec3_t origin;
+
+	idx = args->entindex;
+	VectorCopy( args->origin, origin );
+	
+	switch( gEngfuncs.pfnRandomLong( 0, 1 ) )
+	{
+	case 0:
+		gEngfuncs.pEventAPI->EV_PlaySound( idx, origin, CHAN_WEAPON, "weapons/nerf_fire1.wav", 1, ATTN_NORM, 0, 96 + gEngfuncs.pfnRandomLong(0,0x3) ); break;
+	case 1:
+		gEngfuncs.pEventAPI->EV_PlaySound( idx, origin, CHAN_WEAPON, "weapons/nerf_fire2.wav", 1, ATTN_NORM, 0, 96 + gEngfuncs.pfnRandomLong(0,0x3) ); break;
+	}
+	//gEngfuncs.pEventAPI->EV_PlaySound( idx, origin, CHAN_ITEM, "weapons/bow_reload1.wav", gEngfuncs.pfnRandomFloat(0.95, 1.0), ATTN_NORM, 0, 93 + gEngfuncs.pfnRandomLong(0,0xF) );
+
+	//Only play the weapon anims if I shot it. 
+	//Bug Fix
+	if ( EV_IsLocal( idx ) )
+	{
+		gEngfuncs.pEventAPI->EV_WeaponAnimation( NERF_FIRE, 1 );
+		V_PunchAxis( 0, -0.5 );
+	}
+}
+
 //======================
 //	   BOW END 
 //======================

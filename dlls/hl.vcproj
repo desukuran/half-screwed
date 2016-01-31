@@ -2192,6 +2192,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\nerf_gun.cpp"
+				>
+			</File>
+			<File
 				RelativePath="nihilanth.cpp"
 				>
 				<FileConfiguration

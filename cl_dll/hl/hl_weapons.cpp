@@ -77,6 +77,7 @@ CBow g_Bow;
 CModman g_Modman;
 CJihad g_Jihad;
 CNStar g_NStar;
+CNerfGun g_NerfGun;
 CMW2 g_MW2;
 CGOLDENGUN g_GOLDENGUN;
 CJackal g_Jackal;
@@ -655,6 +656,7 @@ void HUD_InitClientWeapons( void )
 	HUD_PrepEntity( &g_Modman		, &player );
 	HUD_PrepEntity( &g_Jihad	, &player );
 	HUD_PrepEntity( &g_NStar	, &player );
+	HUD_PrepEntity( &g_NerfGun	, &player );
 	HUD_PrepEntity( &g_MW2		, &player );
 	HUD_PrepEntity( &g_Jackal	, &player );
 	HUD_PrepEntity( &g_GOLDENGUN		, &player );
@@ -802,6 +804,10 @@ void HUD_WeaponsPostThink( local_state_s *from, local_state_s *to, usercmd_t *cm
 
 		case WEAPON_NSTAR:
 			pWeapon = &g_NStar;
+			break;
+
+		case WEAPON_NERFGUN:
+			pWeapon = &g_NerfGun;
 			break;
 
 		case WEAPON_MW2:

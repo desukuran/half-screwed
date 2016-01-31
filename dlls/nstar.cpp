@@ -244,7 +244,7 @@ int CNStar::AddToPlayer( CBasePlayer *pPlayer )
 void CNStar::Precache( void )
 {
 	PRECACHE_MODEL("models/w_nstar.mdl");
-	PRECACHE_MODEL("models/v_nstar.mdl");
+	PRECACHE_MODEL("models/v_nerfgun.mdl");
 	PRECACHE_MODEL("models/p_nstar.mdl");
 
 	UTIL_PrecacheOther( "ninja_star" );
