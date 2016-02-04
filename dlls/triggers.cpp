@@ -1578,7 +1578,7 @@ void CChangeLevel :: ChangeLevelNow( CBaseEntity *pActivator )
 	ALERT( at_console, "CHANGE LEVEL: %s %s\n", st_szNextMap, st_szNextSpot );
 
 	if (g_pGameRules->IsCoOp())
-		CHANGE_LEVEL( st_szNextMap, NULL );
+		CHANGE_LEVEL( st_szNextMap, st_szNextSpot );
 	else
 		CHANGE_LEVEL( st_szNextMap, st_szNextSpot );
 }

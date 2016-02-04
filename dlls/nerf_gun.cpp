@@ -38,10 +38,13 @@ class CNerfDart : public CBaseEntity
 	void Precache( void );
 	int  Classify ( void );
 	void EXPORT BubbleThink( void );
+	void EXPORT WallThink( void );
 	void EXPORT DartTouch( CBaseEntity *pOther );
 	void EXPORT ExplodeThink( void );
 
 	int m_iTrail;
+	float m_flDieTime;
+	float m_flStickTime;
 
 public:
 	static CNerfDart *DartCreate( void );
@@ -138,21 +141,22 @@ void CNerfDart::DartTouch( CBaseEntity *pOther )
 	{
 		EMIT_SOUND_DYN(ENT(pev), CHAN_BODY, "weapons/nerf_dartstick.wav", RANDOM_FLOAT(0.95, 1.0), ATTN_NORM, 0, 98 + RANDOM_LONG(0,7));
 
-		SetThink( &CBaseEntity::SUB_FadeOut );
+		SetThink( &CNerfDart::WallThink );
 		pev->nextthink = gpGlobals->time;// this will get changed below if the bolt is allowed to stick in what it hit.
+		m_flStickTime = gpGlobals->time + RANDOM_FLOAT( 0, 10 );
 
 		if ( FClassnameIs( pOther->pev, "worldspawn" ) )
 		{
 			// if what we hit is static architecture, can stay around for a while.
 			Vector vecDir = pev->velocity.Normalize( );
-			UTIL_SetOrigin( pev, pev->origin - vecDir * 12 );
+			UTIL_SetOrigin( pev, pev->origin - vecDir * 18 );
 			pev->angles = UTIL_VecToAngles( vecDir );
 			pev->solid = SOLID_NOT;
 			pev->movetype = MOVETYPE_FLY;
-			pev->velocity = Vector( 0, 0, -200 );
+			pev->velocity = Vector( 0, 0, 0 );
 			pev->avelocity.z = 0;
 			pev->angles.z = RANDOM_LONG(0,360);
-			pev->nextthink = gpGlobals->time + 10.0; //TODO: Change
+			pev->nextthink = gpGlobals->time + RANDOM_FLOAT( 0, 10 ); //TODO: Change
 		}
 
 		/*if (UTIL_PointContents(pev->origin) != CONTENTS_WATER)
@@ -172,6 +176,22 @@ void CNerfDart::BubbleThink( void )
 		return;
 
 	UTIL_BubbleTrail( pev->origin - pev->velocity * 0.1, pev->origin, 20 );
+}
+
+void CNerfDart::WallThink( void )
+{
+	pev->nextthink = gpGlobals->time + 0.1;
+
+	if (gpGlobals->time > m_flStickTime)
+	{
+		if (!m_flDieTime)
+			m_flDieTime = gpGlobals->time + 10;
+
+		pev->velocity.z -= 30;
+	}
+
+	if (gpGlobals->time > m_flDieTime)
+		SetThink( &CBaseEntity::SUB_Remove );
 }
 
 void CNerfDart::ExplodeThink( void )
@@ -227,7 +247,7 @@ void CNerfGun::Spawn( )
 {
 	Precache( );
 	m_iId = WEAPON_NERFGUN;
-	SET_MODEL(ENT(pev), "models/w_nstar.mdl");
+	SET_MODEL(ENT(pev), "models/w_nerfgun.mdl");
 
 	m_iDefaultAmmo = NSTAR_DEFAULT_GIVE;
 
@@ -248,9 +268,9 @@ int CNerfGun::AddToPlayer( CBasePlayer *pPlayer )
 
 void CNerfGun::Precache( void )
 {
-	PRECACHE_MODEL("models/w_nstar.mdl");
+	PRECACHE_MODEL("models/w_nerfgun.mdl");
 	PRECACHE_MODEL("models/v_nerfgun.mdl");
-	PRECACHE_MODEL("models/p_nstar.mdl");
+	PRECACHE_MODEL("models/p_nerfgun.mdl");
 
 	UTIL_PrecacheOther( "nerf_dart" );
 
@@ -277,7 +297,7 @@ int CNerfGun::GetItemInfo(ItemInfo *p)
 
 BOOL CNerfGun::Deploy( )
 {
-	return DefaultDeploy( "models/v_nerfgun.mdl", "models/p_nstar.mdl", NERF_IDLE, "nstar" );
+	return DefaultDeploy( "models/v_nerfgun.mdl", "models/p_nerfgun.mdl", NERF_IDLE, "mp5" );
 }
 
 void CNerfGun::Holster( int skiplocal /* = 0 */ )
@@ -377,7 +397,6 @@ void CNerfGun::FireDart()
 		m_pPlayer->SetSuitUpdate("!HEV_AMO0", FALSE, 0);
 
 	m_flNextPrimaryAttack = UTIL_WeaponTimeBase() + 1.8;
-
 	m_flNextSecondaryAttack = UTIL_WeaponTimeBase() + 0.75;
 
 	if (m_iClip != 0)
@@ -392,15 +411,21 @@ void CNerfGun::WeaponIdle( void )
 
 	if ( m_flPumpTime && m_flPumpTime < gpGlobals->time )
 	{
+		SendWeaponAnim( NERF_DRAW );
 		// play pumping sound
 		EMIT_SOUND_DYN(ENT(m_pPlayer->pev), CHAN_ITEM, "weapons/nerf_bolt.wav", 1, ATTN_NORM, 0, 95 + RANDOM_LONG(0,0x1f));
 		m_flPumpTime = 0;
+		m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + 1.8;
+		m_fBoltTime = UTIL_WeaponTimeBase() + 1.8;
 	}
+	
+	if ( m_fBoltTime < gpGlobals->time )
+		return;
 
 	ResetEmptySound( );
 	
-				SendWeaponAnim( NERF_IDLE );
-				m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + 80.0 / 30.0;
+	SendWeaponAnim( NERF_IDLE );
+	m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + 80.0 / 30.0;
 }
 
 

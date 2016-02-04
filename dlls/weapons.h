@@ -1429,6 +1429,7 @@ public:
 	void WeaponIdle( void );
 
 	int m_fInZoom; // don't save this
+	float m_fBoltTime;
 
 	virtual BOOL UseDecrement( void )
 	{ 

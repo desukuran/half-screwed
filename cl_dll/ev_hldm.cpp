@@ -1559,7 +1559,7 @@ void EV_FireNStar( event_args_t *args )
 enum nerf_e {
 	NERF_IDLE = 0,	// full
 	NERF_FIRE,		// full
-	NERF_DRAW,		// full
+	NERF_BOLT,		// full
 };
 
 void EV_FireNerf( event_args_t *args )
