@@ -427,6 +427,8 @@ private:
 	float m_flBat;
 	float m_fFade;
 	int	  m_iHeight;		// width of the battery innards
+	int	  m_HUD_zeldaheart;
+	int   m_HUD_zeldamagic;
 };
 //
 //-----------------------------------------------------

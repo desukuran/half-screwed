@@ -32,8 +32,9 @@ DECLARE_MESSAGE(m_Health, Health )
 DECLARE_MESSAGE(m_Health, Damage )
 DECLARE_MESSAGE(m_Health, Items)
 
-#define HUD_MGS3 0
+#define HUD_MGS3	0
 #define HUD_HOTLINE 1
+#define HUD_ZELDA	2
 
 #define PAIN_NAME "sprites/%d_pain.spr"
 #define DAMAGE_NAME "sprites/%d_dmg.spr"
@@ -102,6 +103,8 @@ int CHudHealth::VidInit(void)
 	m_HUD_mgs3name = gHUD.GetSpriteIndex( "mgs3name" );
 
 	m_HUD_mstar = gHUD.GetSpriteIndex( "mstar" );
+
+	m_HUD_zeldaheart = gHUD.GetSpriteIndex("zheart");
 
 	m_prc2 = &gHUD.GetSpriteRect(m_HUD_mgs3life);		//Full
 
@@ -242,6 +245,22 @@ int CHudHealth::Draw(float flTime)
 			int y = gHUD.GetSpriteRect(gHUD.m_HUD_number_0).bottom - gHUD.GetSpriteRect(gHUD.m_HUD_number_0).top;
 			gHUD.DrawHudString(5, ScreenHeight-(y*2.5), 320, "HEALTH:", hotline_r, hotline_g, 255);
 			gHUD.DrawHudNumber(5, ScreenHeight-(y+y/2), m_iFlags | DHN_3DIGITS, m_iHealth, hotline_r, hotline_g, 255);
+		}
+		else if (CVAR_GET_FLOAT("hud_game") == HUD_ZELDA)
+		{
+			int ZeldaWidth = gHUD.GetSpriteRect(m_HUD_zeldaheart).right - gHUD.GetSpriteRect(m_HUD_zeldaheart).left;
+			//int HealthWidth = gHUD.GetSpriteRect(gHUD.m_HUD_number_0).right - gHUD.GetSpriteRect(gHUD.m_HUD_number_0).left;
+
+			int y = gHUD.m_iFontHeight + (gHUD.m_iFontHeight / 2);
+			//int x = HealthWidth / 2;
+			int x;
+
+			for (int i = 0; i < (m_iHealth/10); i++)
+			{
+				x = (ZeldaWidth*1.1)*(i + 1);
+				SPR_Set(gHUD.GetSprite(m_HUD_zeldaheart), 255, 255, 255);
+				SPR_DrawHoles(0, x, y, &gHUD.GetSpriteRect(m_HUD_zeldaheart));
+			}
 		}
 		else
 		{

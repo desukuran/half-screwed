@@ -111,6 +111,7 @@ public:
 	int m_iHealth;
 	float m_flHealth;
 	int m_HUD_dmg_bio;
+	int m_HUD_zeldaheart;
 	//int m_HUD_cross;
 
 	int m_HUD_mgs3life; //MGS3-styled lifebar

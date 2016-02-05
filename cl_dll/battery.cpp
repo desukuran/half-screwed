@@ -25,8 +25,9 @@
 #include <string.h>
 #include <stdio.h>
 
-#define HUD_MGS3 0
+#define HUD_MGS3	0
 #define HUD_HOTLINE 1
+#define HUD_ZELDA	2
 
 DECLARE_MESSAGE(m_Battery, Battery)
 
@@ -51,6 +52,9 @@ int CHudBattery::VidInit(void)
 
 	m_HUD_mgs3suitbar = gHUD.GetSpriteIndex( "mgs3suitbar" );
 	m_HUD_mgs3suitdiv = gHUD.GetSpriteIndex( "mgs3suitdiv" );
+
+	m_HUD_zeldaheart = gHUD.GetSpriteIndex("zheart");
+	m_HUD_zeldamagic = gHUD.GetSpriteIndex("zmagic");
 
 	m_prc3 = &gHUD.GetSpriteRect(m_HUD_mgs3suitbar);		//Full
 
@@ -123,6 +127,18 @@ int CHudBattery::Draw(float flTime)
 			int y = gHUD.GetSpriteRect(gHUD.m_HUD_number_0).bottom - gHUD.GetSpriteRect(gHUD.m_HUD_number_0).top;
 			gHUD.DrawHudString(5+150, ScreenHeight-(y*2.5), 320, "ARMOR:", CHudHealth::hotline_r, CHudHealth::hotline_g, 255);
 			gHUD.DrawHudNumber(5+150, ScreenHeight-(y+y/2), m_iFlags | DHN_3DIGITS, m_iBat, CHudHealth::hotline_r, CHudHealth::hotline_g, 255);
+		}
+		else if (CVAR_GET_FLOAT("hud_game") == HUD_ZELDA)
+		{
+			int ZeldaWidth = gHUD.GetSpriteRect(m_HUD_zeldaheart).right - gHUD.GetSpriteRect(m_HUD_zeldaheart).left;
+			int MagicWidth = gHUD.GetSpriteRect(m_HUD_zeldamagic).right - gHUD.GetSpriteRect(m_HUD_zeldamagic).left;
+			int x = ZeldaWidth*1.1;
+			int y = (gHUD.m_iFontHeight*4) + (gHUD.m_iFontHeight / 2);
+			int w = ((MagicWidth-(MagicWidth/16))*(m_flBat));
+
+			SPR_Set(gHUD.GetSprite(m_HUD_zeldamagic), 255, 255, 255 );
+			SPR_DrawHoles(0, x-(MagicWidth/32), y-(MagicWidth/32), &gHUD.GetSpriteRect(m_HUD_zeldamagic));
+			FillRGBA(x, y, w, 16, 0, 0xFF, 0, 255);
 		}
 		else
 		{
