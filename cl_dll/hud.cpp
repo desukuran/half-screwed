@@ -348,6 +348,8 @@ void CHud :: Init( void )
 	CVAR_CREATE( "hud_game", "0", FCVAR_ARCHIVE );				// HUD Mimicking Command...
 	CVAR_CREATE( "hud_timer", "1", FCVAR_ARCHIVE );				// Timer Enable/Disable
 
+	CVAR_CREATE( "mp3_volume", "1", FCVAR_ARCHIVE );
+
 	m_iLogo = 0;
 	m_iFOV = 0;
 

@@ -16,6 +16,7 @@ private:
 	signed char		(_stdcall * SBS)	(int len_ms);
 	signed char		(_stdcall * SDRV)	(int driver);
 	signed char		(_stdcall * INIT)	(int mixrate, int maxsoftwarechannels, unsigned int flags);
+	signed char		(_stdcall * VOL)	(int vol);
 	FSOUND_STREAM*		(_stdcall * SOF)	(const char *filename, unsigned int mode,int memlength);				//AJH old fmod
 	FSOUND_STREAM*		(_stdcall * SO)	(const char *filename, unsigned int mode,int offset, int memlength);	//AJH use new fmod
 	int 			(_stdcall * SPLAY)	(int channel, FSOUND_STREAM *stream);

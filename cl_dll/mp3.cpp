@@ -31,8 +31,9 @@ int CMP3::Initialize()
 		(FARPROC&)SO = GetProcAddress(m_hFMod, "_FSOUND_Stream_Open@16");			//AJH Use new version of fmod
 		(FARPROC&)SPLAY = GetProcAddress(m_hFMod, "_FSOUND_Stream_Play@8");
 		(FARPROC&)CLOSE = GetProcAddress(m_hFMod, "_FSOUND_Close@0");
+		(FARPROC&)VOL = GetProcAddress(m_hFMod, "_FSOUND_SetSFXMasterVolume@4");
 		
-		if( !(SCL && SOP && SBS && SDRV && INIT && (SOF||SO) && SPLAY && CLOSE) )
+		if( !(SCL && SOP && SBS && SDRV && INIT && (SOF||SO) && SPLAY && CLOSE && VOL) )
 		{
 			FreeLibrary( m_hFMod );
 			gEngfuncs.Con_Printf("Fatal Error: FMOD functions couldn't be loaded!\n");
@@ -73,13 +74,17 @@ int CMP3::StopMP3( void )
 
 int CMP3::PlayMP3( const char *pszSong )
 {
+	float vol = CVAR_GET_FLOAT("mp3_volume");
+
 	if( m_iIsPlaying )
 	{
 	// sound system is already initialized
+		VOL( (int)(vol*256.f));
 		SCL( m_Stream );
 	} 
 	else
 	{
+		VOL( (int)(vol*256.f));
 		SOP( FSOUND_OUTPUT_DSOUND );
 		SBS( 200 );
 		SDRV( 0 );
@@ -116,13 +121,17 @@ int CMP3::PlayMP3( const char *pszSong )
 
 int CMP3::PlayMP3NL( const char *pszSong )
 {
+	float vol = CVAR_GET_FLOAT("mp3_volume");
+
 	if( m_iIsPlaying )
 	{
 	// sound system is already initialized
+		VOL( (int)(vol*256.f));
 		SCL( m_Stream );
 	} 
 	else
 	{
+		VOL( (int)(vol*256.f));
 		SOP( FSOUND_OUTPUT_DSOUND );
 		SBS( 200 );
 		SDRV( 0 );
