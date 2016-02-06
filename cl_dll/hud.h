@@ -429,6 +429,8 @@ private:
 	int	  m_iHeight;		// width of the battery innards
 	int	  m_HUD_zeldaheart;
 	int   m_HUD_zeldamagic;
+	int   m_HUD_megamanbg;
+	int	  m_HUD_megamanarmor;
 };
 //
 //-----------------------------------------------------

@@ -36,6 +36,7 @@ DECLARE_MESSAGE(m_Health, Items)
 #define HUD_HOTLINE 1
 #define HUD_ZELDA	2
 #define HUD_MARIO64	3
+#define HUD_MEGAMAN	4
 
 #define PAIN_NAME "sprites/%d_pain.spr"
 #define DAMAGE_NAME "sprites/%d_dmg.spr"
@@ -107,6 +108,8 @@ int CHudHealth::VidInit(void)
 
 	m_HUD_zeldaheart = gHUD.GetSpriteIndex("zheart");
 	m_HUD_mario64 = gHUD.GetSpriteIndex("m64power9");
+	m_HUD_megamanbg = gHUD.GetSpriteIndex("megaman_bg");
+	m_HUD_megamanlife = gHUD.GetSpriteIndex("megaman_life");
 
 	m_prc2 = &gHUD.GetSpriteRect(m_HUD_mgs3life);		//Full
 
@@ -251,10 +254,36 @@ int CHudHealth::Draw(float flTime)
 			int x = (ScreenWidth/2)-(MarioWidth/2);
 			int y = MarioHeight*1.25;
 
-			float k = floor((float)m_iHealth/(100/8));
+			float k = floor((float)m_iHealth/(100.0/8.0));
 			SPR_Set(gHUD.GetSprite(m_HUD_mario64 - k), 255, 255, 255);
 			SPR_DrawHoles(0, x, y, &gHUD.GetSpriteRect(m_HUD_mario64 - k));
 			
+		}
+		else if (CVAR_GET_FLOAT("hud_game") == HUD_MEGAMAN)
+		{
+			int MegamanWidth = gHUD.GetSpriteRect(m_HUD_megamanbg).right - gHUD.GetSpriteRect(m_HUD_megamanbg).left;
+			int MegamanHeight = gHUD.GetSpriteRect(m_HUD_megamanbg).bottom - gHUD.GetSpriteRect(m_HUD_megamanbg).top;
+
+			int x = MegamanWidth * 3;
+			int y = MegamanHeight * 1.5;
+
+			SPR_Set(gHUD.GetSprite(m_HUD_megamanbg), 255, 255, 255);
+			SPR_Draw(0, x, y, &gHUD.GetSpriteRect(m_HUD_megamanbg));
+
+			SPR_Set(gHUD.GetSprite(m_HUD_megamanlife), 255, 255, 255);
+
+			int MegamanLiveHeight = gHUD.GetSpriteRect(m_HUD_megamanlife).bottom - gHUD.GetSpriteRect(m_HUD_megamanlife).top;
+
+			int livesShown = floor((float)m_iHealth/(100.0/28.0));
+			//gHUD.DrawHudNumber(5, ScreenHeight-(y+y/2), m_iFlags | DHN_3DIGITS, livesSHown, 255, 255, 255);	
+
+			for (int i=0;i<livesShown;i++)
+			{
+				int liveX = x + (MegamanWidth/8);
+				int liveY = (y + MegamanHeight) - (i*MegamanLiveHeight) - MegamanLiveHeight;
+
+				SPR_Draw(0, liveX, liveY, &gHUD.GetSpriteRect(m_HUD_megamanlife));
+			}
 		}
 		else
 		{

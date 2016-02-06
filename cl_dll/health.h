@@ -113,6 +113,10 @@ public:
 	int m_HUD_dmg_bio;
 	int m_HUD_zeldaheart;
 	int m_HUD_mario64;
+
+	int m_HUD_megamanbg;
+	int m_HUD_megamanlife;
+
 	//int m_HUD_cross;
 
 	int m_HUD_mgs3life; //MGS3-styled lifebar

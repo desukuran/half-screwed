@@ -28,6 +28,8 @@
 #define HUD_MGS3	0
 #define HUD_HOTLINE 1
 #define HUD_ZELDA	2
+#define HUD_MARIO64	3
+#define	HUD_MEGAMAN	4
 
 DECLARE_MESSAGE(m_Battery, Battery)
 
@@ -55,6 +57,9 @@ int CHudBattery::VidInit(void)
 
 	m_HUD_zeldaheart = gHUD.GetSpriteIndex("zheart");
 	m_HUD_zeldamagic = gHUD.GetSpriteIndex("zmagic");
+
+	m_HUD_megamanbg = gHUD.GetSpriteIndex("megaman_bg");
+	m_HUD_megamanarmor = gHUD.GetSpriteIndex("megaman_armor");
 
 	m_prc3 = &gHUD.GetSpriteRect(m_HUD_mgs3suitbar);		//Full
 
@@ -139,6 +144,32 @@ int CHudBattery::Draw(float flTime)
 			SPR_Set(gHUD.GetSprite(m_HUD_zeldamagic), 255, 255, 255 );
 			SPR_DrawHoles(0, x-(MagicWidth/32), y-(MagicWidth/32), &gHUD.GetSpriteRect(m_HUD_zeldamagic));
 			FillRGBA(x, y, w, 16, 0, 0xFF, 0, 255);
+		}
+		else if (CVAR_GET_FLOAT("hud_game") == HUD_MEGAMAN)
+		{
+			int MegamanWidth = gHUD.GetSpriteRect(m_HUD_megamanbg).right - gHUD.GetSpriteRect(m_HUD_megamanbg).left;
+			int MegamanHeight = gHUD.GetSpriteRect(m_HUD_megamanbg).bottom - gHUD.GetSpriteRect(m_HUD_megamanbg).top;
+
+			int x = MegamanWidth * 1.5;
+			int y = MegamanHeight * 1.5;
+
+			SPR_Set(gHUD.GetSprite(m_HUD_megamanbg), 255, 255, 255);
+			SPR_Draw(0, x, y, &gHUD.GetSpriteRect(m_HUD_megamanbg));
+
+			SPR_Set(gHUD.GetSprite(m_HUD_megamanarmor), 255, 255, 255);
+
+			int MegamanLiveHeight = gHUD.GetSpriteRect(m_HUD_megamanarmor).bottom - gHUD.GetSpriteRect(m_HUD_megamanarmor).top;
+
+			int livesShown = floor((float)m_iBat/(100.0/28.0));
+			//gHUD.DrawHudNumber(5, ScreenHeight-(y+y/2), m_iFlags | DHN_3DIGITS, livesSHown, 255, 255, 255);	
+
+			for (int i=0;i<livesShown;i++)
+			{
+				int liveX = x + (MegamanWidth/8);
+				int liveY = (y + MegamanHeight) - (i*MegamanLiveHeight) - MegamanLiveHeight;
+
+				SPR_Draw(0, liveX, liveY, &gHUD.GetSpriteRect(m_HUD_megamanarmor));
+			}
 		}
 		else
 		{
