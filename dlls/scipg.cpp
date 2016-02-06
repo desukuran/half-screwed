@@ -263,7 +263,7 @@ int CSciPG::AddToPlayer( CBasePlayer *pPlayer )
 void CSciPG::Precache( void )
 {
 	PRECACHE_MODEL("models/w_rpg.mdl");
-	PRECACHE_MODEL("models/v_rpg.mdl");
+	PRECACHE_MODEL("models/v_scirpg.mdl");
 	PRECACHE_MODEL("models/p_rpg.mdl");
 
 	UTIL_PrecacheOther( "scientist_bolt" );
@@ -292,8 +292,8 @@ int CSciPG::GetItemInfo(ItemInfo *p)
 BOOL CSciPG::Deploy( )
 {
 	if (m_iClip)
-		return DefaultDeploy( "models/v_rpg.mdl", "models/p_rpg.mdl", RPG_DRAW1, "scientist" );
-	return DefaultDeploy( "models/v_rpg.mdl", "models/p_rpg.mdl", RPG_DRAW_UL, "scientist" );
+		return DefaultDeploy( "models/v_scirpg.mdl", "models/p_rpg.mdl", RPG_DRAW1, "scientist" );
+	return DefaultDeploy( "models/v_scirpg.mdl", "models/p_rpg.mdl", RPG_DRAW_UL, "scientist" );
 }
 
 void CSciPG::Holster( int skiplocal /* = 0 */ )
