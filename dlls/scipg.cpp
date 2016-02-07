@@ -241,7 +241,7 @@ void CSciPG::Spawn( )
 {
 	Precache( );
 	m_iId = WEAPON_SCIENTIST;
-	SET_MODEL(ENT(pev), "models/w_rpg.mdl");
+	SET_MODEL(ENT(pev), "models/w_scirpg.mdl");
 
 	m_iDefaultAmmo = BOW_DEFAULT_GIVE;
 
@@ -262,7 +262,7 @@ int CSciPG::AddToPlayer( CBasePlayer *pPlayer )
 
 void CSciPG::Precache( void )
 {
-	PRECACHE_MODEL("models/w_rpg.mdl");
+	PRECACHE_MODEL("models/w_scirpg.mdl");
 	PRECACHE_MODEL("models/v_scirpg.mdl");
 	PRECACHE_MODEL("models/p_rpg.mdl");
 
@@ -431,12 +431,12 @@ class CSciPGAmmo : public CBasePlayerAmmo
 	void Spawn( void )
 	{ 
 		Precache( );
-		SET_MODEL(ENT(pev), "models/w_bow_clip.mdl");
+		SET_MODEL(ENT(pev), "models/w_scirpg.mdl");
 		CBasePlayerAmmo::Spawn( );
 	}
 	void Precache( void )
 	{
-		PRECACHE_MODEL ("models/w_bow_clip.mdl");
+		PRECACHE_MODEL ("models/w_scirpg.mdl");
 		PRECACHE_SOUND("items/9mmclip1.wav");
 	}
 	BOOL AddAmmo( CBaseEntity *pOther ) 
