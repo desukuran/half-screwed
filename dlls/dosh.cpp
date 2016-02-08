@@ -26,6 +26,8 @@
 #include "soundent.h"
 #include "gamerules.h"
 
+#define DOSH_AIR_VELOCITY	1200
+
 enum dosh_e {
 	DOSH_IDLE = 0,
 	DOSH_FIDGET,
@@ -37,9 +39,7 @@ enum dosh_e {
 
 LINK_ENTITY_TO_CLASS( weapon_dosh, CDosh );
 
-#ifndef CLIENT_DLL
-LINK_ENTITY_TO_CLASS( dosh_rocket, CDoshRocket );
-
+/*
 //=========================================================
 //=========================================================
 CDoshRocket *CDoshRocket::CreateDoshRocket( Vector vecOrigin, Vector vecAngles, CBaseEntity *pOwner, CDosh *pLauncher )
@@ -61,21 +61,10 @@ CDoshRocket *CDoshRocket::CreateDoshRocket( Vector vecOrigin, Vector vecAngles, 
 //=========================================================
 void CDoshRocket :: Spawn( void )
 {
-	Precache( );
-	// motor
-	pev->movetype = MOVETYPE_TOSS;
-	pev->solid = SOLID_BBOX;
-
-	//SET_MODEL(ENT(pev), "models/doshrocket.mdl");
-	UTIL_SetSize(pev, Vector( 0, 0, 0), Vector(0, 0, 0));
-	UTIL_SetOrigin( pev, pev->origin );
 
 	pev->classname = MAKE_STRING("dosh_rocket");
 
-	SetThink( &CDoshRocket::IgniteThink );
-	SetTouch( &CDoshRocket::DoshTouch );
 
-	pev->angles.x -= 30;
 	UTIL_MakeVectors( pev->angles );
 	pev->angles.x = -(pev->angles.x + 30);
 
@@ -83,8 +72,6 @@ void CDoshRocket :: Spawn( void )
 	pev->gravity = 0.5;
 
 	pev->nextthink = gpGlobals->time + 0.4;
-
-	pev->dmg = gSkillData.plrDmgDosh;
 }
 
 //=========================================================
@@ -101,7 +88,61 @@ void CDoshRocket :: RocketTouch ( CBaseEntity *pPlayer )
 	ExplodeTouch2( pPlayer );
 }
 
-void CDoshRocket::DoshTouch( CBaseEntity *pOther )
+
+
+
+#endif
+*/
+class CDoshWorld : public CBaseEntity
+{
+	void Spawn( void );
+	void Precache( void );
+	int  Classify ( void );
+	void EXPORT BubbleThink( void );
+	void EXPORT WallThink( void );
+	void EXPORT DoshTouch( CBaseEntity *pOther );
+	void EXPORT ExplodeThink( void );
+
+	int m_iTrail;
+	float m_flDieTime;
+	float m_flStickTime;
+
+public:
+	static CDoshWorld *DoshCreate( void );
+};
+LINK_ENTITY_TO_CLASS( wrld_dosh, CDoshWorld );
+
+int	CDoshWorld :: Classify ( void )
+{
+	return	CLASS_ALIEN_PREDATOR;
+}
+
+void CDoshWorld::Precache( void )
+{
+	PRECACHE_SOUND ("weapons/doshget.wav");
+	PRECACHE_MODEL("models/dosh.mdl");
+}
+
+void CDoshWorld::Spawn( void )
+{
+	Precache( );
+	pev->movetype = MOVETYPE_TOSS;
+	pev->solid = SOLID_BBOX;
+
+	pev->gravity = 1;
+	//pev->velocity = Vector(0, 0, -50);
+
+	SET_MODEL(ENT(pev), "models/dosh.mdl");
+	pev->classname = MAKE_STRING("wrld_dosh");
+
+	UTIL_SetOrigin( pev, pev->origin );
+	UTIL_SetSize(pev, Vector(0, 0, 0), Vector(0, 0, 0));
+
+	SetTouch( &CDoshWorld::DoshTouch );
+	pev->nextthink = gpGlobals->time + 0.2;
+}
+
+void CDoshWorld::DoshTouch( CBaseEntity *pOther )
 {
 	SetTouch( NULL );
 	SetThink( NULL );
@@ -125,9 +166,7 @@ void CDoshRocket::DoshTouch( CBaseEntity *pOther )
 			// if what we hit is static architecture, can stay around for a while.
 			Vector vecDir = pev->velocity.Normalize( );
 			UTIL_SetOrigin( pev, pev->origin - vecDir * 12 );
-			//pev->angles = UTIL_VecToAngles( vecDir );
 			pev->angles = Vector( 0, 0, 0 ); //Should reset it upright.
-			//pev->velocity = Vector( 0, 0, 0 );
 			pev->avelocity.y = 100; //Simulate the Killing Floor spinning
 			pev->solid = SOLID_BBOX;
 			pev->movetype = MOVETYPE_FLY;
@@ -139,23 +178,20 @@ void CDoshRocket::DoshTouch( CBaseEntity *pOther )
 	}
 }
 
-//=========================================================
-//=========================================================
-void CDoshRocket :: Precache( void )
+CDoshWorld *CDoshWorld::DoshCreate( void )
 {
-	m_iTrail = PRECACHE_MODEL("sprites/smoke.spr");
-	PRECACHE_SOUND ("weapons/doshget.wav");
+	// Create a new entity with CCrossbowBolt private data
+	CDoshWorld *pDosh = GetClassPtr( (CDoshWorld *)NULL );
+	pDosh->pev->classname = MAKE_STRING("dosh");
+	pDosh->Spawn();
+
+	return pDosh;
 }
 
+///////////////////
+//		DOSH START
+///////////////////
 
-void CDoshRocket :: IgniteThink( void  )
-{
-
-	pev->movetype = MOVETYPE_FLY;
-	m_flIgniteTime = gpGlobals->time;
-}
-
-#endif
 void CDosh::Reload( void )
 {
 		return;
@@ -178,12 +214,11 @@ void CDosh::Precache( void )
 	PRECACHE_MODEL("models/w_dosh.mdl");
 	PRECACHE_MODEL("models/v_dosh.mdl");
 	PRECACHE_MODEL("models/p_dosh.mdl");
-	PRECACHE_MODEL("models/dosh.mdl");	//Jason!
 
 	PRECACHE_SOUND("items/9mmclip1.wav");
 
 //	UTIL_PrecacheOther( "laser_spot" );
-	UTIL_PrecacheOther( "dosh_rocket" );
+	UTIL_PrecacheOther( "wrld_dosh" );
 
 	PRECACHE_SOUND("weapons/dosh1.wav"); //HERES SOME CASH GUYS SOMEONE TAKE IT
 	PRECACHE_SOUND("weapons/dosh2.wav"); //HERES SOME CASH GUYS SOMEONE TAKE IT
@@ -194,7 +229,6 @@ void CDosh::Precache( void )
 	PRECACHE_SOUND("weapons/doshget.wav"); //HERES SOME CASH GUYS SOMEONE TAKE IT
 
 	m_usDosh = PRECACHE_EVENT ( 1, "events/dosh.sc" );
-	m_usDosh2 = PRECACHE_EVENT( 1, "events/dosh2.sc" );
 }
 
 
@@ -229,11 +263,6 @@ int CDosh::AddToPlayer( CBasePlayer *pPlayer )
 
 BOOL CDosh::Deploy( )
 {
-	if ( m_iClip == 0 )
-	{
-		return DefaultDeploy( "models/v_dosh.mdl", "models/p_dosh.mdl", DOSH_IDLE, "crowbar" );
-	}
-
 	return DefaultDeploy( "models/v_dosh.mdl", "models/p_dosh.mdl", DOSH_IDLE, "crowbar" );
 }
 
@@ -246,8 +275,6 @@ BOOL CDosh::CanHolster( void )
 
 void CDosh::Holster( int skiplocal /* = 0 */ )
 {
-	m_fInReload = FALSE;// cancel any reload in progress.
-
 	m_pPlayer->m_flNextAttack = UTIL_WeaponTimeBase() + 0.5;
 	
 	SendWeaponAnim( DOSH_THROW3 );
@@ -264,11 +291,6 @@ void CDosh::PrimaryAttack()
 
  	UTIL_MakeVectors( m_pPlayer->pev->v_angle + m_pPlayer->pev->punchangle );
 
-	// we don't add in player velocity anymore.
-	CGrenade::ShootContact2( m_pPlayer->pev, 
-							m_pPlayer->pev->origin + m_pPlayer->pev->view_ofs + gpGlobals->v_forward * 60, 
-							gpGlobals->v_forward * 512 );
-
 	int flags;
 #if defined( CLIENT_WEAPONS )
 	flags = FEV_NOTHOST;
@@ -277,6 +299,27 @@ void CDosh::PrimaryAttack()
 #endif
 
 	PLAYBACK_EVENT( flags, m_pPlayer->edict(), m_usDosh ); 
+
+	Vector anglesAim = m_pPlayer->pev->v_angle + m_pPlayer->pev->punchangle;
+	UTIL_MakeVectors( anglesAim );
+	
+	anglesAim.x		= -anglesAim.x;
+
+	Vector vecSrc	 = m_pPlayer->GetGunPosition( ) - gpGlobals->v_up * 2;
+	Vector vecDir	 = gpGlobals->v_forward;
+
+#ifndef CLIENT_DLL
+	CDoshWorld *pDosh = CDoshWorld::DoshCreate();
+	pDosh->pev->origin = vecSrc;
+	pDosh->pev->angles = anglesAim;
+	pDosh->pev->owner = m_pPlayer->edict();
+
+	pDosh->pev->velocity = vecDir * DOSH_AIR_VELOCITY;
+	pDosh->pev->velocity.z -= 15;
+	pDosh->pev->speed = DOSH_AIR_VELOCITY;
+
+	pDosh->pev->avelocity.z = 10;
+#endif
 
 	m_flNextPrimaryAttack = UTIL_WeaponTimeBase() + 1;
 	m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + 1;// idle pretty soon after shooting.
@@ -295,7 +338,7 @@ void CDosh::WeaponIdle( void )
 	{
 		int iAnim;
 		float flRand = UTIL_SharedRandomFloat( m_pPlayer->random_seed, 0, 1 );
-		if (flRand <= 0.75 || m_fSpotActive)
+		if (flRand <= 0.75)
 		{
 				iAnim = DOSH_IDLE;
 

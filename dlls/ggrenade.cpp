@@ -539,34 +539,6 @@ CGrenade *CGrenade::ShootContact( entvars_t *pevOwner, Vector vecStart, Vector v
 	return pGrenade;
 }
 
-
-CGrenade *CGrenade::ShootContact2( entvars_t *pevOwner, Vector vecStart, Vector vecVelocity ) //No tumble, for dosh ONLY
-{
-	CGrenade *pGrenade = GetClassPtr( (CGrenade *)NULL );
-	pGrenade->DoshSpawn();
-	// contact grenades arc lower
-	pGrenade->pev->gravity = 0.4;// lower gravity since grenade is aerodynamic and engine doesn't know it.
-	UTIL_SetOrigin( pGrenade->pev, vecStart );
-	pGrenade->pev->velocity = vecVelocity;
-	pGrenade->pev->angles = UTIL_VecToAngles (pGrenade->pev->velocity);
-	pGrenade->pev->owner = ENT(pevOwner);
-	
-	// make monsters afaid of it while in the air
-	pGrenade->SetThink( &CGrenade::DangerSoundThink );
-	pGrenade->pev->nextthink = gpGlobals->time;
-	
-	// Tumble in air
-	//pGrenade->pev->avelocity.x = RANDOM_FLOAT ( -100, -500 );
-	
-	// Explode on contact
-	pGrenade->SetTouch( &CDoshRocket::DoshTouch );
-
-	//pGrenade->pev->dmg = gSkillData.plrDmgM203Grenade;
-
-
-	return pGrenade;
-}
-
 CGrenade * CGrenade:: ShootTimed( entvars_t *pevOwner, Vector vecStart, Vector vecVelocity, float time )
 {
 	CGrenade *pGrenade = GetClassPtr( (CGrenade *)NULL );

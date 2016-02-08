@@ -34,7 +34,6 @@ public:
 	static CGrenade *ShootTimed( entvars_t *pevOwner, Vector vecStart, Vector vecVelocity, float time );
 	static CGrenade *ShootJihad( entvars_t *pevOwner, Vector vecStart, Vector vecVelocity, float time );
 	static CGrenade *ShootContact( entvars_t *pevOwner, Vector vecStart, Vector vecVelocity );
-	static CGrenade *ShootContact2( entvars_t *pevOwner, Vector vecStart, Vector vecVelocity );
 	static CGrenade *ShootSatchelCharge( entvars_t *pevOwner, Vector vecStart, Vector vecVelocity );
 	static void UseSatchelCharges( entvars_t *pevOwner, SATCHELCODE code );
 
@@ -1049,15 +1048,9 @@ public:
 	void Holster( int skiplocal = 0 );
 
 	void PrimaryAttack( void );
-	//void SecondaryAttack( void );
 	void WeaponIdle( void );
 
-	//void UpdateSpot( void );
 	BOOL ShouldWeaponIdle( void ) { return TRUE; };
-
-	CLaserSpot *m_pSpot;
-	int m_fSpotActive;
-	int m_cActiveRockets;// how many missiles in flight from this launcher right now?
 
 	virtual BOOL UseDecrement( void )
 	{ 
@@ -1070,7 +1063,6 @@ public:
 
 private:
 	unsigned short m_usDosh;
-	unsigned short m_usDosh2;
 
 };
 
