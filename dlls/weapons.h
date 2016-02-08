@@ -1358,10 +1358,14 @@ public:
 	void PrimaryAttack( void );
 	//void SecondaryAttack( void );
 	BOOL Deploy( void );
-	BOOL CanHolster( void );
 	void Holster( int skiplocal = 0 );
 	void WeaponIdle( void );
 	void EXPORT ExplodeThink( void );
+
+	//BOOL ShouldWeaponIdle( void ) { return TRUE; };
+
+	//BOOL m_bYell = false;
+	float m_fExplodeTime;
 	
 	virtual BOOL UseDecrement( void )
 	{ 

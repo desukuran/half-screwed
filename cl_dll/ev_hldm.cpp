@@ -1778,7 +1778,7 @@ void EV_FireJackal( event_args_t *args )
 
 void EV_Jihad( event_args_t *args )
 {
-	return;
+	gEngfuncs.pEventAPI->EV_WeaponAnimation ( 2, 1 );
 }
 
 void EV_TrainPitchAdjust( event_args_t *args )

@@ -23,10 +23,7 @@
 
 
 #define	JIHAD_PRIMARY_VOLUME		450
-
-BOOL lolalo = FALSE;
-float timeouttemp = 0;
-float timeout = 3.5; //How many seconds until you need to yell again and reset to even explode.
+#define YELL_TIME					1.8
 
 enum jihad_e {
 	JIHAD_IDLE = 0,
@@ -44,6 +41,7 @@ void CJihad::Spawn( )
 	Precache( );
 	m_iId = WEAPON_JIHAD;
 	SET_MODEL(ENT(pev), "models/w_jihad.mdl");
+	m_iClip = -1;
 
 #ifndef CLIENT_DLL
 	pev->dmg = gSkillData.plrDmgJihad;
@@ -84,13 +82,7 @@ int CJihad::GetItemInfo(ItemInfo *p)
 BOOL CJihad::Deploy( )
 {
 	//m_flReleaseThrow = -1;
-	return DefaultDeploy( "models/v_jihad.mdl", "models/p_jihad.mdl", JIHAD_SHOOT1, "crowbar" );
-}
-
-BOOL CJihad::CanHolster( void )
-{
-	// can only holster hand grenades when not primed!
-	return 1;
+	return DefaultDeploy( "models/v_jihad.mdl", "models/p_jihad.mdl", JIHAD_SHOOT1, "tripmine" );
 }
 
 void CJihad::Holster( int skiplocal /* = 0 */ )
@@ -99,41 +91,41 @@ void CJihad::Holster( int skiplocal /* = 0 */ )
 
 void CJihad::PrimaryAttack()
 {	
-	if ((lolalo == TRUE) && (gpGlobals->time > timeouttemp))
-	{
-		//Waited too long, reset the lolalo
-		lolalo = FALSE;
-	}
-
-	if ((lolalo == TRUE) && (gpGlobals->time < timeouttemp)) 
-	{
-		Vector vecSrc = m_pPlayer->pev->origin + m_pPlayer->pev->view_ofs + gpGlobals->v_forward * 16;
-		Vector vecThrow = gpGlobals->v_forward * 500 + m_pPlayer->pev->velocity;
-		SendWeaponAnim( JIHAD_SHOOT3 );
-		lolalo = FALSE;
-		m_pPlayer->m_flNextAttack = UTIL_WeaponTimeBase() + 2;
-		#ifdef CLIENT_DLL
-		//Genuflect
-		#else
-		ExplosionCreate( m_pPlayer->Center(), m_pPlayer->pev->angles, m_pPlayer->edict(), 1080, TRUE ); // BOOM!
+		if (m_fExplodeTime && gpGlobals->time < m_fExplodeTime)
+		{
+			m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + .2;
+			return;
+		}
+		else if (m_fExplodeTime && gpGlobals->time > m_fExplodeTime)
+		{
+		#ifndef CLIENT_DLL
+			ExplosionCreate( m_pPlayer->Center(), m_pPlayer->pev->angles, m_pPlayer->edict(), 1080, TRUE ); // BOOM!
 		#endif
-		//CGrenade::ShootJihad( m_pPlayer->pev, vecSrc, vecThrow, 0 );
-	}
-	else
-	{
+			return;
+		}
+
 		SendWeaponAnim( JIHAD_SHOOT3 );
 		EMIT_SOUND(ENT(m_pPlayer->pev), CHAN_WEAPON, "weapons/jihad.wav", 1.0, ATTN_NORM);
-		m_pPlayer->m_flNextAttack = UTIL_WeaponTimeBase() + 1; // You shouldnt last this long for a next attack, in the old patch
-		timeouttemp = gpGlobals->time + timeout;
-		lolalo = TRUE;
-		//return; //Don't wanna blow up just yet.
-	}
+		m_fExplodeTime = gpGlobals->time + YELL_TIME;
+		m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + .1;
+		m_flNextPrimaryAttack = UTIL_WeaponTimeBase() + YELL_TIME;
 }
 void CJihad::WeaponIdle( void )
 {
-		int iAnim;
-			iAnim = JIHAD_IDLE;
-			m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + UTIL_SharedRandomFloat( m_pPlayer->random_seed, 10, 15 );// how long till we do this again.
+	if (m_fExplodeTime && gpGlobals->time > m_fExplodeTime)
+	{
+		m_pPlayer->m_flNextAttack = UTIL_WeaponTimeBase() + 50; //Prevent the player from attacking again
+		#ifndef CLIENT_DLL
+			ExplosionCreate( m_pPlayer->Center(), m_pPlayer->pev->angles, m_pPlayer->edict(), 1080, TRUE ); // BOOM!
+		#endif
+	}
 
-		SendWeaponAnim( iAnim );
+		m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + 0.1;
+
+		if (!m_fExplodeTime)
+		{
+			int iAnim;
+			iAnim = JIHAD_IDLE;
+			SendWeaponAnim( iAnim );
+		}
 }
