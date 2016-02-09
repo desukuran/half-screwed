@@ -22,25 +22,7 @@
 #include "player.h"
 #include "gamerules.h"
 
-
-//#define	CROWBAR_BODYHIT_VOLUME 128
-//#define	CROWBAR_WALLHIT_VOLUME 512
-
 LINK_ENTITY_TO_CLASS( weapon_jason, CJason );
-
-
-
-enum gauss_e {
-	JASON_IDLE = 0,
-	JASON_DRAW,
-	JASON_HOLSTER,
-	JASON_ATTACK1HIT,
-	JASON_ATTACK1MISS,
-	JASON_ATTACK2MISS,
-	JASON_ATTACK2HIT,
-	JASON_ATTACK3MISS,
-	JASON_ATTACK3HIT
-};
 
 
 void CJason::Spawn( )
@@ -82,48 +64,50 @@ int CJason::GetItemInfo(ItemInfo *p)
 
 BOOL CJason::Deploy( )
 {
-	return DefaultDeploy( "models/v_jason.mdl", "models/p_jason.mdl", JASON_DRAW, "jason" );
+	return DefaultDeploy( "models/v_jason.mdl", "models/p_jason.mdl", 0, "tripmine" );
 }
 
 void CJason::Holster( int skiplocal /* = 0 */ )
 {
 	m_pPlayer->m_flNextAttack = UTIL_WeaponTimeBase() + 0.5;
-	SendWeaponAnim( JASON_HOLSTER );
 }
 
 void CJason::PrimaryAttack()
 {
-				switch( RANDOM_LONG(0,2) )
-				{
-				case 0:
-					EMIT_SOUND(ENT(m_pPlayer->pev), CHAN_ITEM, "weapons/jason1.wav", 1, ATTN_NORM); break;
-				case 1:
-					EMIT_SOUND(ENT(m_pPlayer->pev), CHAN_ITEM, "weapons/jason2.wav", 1, ATTN_NORM); break;
-				case 2:
-					EMIT_SOUND(ENT(m_pPlayer->pev), CHAN_ITEM, "weapons/jason3.wav", 1, ATTN_NORM); break;
-				}
+	switch( RANDOM_LONG(0,2) )
+	{
+		case 0:
+			EMIT_SOUND(ENT(m_pPlayer->pev), CHAN_ITEM, "weapons/jason1.wav", 1, ATTN_NORM); break;
+		case 1:
+			EMIT_SOUND(ENT(m_pPlayer->pev), CHAN_ITEM, "weapons/jason2.wav", 1, ATTN_NORM); break;
+		case 2:
+			EMIT_SOUND(ENT(m_pPlayer->pev), CHAN_ITEM, "weapons/jason3.wav", 1, ATTN_NORM); break;
+	}
 
-if (g_pGameRules->IsHeavyRain())  // is heavy rain enabled?
-   {
+	if (g_pGameRules->IsHeavyRain())  // is heavy rain enabled?
+	{
 		m_pPlayer->AddPoints(1,FALSE);
-   }
+	}
+
 	m_pPlayer->m_flNextAttack = UTIL_WeaponTimeBase() + 1;
 }
 
 void CJason::SecondaryAttack()
 {
-				switch( RANDOM_LONG(0,2) )
-				{
-				case 0:
-					EMIT_SOUND(ENT(m_pPlayer->pev), CHAN_ITEM, "weapons/shaun1.wav", 1, ATTN_NORM); break;
-				case 1:
-					EMIT_SOUND(ENT(m_pPlayer->pev), CHAN_ITEM, "weapons/shaun2.wav", 1, ATTN_NORM); break;
-				case 2:
-					EMIT_SOUND(ENT(m_pPlayer->pev), CHAN_ITEM, "weapons/shaun3.wav", 1, ATTN_NORM); break;
-				}
-if (g_pGameRules->IsHeavyRain())  // is heavy rain enabled?
-   {
+	switch( RANDOM_LONG(0,2) )
+	{
+	case 0:
+		EMIT_SOUND(ENT(m_pPlayer->pev), CHAN_ITEM, "weapons/shaun1.wav", 1, ATTN_NORM); break;
+	case 1:
+		EMIT_SOUND(ENT(m_pPlayer->pev), CHAN_ITEM, "weapons/shaun2.wav", 1, ATTN_NORM); break;
+	case 2:
+		EMIT_SOUND(ENT(m_pPlayer->pev), CHAN_ITEM, "weapons/shaun3.wav", 1, ATTN_NORM); break;
+	}
+
+	if (g_pGameRules->IsHeavyRain())  // is heavy rain enabled?
+	{
 		m_pPlayer->AddPoints(-1,TRUE);
-   }
+	}
+
 	m_pPlayer->m_flNextAttack = UTIL_WeaponTimeBase() + 1;
 }

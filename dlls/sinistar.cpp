@@ -110,11 +110,11 @@ int	CSinistar :: Classify ( void )
 {
 if (g_pGameRules->IsTest() && testmonsters.value <= 0)
 	{
-	return	CLASS_NONE;
+		return	CLASS_NONE;
 	}
 	else
 	{
-	return	CLASS_ALIEN_MONSTER;
+		return	CLASS_ALIEN_MONSTER;
 	}
 }
 

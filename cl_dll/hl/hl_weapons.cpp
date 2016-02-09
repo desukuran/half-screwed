@@ -82,6 +82,7 @@ CMW2 g_MW2;
 CGOLDENGUN g_GOLDENGUN;
 CJackal g_Jackal;
 CZAPPER g_ZAPPER;
+CPokeBall g_PokeBall;
 
 /*
 ======================
@@ -661,6 +662,7 @@ void HUD_InitClientWeapons( void )
 	HUD_PrepEntity( &g_Jackal	, &player );
 	HUD_PrepEntity( &g_GOLDENGUN		, &player );
 	HUD_PrepEntity( &g_ZAPPER	, &player );
+	HUD_PrepEntity( &g_PokeBall	, &player );
 }
 
 /*
@@ -808,6 +810,10 @@ void HUD_WeaponsPostThink( local_state_s *from, local_state_s *to, usercmd_t *cm
 
 		case WEAPON_NERFGUN:
 			pWeapon = &g_NerfGun;
+			break;
+
+		case WEAPON_POKEBALL:
+			pWeapon = &g_PokeBall;
 			break;
 
 		case WEAPON_MW2:

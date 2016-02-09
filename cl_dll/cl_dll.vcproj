@@ -111,6 +111,8 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
+				Description="Copying Client DEBUG DLLs..."
+				CommandLine="copy &quot;$(TargetPath)&quot; &quot;F:\Games\Steam\SteamApps\common\Half-Life\half-screwed\cl_dlls&quot;"
 			/>
 		</Configuration>
 		<Configuration
@@ -1795,6 +1797,10 @@
 				</File>
 				<File
 					RelativePath="..\dlls\nstar.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\dlls\pokeball.cpp"
 					>
 				</File>
 				<File

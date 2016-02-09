@@ -100,6 +100,7 @@ public:
 #define WEAPON_JACKAL			25
 #define WEAPON_MODMAN			26
 #define WEAPON_NERFGUN			27
+#define WEAPON_POKEBALL			28
 
 
 #define WEAPON_ALLWEAPONS		(~(1<<WEAPON_SUIT))
@@ -125,6 +126,7 @@ public:
 #define EGON_WEIGHT			20
 #define HORNETGUN_WEIGHT	10
 #define HANDGRENADE_WEIGHT	5
+#define POKEBALL_WEIGHT		5
 #define SNARK_WEIGHT		5
 #define SATCHEL_WEIGHT		-10
 #define TRIPMINE_WEIGHT		-10
@@ -926,6 +928,32 @@ public:
 	}
 };
 
+class CPokeBall : public CBasePlayerWeapon
+{
+public:
+	void Spawn( void );
+	void Precache( void );
+	int iItemSlot( void ) { return 3; }
+	int GetItemInfo(ItemInfo *p);
+
+	void PrimaryAttack( void );
+	BOOL Deploy( void );
+	BOOL CanHolster( void );
+	void Holster( int skiplocal = 0 );
+	void WeaponIdle( void );
+	
+	BOOL ShouldWeaponIdle( void ) { return TRUE; };
+
+	virtual BOOL UseDecrement( void )
+	{ 
+#if defined( CLIENT_WEAPONS )
+		return TRUE;
+#else
+		return FALSE;
+#endif
+	}
+};
+
 class CSatchel : public CBasePlayerWeapon
 {
 public:
@@ -1353,8 +1381,6 @@ public:
 	void Holster( int skiplocal = 0 );
 	void WeaponIdle( void );
 	void EXPORT ExplodeThink( void );
-
-	//BOOL ShouldWeaponIdle( void ) { return TRUE; };
 
 	//BOOL m_bYell = false;
 	float m_fExplodeTime;
