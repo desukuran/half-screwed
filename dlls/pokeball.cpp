@@ -82,6 +82,7 @@ void CPokeballWorld::Precache( void )
 {
 	PRECACHE_MODEL("models/w_pokeball.mdl");
 	PRECACHE_SOUND("weapons/pokeball_bounce.wav");
+	PRECACHE_SOUND("weapons/pokeball_open.wav");
 }
 
 void CPokeballWorld::Spawn( void )
@@ -128,7 +129,29 @@ void CPokeballWorld::PokeballOpen( void )
 
 	};
 
+	Vector vecSpot = pev->origin;
 
+	//Blows up in coins, disappears. Scott Pilgrim and River City Ransom-esque.
+	const Vector &direction = Vector(0,0,1);
+	int count = RANDOM_LONG(45,160);
+
+	EMIT_SOUND(ENT(pev), CHAN_VOICE, "cwc/death.wav", 1, ATTN_NORM );
+
+	MESSAGE_BEGIN( MSG_PVS, SVC_TEMPENTITY, vecSpot );
+		WRITE_BYTE( TE_SPRITE_SPRAY );
+		WRITE_COORD( vecSpot.x );	// pos
+		WRITE_COORD( vecSpot.y );	
+		WRITE_COORD( vecSpot.z );	
+		WRITE_COORD( direction.x);	// dir
+		WRITE_COORD( direction.y);	
+		WRITE_COORD( direction.z);	
+		WRITE_SHORT( g_sModelIndexSmoke );	// model
+		WRITE_BYTE ( count );			// count
+		WRITE_BYTE ( 130 );			// speed
+		WRITE_BYTE ( 80 );			// noise ( client will divide by 100 )
+	MESSAGE_END();
+
+	EMIT_SOUND(ENT(pev), CHAN_VOICE, "weapons/pokeball_open.wav", 1, ATTN_NORM);
 	CBaseMonster *pPokemon = (CBaseMonster*)Create( temp, pev->origin, newAngles, edict() );
 	UTIL_Remove(this);
 }
