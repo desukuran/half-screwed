@@ -19,9 +19,20 @@
 #include "weapons.h"
 #include "nodes.h"
 #include "player.h"
+#include "gamerules.h"
 
+static char *m_cMonsterName[] = { "Barney", "Scientist", "Nihilanth", "Zombie", "Headcrab", "Gay Glenn", "Big Momma" };
 
-#define	HANDGRENADE_PRIMARY_VOLUME		450
+enum monsterpokeball_e {
+	POKEB_BARNEY = 0,
+	POKEB_SCIENTIST,
+	POKEB_NIHILANTH,
+	POKEB_ZOMBIE,
+	POKEB_HEADCRAB,
+	POKEB_GAYGLENN,
+	POKEB_BIGMOMMA
+};
+
 
 enum handgrenade_e {
 	HANDGRENADE_IDLE = 0,
@@ -33,23 +44,36 @@ enum handgrenade_e {
 
 #ifndef CLIENT_DLL
 
-#define POKEBALL_AIR_VELOCITY 1800
+#define POKEBALL_AIR_VELOCITY 450
 
 class CPokeballWorld : public CBaseEntity
 {
 	void Spawn( void );
 	void Precache( void );
 	void EXPORT PokeballTouch( CBaseEntity *pOther );
+	void EXPORT PokeballThink( void );
+	void EXPORT PokeballOpen( void );
+
+	int m_iMonsterChoice;
 
 public:
-	static CPokeballWorld *PokeballCreate( void );
+	static CPokeballWorld *PokeballCreate( int iChoice );
 };
 
-CPokeballWorld *CPokeballWorld::PokeballCreate( void )
+CPokeballWorld *CPokeballWorld::PokeballCreate( int iChoice )
 {
 	CPokeballWorld *pBall = GetClassPtr( (CPokeballWorld *)NULL );
 	pBall->pev->classname = MAKE_STRING("pokeball");
+	pBall->pev->sequence = RANDOM_LONG( 3, 6 );
+	pBall->pev->framerate = 1.0;
+
+	pBall->pev->gravity = 0.5;
+	pBall->pev->friction = 0.8;
 	pBall->Spawn();
+
+	pBall->m_iMonsterChoice = iChoice;
+
+	pBall->pev->dmgtime = gpGlobals->time + RANDOM_FLOAT( 2, 4 );
 
 	return pBall;
 }
@@ -64,15 +88,73 @@ void CPokeballWorld::Spawn( void )
 {
 	Precache( );
 	SET_MODEL(ENT(pev), "models/w_pokeball.mdl");
-	pev->movetype = MOVETYPE_FLY;
+	pev->movetype = MOVETYPE_BOUNCE;
 	pev->solid = SOLID_BBOX;
 
-	pev->gravity = 1;
+	pev->gravity = .75;
 
 	SetTouch( &CPokeballWorld::PokeballTouch );
+	SetThink( &CPokeballWorld::PokeballThink );
+
+	pev->nextthink = gpGlobals->time + 0.1;
 
 	UTIL_SetOrigin( pev, pev->origin );
 	UTIL_SetSize(pev, Vector(0, 0, 0), Vector(0, 0, 0));
+}
+
+void CPokeballWorld::PokeballOpen( void )
+{
+	Vector newAngles = pev->angles;
+	newAngles.x = 0;
+
+	char temp[64];
+		
+	switch(m_iMonsterChoice)
+	{
+		case POKEB_BARNEY:
+			sprintf(temp, "monster_barney"); break;
+		case POKEB_SCIENTIST:
+			sprintf(temp, "monster_scientist");break;
+		case POKEB_NIHILANTH:
+			sprintf(temp, "monster_nihilanth");break;
+		case POKEB_ZOMBIE:
+			sprintf(temp, "monster_zombie");break;
+		case POKEB_HEADCRAB:
+			sprintf(temp, "monster_headcrab");break;
+		case POKEB_GAYGLENN:
+			sprintf(temp, "monster_gayglenn");break;
+		case POKEB_BIGMOMMA:
+			sprintf(temp, "monster_bigmomma");break;
+
+	};
+
+
+	CBaseMonster *pPokemon = (CBaseMonster*)Create( temp, pev->origin, newAngles, edict() );
+	UTIL_Remove(this);
+}
+
+void CPokeballWorld::PokeballThink( void )
+{
+	if (!IsInWorld())
+	{
+		UTIL_Remove( this );
+		return;
+	}
+
+	//StudioFrameAdvance( );
+	pev->nextthink = gpGlobals->time + 0.1;
+
+	if (pev->dmgtime <= gpGlobals->time)
+	{
+		SetThink( &CPokeballWorld::PokeballOpen );
+	}
+
+	if (pev->waterlevel != 0)
+	{
+		pev->velocity = pev->velocity * 0.5;
+		pev->framerate = 0.2;
+	}
+
 }
 
 void CPokeballWorld::PokeballTouch( CBaseEntity *pOther )
@@ -94,6 +176,7 @@ void CPokeballWorld::PokeballTouch( CBaseEntity *pOther )
 	{
 		// add a bit of static friction
 		pev->velocity = pev->velocity * 0.8;
+		//pev->velocity.z -= 40;
 
 		pev->sequence = RANDOM_LONG( 1, 1 );
 	}
@@ -154,7 +237,7 @@ int CPokeBall::GetItemInfo(ItemInfo *p)
 
 BOOL CPokeBall::Deploy( )
 {
-	m_flReleaseThrow = -1;
+	ClientPrint(m_pPlayer->pev, HUD_PRINTCENTER, "Press Right Click to change monster choice."); //digamos al cliente
 	return DefaultDeploy( "models/v_pokeball.mdl", "models/p_pokeball.mdl", HANDGRENADE_DRAW, "crowbar" );
 }
 
@@ -198,7 +281,7 @@ void CPokeBall::PrimaryAttack()
 		float time = 3.0;
 
 #ifndef CLIENT_DLL
-		CPokeballWorld *pBall = CPokeballWorld::PokeballCreate();
+		CPokeballWorld *pBall = CPokeballWorld::PokeballCreate(m_iMonsterChoice);
 		pBall->pev->origin = vecSrc;
 		pBall->pev->angles = anglesAim;
 		pBall->pev->owner = m_pPlayer->edict();
@@ -212,7 +295,28 @@ void CPokeBall::PrimaryAttack()
 		m_pPlayer->SetAnimation( PLAYER_ATTACK1 );
 
 		m_flNextPrimaryAttack = UTIL_WeaponTimeBase() + 0.5;
+		m_flNextSecondaryAttack = UTIL_WeaponTimeBase() + 0.5;
 		m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + 0.5;
+}
+
+void CPokeBall::SecondaryAttack( void )
+{
+	m_iMonsterChoice += 1;
+
+	if (m_iMonsterChoice > sizeof(monsterpokeball_e))
+		m_iMonsterChoice = 0;
+#ifndef CLIENT_DLL
+	if (!g_pGameRules->IsTest() && m_iMonsterChoice == POKEB_NIHILANTH)
+		m_iMonsterChoice += 1; //Skip Nihil
+#endif
+
+	char temp[256];
+		sprintf(temp, "Chosen Monster: %s", m_cMonsterName[m_iMonsterChoice]);		
+
+	ClientPrint(m_pPlayer->pev, HUD_PRINTCENTER, temp); //digamos al cliente
+
+		m_flNextPrimaryAttack = UTIL_WeaponTimeBase() + 0.5;
+		m_flNextSecondaryAttack = UTIL_WeaponTimeBase() + 0.5;
 }
 
 

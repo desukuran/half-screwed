@@ -937,12 +937,15 @@ public:
 	int GetItemInfo(ItemInfo *p);
 
 	void PrimaryAttack( void );
+	void SecondaryAttack( void );
 	BOOL Deploy( void );
 	BOOL CanHolster( void );
 	void Holster( int skiplocal = 0 );
 	void WeaponIdle( void );
 	
-	BOOL ShouldWeaponIdle( void ) { return TRUE; };
+	//BOOL ShouldWeaponIdle( void ) { return TRUE; };
+
+	int m_iMonsterChoice;
 
 	virtual BOOL UseDecrement( void )
 	{ 

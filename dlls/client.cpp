@@ -1444,6 +1444,12 @@ void ClientPrecache( void )
 
 		UTIL_PrecacheOther("monster_homestuck");
 
+		UTIL_PrecacheOther("monster_bigmomma");
+
+		UTIL_PrecacheOther("monster_nihilanth");
+
+		UTIL_PrecacheOther("monster_zombie");
+
 
    // START BOT
    if (!IS_DEDICATED_SERVER())
