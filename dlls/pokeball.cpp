@@ -26,14 +26,91 @@
 enum handgrenade_e {
 	HANDGRENADE_IDLE = 0,
 	HANDGRENADE_FIDGET,
-	HANDGRENADE_PINPULL,
 	HANDGRENADE_THROW1,	// toss
-	HANDGRENADE_THROW2,	// medium
-	HANDGRENADE_THROW3,	// hard
 	HANDGRENADE_HOLSTER,
 	HANDGRENADE_DRAW
 };
 
+#ifndef CLIENT_DLL
+
+#define POKEBALL_AIR_VELOCITY 1800
+
+class CPokeballWorld : public CBaseEntity
+{
+	void Spawn( void );
+	void Precache( void );
+	void EXPORT PokeballTouch( CBaseEntity *pOther );
+
+public:
+	static CPokeballWorld *PokeballCreate( void );
+};
+
+CPokeballWorld *CPokeballWorld::PokeballCreate( void )
+{
+	CPokeballWorld *pBall = GetClassPtr( (CPokeballWorld *)NULL );
+	pBall->pev->classname = MAKE_STRING("pokeball");
+	pBall->Spawn();
+
+	return pBall;
+}
+
+void CPokeballWorld::Precache( void )
+{
+	PRECACHE_MODEL("models/w_pokeball.mdl");
+	PRECACHE_SOUND("weapons/pokeball_bounce.wav");
+}
+
+void CPokeballWorld::Spawn( void )
+{
+	Precache( );
+	SET_MODEL(ENT(pev), "models/w_pokeball.mdl");
+	pev->movetype = MOVETYPE_FLY;
+	pev->solid = SOLID_BBOX;
+
+	pev->gravity = 1;
+
+	SetTouch( &CPokeballWorld::PokeballTouch );
+
+	UTIL_SetOrigin( pev, pev->origin );
+	UTIL_SetSize(pev, Vector(0, 0, 0), Vector(0, 0, 0));
+}
+
+void CPokeballWorld::PokeballTouch( CBaseEntity *pOther )
+{
+	// don't hit the guy that launched this grenade
+	if ( pOther->edict() == pev->owner )
+		return;
+
+	Vector vecTestVelocity;
+	// pev->avelocity = Vector (300, 300, 300);
+
+	// this is my heuristic for modulating the grenade velocity because grenades dropped purely vertical
+	// or thrown very far tend to slow down too quickly for me to always catch just by testing velocity. 
+	// trimming the Z velocity a bit seems to help quite a bit.
+	vecTestVelocity = pev->velocity; 
+	vecTestVelocity.z *= 0.45;
+
+	if (pev->flags & FL_ONGROUND)
+	{
+		// add a bit of static friction
+		pev->velocity = pev->velocity * 0.8;
+
+		pev->sequence = RANDOM_LONG( 1, 1 );
+	}
+	else
+	{
+		// play bounce sound
+		EMIT_SOUND(ENT(pev), CHAN_VOICE, "weapons/pokeball_bounce.wav", 0.5, ATTN_NORM);
+	}
+	pev->framerate = pev->velocity.Length() / 200.0;
+	if (pev->framerate > 1.0)
+		pev->framerate = 1;
+	else if (pev->framerate < 0.5)
+		pev->framerate = 0;
+}
+
+LINK_ENTITY_TO_CLASS( wrld_pokeball, CPokeballWorld );
+#endif
 
 LINK_ENTITY_TO_CLASS( weapon_pokeball, CPokeBall );
 
@@ -42,7 +119,7 @@ void CPokeBall::Spawn( )
 {
 	Precache( );
 	m_iId = WEAPON_POKEBALL;
-	SET_MODEL(ENT(pev), "models/w_grenade.mdl");
+	SET_MODEL(ENT(pev), "models/w_pokeball.mdl");
 
 	FallInit();// get ready to fall down.
 }
@@ -50,9 +127,11 @@ void CPokeBall::Spawn( )
 
 void CPokeBall::Precache( void )
 {
-	PRECACHE_MODEL("models/w_grenade.mdl");
-	PRECACHE_MODEL("models/v_grenade.mdl");
-	PRECACHE_MODEL("models/p_grenade.mdl");
+	PRECACHE_MODEL("models/w_pokeball.mdl");
+	PRECACHE_MODEL("models/v_pokeball.mdl");
+	PRECACHE_MODEL("models/p_pokeball.mdl");
+
+	UTIL_PrecacheOther( "wrld_pokeball" );
 }
 
 int CPokeBall::GetItemInfo(ItemInfo *p)
@@ -76,7 +155,7 @@ int CPokeBall::GetItemInfo(ItemInfo *p)
 BOOL CPokeBall::Deploy( )
 {
 	m_flReleaseThrow = -1;
-	return DefaultDeploy( "models/v_grenade.mdl", "models/p_grenade.mdl", HANDGRENADE_DRAW, "crowbar" );
+	return DefaultDeploy( "models/v_pokeball.mdl", "models/p_pokeball.mdl", HANDGRENADE_DRAW, "crowbar" );
 }
 
 BOOL CPokeBall::CanHolster( void )
@@ -96,27 +175,6 @@ void CPokeBall::Holster( int skiplocal /* = 0 */ )
 
 void CPokeBall::PrimaryAttack()
 {
-	if ( !m_flStartThrow )
-	{
-		m_flStartThrow = gpGlobals->time;
-		m_flReleaseThrow = 0;
-
-		SendWeaponAnim( HANDGRENADE_PINPULL );
-		m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + 0.5;
-	}
-}
-
-
-void CPokeBall::WeaponIdle( void )
-{
-	if ( m_flReleaseThrow == 0 && m_flStartThrow )
-		 m_flReleaseThrow = gpGlobals->time;
-
-	if ( m_flTimeWeaponIdle > UTIL_WeaponTimeBase() )
-		return;
-
-	if ( m_flStartThrow )
-	{
 		Vector angThrow = m_pPlayer->pev->v_angle + m_pPlayer->pev->punchangle;
 
 		if ( angThrow.x < 0 )
@@ -134,48 +192,35 @@ void CPokeBall::WeaponIdle( void )
 
 		Vector vecThrow = gpGlobals->v_forward * flVel + m_pPlayer->pev->velocity;
 
+		Vector anglesAim = m_pPlayer->pev->v_angle + m_pPlayer->pev->punchangle;
+
 		// alway explode 3 seconds after the pin was pulled
-		float time = m_flStartThrow - gpGlobals->time + 3.0;
-		if (time < 0)
-			time = 0;
+		float time = 3.0;
 
-		CGrenade::ShootTimed( m_pPlayer->pev, vecSrc, vecThrow, time );
+#ifndef CLIENT_DLL
+		CPokeballWorld *pBall = CPokeballWorld::PokeballCreate();
+		pBall->pev->origin = vecSrc;
+		pBall->pev->angles = anglesAim;
+		pBall->pev->owner = m_pPlayer->edict();
 
-		if ( flVel < 500 )
-		{
-			SendWeaponAnim( HANDGRENADE_THROW1 );
-		}
-		else if ( flVel < 1000 )
-		{
-			SendWeaponAnim( HANDGRENADE_THROW2 );
-		}
-		else
-		{
-			SendWeaponAnim( HANDGRENADE_THROW3 );
-		}
+		pBall->pev->velocity = gpGlobals->v_forward * POKEBALL_AIR_VELOCITY;
+#endif
+
+		SendWeaponAnim( HANDGRENADE_THROW1 );
 
 		// player "shoot" animation
 		m_pPlayer->SetAnimation( PLAYER_ATTACK1 );
 
-		m_flReleaseThrow = 0;
-		m_flStartThrow = 0;
 		m_flNextPrimaryAttack = UTIL_WeaponTimeBase() + 0.5;
 		m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + 0.5;
+}
+
+
+void CPokeBall::WeaponIdle( void )
+{
+
+	if ( m_flTimeWeaponIdle > UTIL_WeaponTimeBase() )
 		return;
-	}
-	else if ( m_flReleaseThrow > 0 )
-	{
-		// we've finished the throw, restart.
-		m_flStartThrow = 0;
-
-		SendWeaponAnim( HANDGRENADE_DRAW );
-
-
-		m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + UTIL_SharedRandomFloat( m_pPlayer->random_seed, 10, 15 );
-		m_flReleaseThrow = -1;
-		return;
-	}
-
 
 		int iAnim;
 		float flRand = UTIL_SharedRandomFloat( m_pPlayer->random_seed, 0, 1 );
