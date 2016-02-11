@@ -683,6 +683,8 @@ void CBaseMonster :: Killed( entvars_t *pevAttacker, int iGib )
 	}
 
 
+
+
 	if	( ShouldGibMonster( iGib ) )
 	{
 		CallGibMonster();

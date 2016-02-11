@@ -76,6 +76,7 @@ public:
 	virtual BOOL IsCOD( void ) {return FALSE; }; // is this COD?
 	virtual BOOL IsTest( void ) {return FALSE; }; // are we in test mode?
 	virtual BOOL IsMonster( void ) {return FALSE; }; // are we in monster hunt mode?
+	virtual BOOL IsPokemon( void ) {return FALSE; }; // are we in pokemon stadium mode?
 	virtual BOOL IsCoOp( void ) = 0;// is this a coop game?
 	virtual const char *GetGameDescription( void ) { return "Half-Screwed"; }  // this is the game name that gets seen in the server browser
 
