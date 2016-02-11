@@ -27,6 +27,7 @@
 
 #ifdef _WIN32
 #include "ttsapi.h"
+#include <string>
 #endif
 
 #include <string.h>
@@ -207,7 +208,22 @@ void CHudSayText :: SayTextPrint( const char *pszBuf, int iBufSize, int clientIn
 #ifdef _WIN32
 	if (m_HUD_tts_enable->value > 0)
 	{
-		status = TextToSpeechSpeak( ttsHandlePtr, (LPSTR)pszBuf, TTS_NORMAL );
+		std::string temp = strstr(pszBuf, ": ");
+		temp = temp.substr(2);
+		LPSTR tmp = const_cast<char *>(temp.c_str());
+		status = TextToSpeechSpeak( ttsHandlePtr, tmp, TTS_FORCE );
+
+		if (status != MMSYSERR_NOERROR)
+		{
+			if (status == MMSYSERR_NOMEM)
+			{
+				ConsolePrint("TTS ERROR: No memory");
+			}
+			else if (status == MMSYSERR_INVALHANDLE)
+			{
+				ConsolePrint("TTS ERROR: Invalid Handle");
+			}
+		}
 	}
 #endif
 
@@ -258,6 +274,9 @@ void CHudSayText :: SayTextPrint( const char *pszBuf, int iBufSize, int clientIn
 	}
 
 	m_iFlags |= HUD_ACTIVE;
+#ifdef _WIN32
+	if (m_HUD_tts_enable->value == 0)
+#endif
 	PlaySound( "misc/talk.wav", 1 );
 
 	if ( ScreenHeight >= 480 )
