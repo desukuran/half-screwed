@@ -17,10 +17,17 @@
 //
 // implementation of CHudSayText class
 //
+#ifdef _WIN32
+#include "windows.h"
+#endif
 
 #include "hud.h"
 #include "cl_util.h"
 #include "parsemsg.h"
+
+#ifdef _WIN32
+#include "ttsapi.h"
+#endif
 
 #include <string.h>
 #include <stdio.h>
@@ -28,6 +35,10 @@
 #include "vgui_TeamFortressViewport.h"
 
 extern float *GetClientColor( int clientIndex );
+
+#ifdef _WIN32
+MMRESULT status;
+#endif
 
 #define MAX_LINES	5
 #define MAX_CHARS_PER_LINE	256  /* it can be less than this, depending on char size */
@@ -45,6 +56,10 @@ static float flScrollTime = 0;  // the time at which the lines next scroll up
 static int Y_START = 0;
 static int line_height = 0;
 
+#ifdef _WIN32
+LPTTS_HANDLE_T ttsHandlePtr = NULL; 
+#endif
+
 DECLARE_MESSAGE( m_SayText, SayText );
 
 int CHudSayText :: Init( void )
@@ -54,6 +69,22 @@ int CHudSayText :: Init( void )
 	HOOK_MESSAGE( SayText );
 
 	InitHUDData();
+#ifdef _WIN32
+	status = TextToSpeechStartup(NULL, &ttsHandlePtr, WAVE_MAPPER, 0 );
+	if ( status != MMSYSERR_NOERROR ) {
+		if ( status == MMSYSERR_ERROR ) {
+			ConsolePrint( "TTS ERROR: DECtalk dictionary not found.\n" );
+		}
+		if ( status == MMSYSERR_ALLOCATED ) {
+			ConsolePrint( "TTS ERROR: No more DECtalk License units available.\n" );
+		}
+		if ( status == MMSYSERR_NOMEM ) {
+			ConsolePrint( "TTS ERROR: Memory allocation error.\n" );
+		}
+	}
+
+	m_HUD_tts_enable =		gEngfuncs.pfnRegisterVariable( "hud_tts_enable", "1", 0);
+#endif
 
 	m_HUD_saytext =			gEngfuncs.pfnRegisterVariable( "hud_saytext", "1", 0 );
 	m_HUD_saytext_time =	gEngfuncs.pfnRegisterVariable( "hud_saytext_time", "5", 0 );
@@ -172,6 +203,13 @@ void CHudSayText :: SayTextPrint( const char *pszBuf, int iBufSize, int clientIn
 		ConsolePrint( pszBuf );
 		return;
 	}
+
+#ifdef _WIN32
+	if (m_HUD_tts_enable->value > 0)
+	{
+		status = TextToSpeechSpeak( ttsHandlePtr, (LPSTR)pszBuf, TTS_NORMAL );
+	}
+#endif
 
 	// find an empty string slot
 	int i;
