@@ -17,17 +17,21 @@
 //
 // implementation of CHudSayText class
 //
+#if 0
 #ifdef _WIN32
 #include "windows.h"
+#endif
 #endif
 
 #include "hud.h"
 #include "cl_util.h"
 #include "parsemsg.h"
 
+#if 0
 #ifdef _WIN32
 #include "ttsapi.h"
 #include <string>
+#endif
 #endif
 
 #include <string.h>
@@ -37,8 +41,10 @@
 
 extern float *GetClientColor( int clientIndex );
 
+#if 0
 #ifdef _WIN32
 MMRESULT status;
+#endif
 #endif
 
 #define MAX_LINES	5
@@ -57,8 +63,10 @@ static float flScrollTime = 0;  // the time at which the lines next scroll up
 static int Y_START = 0;
 static int line_height = 0;
 
+#if 0
 #ifdef _WIN32
 LPTTS_HANDLE_T ttsHandlePtr = NULL; 
+#endif
 #endif
 
 DECLARE_MESSAGE( m_SayText, SayText );
@@ -70,6 +78,7 @@ int CHudSayText :: Init( void )
 	HOOK_MESSAGE( SayText );
 
 	InitHUDData();
+#if 0
 #ifdef _WIN32
 	status = TextToSpeechStartup(NULL, &ttsHandlePtr, WAVE_MAPPER, 0 );
 	if ( status != MMSYSERR_NOERROR ) {
@@ -85,6 +94,7 @@ int CHudSayText :: Init( void )
 	}
 
 	m_HUD_tts_enable =		gEngfuncs.pfnRegisterVariable( "hud_tts_enable", "1", 0);
+#endif
 #endif
 
 	m_HUD_saytext =			gEngfuncs.pfnRegisterVariable( "hud_saytext", "1", 0 );
@@ -205,6 +215,7 @@ void CHudSayText :: SayTextPrint( const char *pszBuf, int iBufSize, int clientIn
 		return;
 	}
 
+#if 0
 #ifdef _WIN32
 	if (m_HUD_tts_enable->value > 0)
 	{
@@ -225,6 +236,7 @@ void CHudSayText :: SayTextPrint( const char *pszBuf, int iBufSize, int clientIn
 			}
 		}
 	}
+#endif
 #endif
 
 	// find an empty string slot
@@ -274,9 +286,13 @@ void CHudSayText :: SayTextPrint( const char *pszBuf, int iBufSize, int clientIn
 	}
 
 	m_iFlags |= HUD_ACTIVE;
+
+#if 0
 #ifdef _WIN32
 	if (m_HUD_tts_enable->value == 0)
 #endif
+#endif
+
 	PlaySound( "misc/talk.wav", 1 );
 
 	if ( ScreenHeight >= 480 )

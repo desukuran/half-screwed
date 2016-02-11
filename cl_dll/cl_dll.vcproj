@@ -2207,26 +2207,6 @@
 					>
 				</File>
 			</Filter>
-			<Filter
-				Name="DECTalk"
-				>
-				<File
-					RelativePath=".\dectalk.def"
-					>
-				</File>
-				<File
-					RelativePath=".\dectalk.lib"
-					>
-				</File>
-				<File
-					RelativePath=".\TTSAPI.H"
-					>
-				</File>
-				<File
-					RelativePath=".\ttsfeat.h"
-					>
-				</File>
-			</Filter>
 		</Filter>
 	</Files>
 	<Globals>
