@@ -178,7 +178,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="user32.lib winmm.lib ../utils/vgui/lib/win32_vc6/vgui.lib wsock32.lib"
+				AdditionalDependencies="user32.lib winmm.lib ../utils/vgui/lib/win32_vc6/vgui.lib wsock32.lib dectalk.lib"
 				OutputFile=".\Release\client.dll"
 				LinkIncremental="1"
 				SuppressStartupBanner="true"
@@ -2204,6 +2204,26 @@
 				</File>
 				<File
 					RelativePath=".\fmodvc.lib"
+					>
+				</File>
+			</Filter>
+			<Filter
+				Name="DECTalk"
+				>
+				<File
+					RelativePath=".\dectalk.def"
+					>
+				</File>
+				<File
+					RelativePath=".\dectalk.lib"
+					>
+				</File>
+				<File
+					RelativePath=".\TTSAPI.H"
+					>
+				</File>
+				<File
+					RelativePath=".\ttsfeat.h"
 					>
 				</File>
 			</Filter>
