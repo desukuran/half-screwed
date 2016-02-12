@@ -2516,6 +2516,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\pokemonstadium_gamerules.cpp"
+				>
+			</File>
+			<File
 				RelativePath="rat.cpp"
 				>
 				<FileConfiguration
@@ -3593,6 +3597,10 @@
 			</File>
 			<File
 				RelativePath="..\pm_shared\pm_shared.h"
+				>
+			</File>
+			<File
+				RelativePath=".\pokemonstadium_gamerules.h"
 				>
 			</File>
 			<File

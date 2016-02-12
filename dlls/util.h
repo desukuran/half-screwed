@@ -447,7 +447,8 @@ extern DLL_GLOBAL int			g_Language;
 #define HS_COD				4
 #define HS_COOP				5
 #define HS_MONSTER			6
-#define HS_TESTMODE			9
+#define HS_POKEMON			7
+#define HS_TESTMODE			8
 
 // triggers
 #define	SF_TRIGGER_ALLOWMONSTERS	1// monsters allowed to fire this trigger

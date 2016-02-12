@@ -29,11 +29,6 @@ extern int gmsgScoreInfo;
 extern int gmsgPlayMP3; //AJH - Killars MP3player
 extern int gmsgStopMP3;
 
-CHeavyRainplay :: CHeavyRainplay()
-{
- //Genuflect
-}
-
 BOOL CHeavyRainplay::IsHeavyRain()
 {
  return TRUE;

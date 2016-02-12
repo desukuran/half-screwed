@@ -7,7 +7,6 @@
 class CHeavyRainplay : public CHalfLifeMultiplay
 {
 public:
-	CHeavyRainplay();
 	virtual const char *GetGameDescription( void ) { return "Heavy Rain Mode"; }  // this is the game name that gets seen in the server browser
 	virtual BOOL IsHeavyRain( void );
 	virtual void PlayerSpawn( CBasePlayer *pPlayer );

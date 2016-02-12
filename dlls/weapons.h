@@ -946,7 +946,7 @@ public:
 	//BOOL ShouldWeaponIdle( void ) { return TRUE; };
 
 	int m_iMonsterChoice;
-
+	int m_cActiveBalls;
 	virtual BOOL UseDecrement( void )
 	{ 
 #if defined( CLIENT_WEAPONS )
@@ -1113,7 +1113,6 @@ public:
 
 	int m_iTrail;
 	float m_flIgniteTime;
-	CDosh *m_pLauncher;// pointer back to the launcher that fired me. 
 };
 
 class CJason : public CBasePlayerWeapon

@@ -56,11 +56,13 @@ class CPokeballWorld : public CBaseEntity
 
 	int m_iMonsterChoice;
 
+	CPokeBall *pokeball;
+
 public:
-	static CPokeballWorld *PokeballCreate( int iChoice );
+	static CPokeballWorld *PokeballCreate( int iChoice, CPokeBall *pPokeball );
 };
 
-CPokeballWorld *CPokeballWorld::PokeballCreate( int iChoice )
+CPokeballWorld *CPokeballWorld::PokeballCreate( int iChoice, CPokeBall *pPokeball )
 {
 	CPokeballWorld *pBall = GetClassPtr( (CPokeballWorld *)NULL );
 	pBall->pev->classname = MAKE_STRING("pokeball");
@@ -70,6 +72,7 @@ CPokeballWorld *CPokeballWorld::PokeballCreate( int iChoice )
 	pBall->pev->gravity = 0.5;
 	pBall->pev->friction = 0.8;
 	pBall->Spawn();
+	pBall->pokeball = pPokeball;
 
 	pBall->m_iMonsterChoice = iChoice;
 
@@ -153,6 +156,7 @@ void CPokeballWorld::PokeballOpen( void )
 
 	EMIT_SOUND(ENT(pev), CHAN_VOICE, "weapons/pokeball_open.wav", 1, ATTN_NORM);
 	CBaseMonster *pPokemon = (CBaseMonster*)Create( temp, pev->origin, newAngles, edict() );
+	pokeball->m_cActiveBalls--;
 	UTIL_Remove(this);
 }
 
@@ -160,6 +164,7 @@ void CPokeballWorld::PokeballThink( void )
 {
 	if (!IsInWorld())
 	{
+		pokeball->m_cActiveBalls--;
 		UTIL_Remove( this );
 		return;
 	}
@@ -281,6 +286,10 @@ void CPokeBall::Holster( int skiplocal /* = 0 */ )
 
 void CPokeBall::PrimaryAttack()
 {
+		if (m_cActiveBalls > 2)
+			return;
+
+		m_cActiveBalls++;
 		Vector angThrow = m_pPlayer->pev->v_angle + m_pPlayer->pev->punchangle;
 
 		if ( angThrow.x < 0 )
@@ -304,7 +313,7 @@ void CPokeBall::PrimaryAttack()
 		float time = 3.0;
 
 #ifndef CLIENT_DLL
-		CPokeballWorld *pBall = CPokeballWorld::PokeballCreate(m_iMonsterChoice);
+		CPokeballWorld *pBall = CPokeballWorld::PokeballCreate(m_iMonsterChoice, this);
 		pBall->pev->origin = vecSrc;
 		pBall->pev->angles = anglesAim;
 		pBall->pev->owner = m_pPlayer->edict();

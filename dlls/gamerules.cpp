@@ -26,6 +26,7 @@
 #include	"shytplay_gamerules.h"
 #include	"heavyrain_gamerules.h"
 #include	"monhunt_gamerules.h"
+#include	"pokemonstadium_gamerules.h"
 #include	"coop_gamerules.h"
 #include	"cod_gamerules.h"
 #include	"test_gamerules.h"
@@ -363,32 +364,37 @@ CGameRules *InstallGameRules( void )
 			g_gameplay = HL_TEAMPLAY;
 			return new CHalfLifeTeamplay;
 		}
-		if ( gameplay.value == HS_SHYTPLAY )
+		else if ( gameplay.value == HS_SHYTPLAY )
 		{
 			g_gameplay = HS_SHYTPLAY;
 			return new CHalfLifeShytplay;
 		}
-		if ( gameplay.value == HS_HEAVYRAIN )
+		else if ( gameplay.value == HS_HEAVYRAIN )
 		{
 			g_gameplay = HS_HEAVYRAIN;
 			return new CHeavyRainplay;
 		}
-		if ( gameplay.value == HS_COD )
+		else if ( gameplay.value == HS_COD )
 		{
 			g_gameplay = HS_COD;
 			return new CCodplay;
 		}
-		if ( gameplay.value == HS_COOP )
+		else if ( gameplay.value == HS_COOP )
 		{
 			g_gameplay = HS_COOP;
 			return new CCoopplay;
 		}
-		if ( gameplay.value == HS_MONSTER )
+		else if ( gameplay.value == HS_MONSTER )
 		{
 			g_gameplay = HS_MONSTER;
 			return new CMonsterplay;
 		}
-		if ( gameplay.value == HS_TESTMODE )
+		else if ( gameplay.value == HS_POKEMON )
+		{
+			g_gameplay = HS_POKEMON;
+			return new CPokemonStadiumplay;
+		}
+		else if ( gameplay.value == HS_TESTMODE )
 		{
 			g_gameplay = HS_TESTMODE;
 			return new CTestplay;
