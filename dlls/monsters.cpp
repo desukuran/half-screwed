@@ -3368,6 +3368,9 @@ BOOL CBaseMonster :: GetEnemy ( void )
 {
 	CBaseEntity *pNewEnemy;
 
+	if (pNewEnemy->IsPlayer() && g_pGameRules->IsPokemon())
+		return false;
+
 	if ( HasConditions(bits_COND_SEE_HATE | bits_COND_SEE_DISLIKE | bits_COND_SEE_NEMESIS) )
 	{
 		pNewEnemy = BestVisibleEnemy();

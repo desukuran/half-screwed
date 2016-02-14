@@ -156,6 +156,8 @@ void CPokeballWorld::PokeballOpen( void )
 
 	EMIT_SOUND(ENT(pev), CHAN_VOICE, "weapons/pokeball_open.wav", 1, ATTN_NORM);
 	CBaseMonster *pPokemon = (CBaseMonster*)Create( temp, pev->origin, newAngles, edict() );
+	pPokemon->pev->owner = pev->owner;
+	pPokemon->pev->scale = 2.0;
 	pokeball->m_cActiveBalls--;
 	UTIL_Remove(this);
 }
@@ -265,7 +267,7 @@ int CPokeBall::GetItemInfo(ItemInfo *p)
 
 BOOL CPokeBall::Deploy( )
 {
-	ClientPrint(m_pPlayer->pev, HUD_PRINTCENTER, "Press Right Click to change monster choice."); //digamos al cliente
+	ClientPrint(m_pPlayer->pev, HUD_PRINTCENTER, "Right Click to change monster choice."); //digamos al cliente
 	return DefaultDeploy( "models/v_pokeball.mdl", "models/p_pokeball.mdl", HANDGRENADE_DRAW, "crowbar" );
 }
 

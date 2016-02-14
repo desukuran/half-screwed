@@ -682,6 +682,25 @@ void CBaseMonster :: Killed( entvars_t *pevAttacker, int iGib )
 		}
 	}
 
+	if (g_pGameRules->IsPokemon())
+	{
+		if (pevAttacker->flags & FL_MONSTER)
+		{
+			if (pev->owner == pevAttacker->owner)
+			{
+				const char *monster_name = CMonsterplay::PrepareMonsterName( STRING(pev->classname) );
+				//Player's own pokemon killed their other pokemon.
+				CBaseEntity *ep = CBaseEntity::Instance( pevAttacker->owner );
+				ep->AddPoints(-1, true);
+			}
+			else
+			{
+				CBaseEntity *ep = CBaseEntity::Instance( pevAttacker->owner );
+				ep->AddPoints(1, true);
+			}
+		}
+	}
+
 
 
 

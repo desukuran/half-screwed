@@ -481,10 +481,10 @@ void CScientist :: StartTask( Task_t *pTask )
 		{
 			Talk( 2 );
 			m_hTalkTarget = m_hEnemy;
-			if ( m_hEnemy->IsPlayer() )
-				PlaySentence( "SC_PLFEAR", 5, VOL_NORM, ATTN_NORM );
-			else if ( m_hEnemy->IsPlayer() && g_pGameRules->IsMonster())
+			if ( m_hEnemy->IsPlayer() && g_pGameRules->IsMonster())
 				ExplosionCreate( Center(), pev->angles, edict(), 128, TRUE ); // BOOM!
+			else if ( m_hEnemy->IsPlayer() )
+				PlaySentence( "SC_PLFEAR", 5, VOL_NORM, ATTN_NORM );
 			else
 				PlaySentence( "SC_FEAR", 5, VOL_NORM, ATTN_NORM );
 		}
