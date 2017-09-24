@@ -118,10 +118,60 @@ void CBoombox::PrimaryAttack()
 
 void CBoombox::SecondaryAttack()
 {	
+#ifndef CLIENT_DLL
+	MESSAGE_BEGIN( MSG_PAS, SVC_TEMPENTITY, pev->origin );
+		WRITE_BYTE( TE_BEAMCYLINDER );
+		WRITE_COORD( m_pPlayer->pev->origin.x);
+		WRITE_COORD( m_pPlayer->pev->origin.y);
+		WRITE_COORD( m_pPlayer->pev->origin.z + 16);
+		WRITE_COORD( m_pPlayer->pev->origin.x);
+		WRITE_COORD( m_pPlayer->pev->origin.y);
+		WRITE_COORD( m_pPlayer->pev->origin.z + 160); // reach damage radius over .3 seconds
+		WRITE_SHORT( m_iSpriteTexture );
+		WRITE_BYTE( 0 ); // startframe
+		WRITE_BYTE( 0 ); // framerate
+		WRITE_BYTE( 2 ); // life
+		WRITE_BYTE( 16 );  // width
+		WRITE_BYTE( 0 );   // noise
+		WRITE_BYTE( 255  );
+		WRITE_BYTE( 0  );
+		WRITE_BYTE( 0  );
+		WRITE_BYTE( 255 ); //brightness
+		WRITE_BYTE( 0 );		// speed
+	MESSAGE_END();
+#endif
+
 		EMIT_SOUND(ENT(m_pPlayer->pev), CHAN_WEAPON, "bbox/songrc.wav", 1, ATTN_NORM); //1.83
 #ifndef CLIENT_DLL
 		UTIL_ScreenShake( m_pPlayer->pev->origin, 25.0, 200.0, 2, 750 );
 #endif
 		RadiusDamage( m_pPlayer->pev->origin, pev, m_pPlayer->pev, 10, 750, CLASS_NONE, DMG_BILLNYE | DMG_ALWAYSGIB );
 		m_pPlayer->m_flNextAttack = UTIL_WeaponTimeBase() + 1.75;
+}
+
+void CBoombox::WeaponIdle(void)
+{
+	//Reload();
+
+	if (m_flTimeWeaponIdle > UTIL_WeaponTimeBase())
+		return;
+
+	int iAnim;
+	float flRand = UTIL_SharedRandomFloat(m_pPlayer->random_seed, 0, 1);
+	if (flRand <= 0.75)
+	{
+		iAnim = BOOMBOX_IDLE;
+		m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + 30.0 / 16 * (2);
+	}
+	else if (flRand <= 0.875)
+	{
+		iAnim = BOOMBOX_IDLE2;
+		m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + 40.0 / 16.0;
+	}
+	else
+	{
+		iAnim = BOOMBOX_IDLE3;
+		m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + 35.0 / 16.0;
+	}
+	SendWeaponAnim(iAnim);
 }

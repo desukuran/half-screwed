@@ -315,7 +315,7 @@
 			<Tool
 				Name="VCPostBuildEventTool"
 				Description="Copying Server DEBUG DLLs..."
-				CommandLine="copy &quot;$(TargetPath)&quot; &quot;F:\Games\Steam\SteamApps\common\Half-Life\half-screwed\dlls&quot;"
+				CommandLine="copy &quot;$(TargetPath)&quot; &quot;E:\Games\Steam\SteamApps\common\Half-Life\half-screwed\dlls&quot;"
 			/>
 		</Configuration>
 	</Configurations>

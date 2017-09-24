@@ -42,7 +42,7 @@ DECLARE_MESSAGE(m_Health, Items)
 #define DAMAGE_NAME "sprites/%d_dmg.spr"
 
 int giDmgHeight, giDmgWidth;
-int CHudHealth::hotline_r, CHudHealth::hotline_g, CHudHealth::hotline_b = 0;
+vec3_t CHudHealth::m_vHotline;
 
 int giDmgFlags[NUM_DMG_TYPES] = 
 {
@@ -227,8 +227,8 @@ int CHudHealth::Draw(float flTime)
 		{
 			HotlineThink();
 			int y = gHUD.GetSpriteRect(gHUD.m_HUD_number_0).bottom - gHUD.GetSpriteRect(gHUD.m_HUD_number_0).top;
-			gHUD.DrawHudString(5, ScreenHeight-(y*2.5), 320, "HEALTH:", hotline_r, hotline_g, 255);
-			gHUD.DrawHudNumber(5, ScreenHeight-(y+y/2), m_iFlags | DHN_3DIGITS, m_iHealth, hotline_r, hotline_g, 255);
+			gHUD.DrawHudString(5, ScreenHeight-(y*2.5), 320, "HEALTH:", m_vHotline.x, m_vHotline.y, 255);
+			gHUD.DrawHudNumber(5, ScreenHeight-(y+y/2), m_iFlags | DHN_3DIGITS, m_iHealth, m_vHotline.x, m_vHotline.y, 255);
 		}
 		else if (CVAR_GET_FLOAT("hud_game") == HUD_ZELDA)
 		{
@@ -324,9 +324,9 @@ void CHudHealth::HotlineThink()
             else if (colorInvert)
                 cosSin -= 0.01;
 
-            hotline_r = (float)sin(cosSin) * 255;
-            hotline_g = (float)cos(cosSin) * 255;
-			hotline_b = 255;
+            m_vHotline.x = (float)sin(cosSin) * 255; //Red
+            m_vHotline.y = (float)cos(cosSin) * 255; //green
+			m_vHotline.z = 255;						//blue
 }
 
 void CHudHealth::CalcDamageDirection(vec3_t vecFrom)

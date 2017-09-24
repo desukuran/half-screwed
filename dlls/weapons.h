@@ -101,6 +101,7 @@ public:
 #define WEAPON_MODMAN			26
 #define WEAPON_NERFGUN			27
 #define WEAPON_POKEBALL			28
+#define WEAPON_MLG				29
 
 
 #define WEAPON_ALLWEAPONS		(~(1<<WEAPON_SUIT))
@@ -658,6 +659,7 @@ public:
 	int iItemSlot( void ) { return 1; }
 	int GetItemInfo(ItemInfo *p);
 
+	void WeaponIdle( void );
 	void PrimaryAttack( void );
 	void SecondaryAttack( void );
 	BOOL Deploy( void );

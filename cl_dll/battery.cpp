@@ -130,8 +130,8 @@ int CHudBattery::Draw(float flTime)
 		{
 			//HotlineThink();
 			int y = gHUD.GetSpriteRect(gHUD.m_HUD_number_0).bottom - gHUD.GetSpriteRect(gHUD.m_HUD_number_0).top;
-			gHUD.DrawHudString(5+150, ScreenHeight-(y*2.5), 320, "ARMOR:", CHudHealth::hotline_r, CHudHealth::hotline_g, 255);
-			gHUD.DrawHudNumber(5+150, ScreenHeight-(y+y/2), m_iFlags | DHN_3DIGITS, m_iBat, CHudHealth::hotline_r, CHudHealth::hotline_g, 255);
+			gHUD.DrawHudString(5+150, ScreenHeight-(y*2.5), 320, "ARMOR:", CHudHealth::m_vHotline.x, CHudHealth::m_vHotline.y, 255);
+			gHUD.DrawHudNumber(5+150, ScreenHeight-(y+y/2), m_iFlags | DHN_3DIGITS, m_iBat, CHudHealth::m_vHotline.x, CHudHealth::m_vHotline.y, 255);
 		}
 		else if (CVAR_GET_FLOAT("hud_game") == HUD_ZELDA)
 		{

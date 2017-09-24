@@ -427,6 +427,7 @@ IMPLEMENT_CUSTOM_SCHEDULES( CScientist, CTalkMonster );
 
 void CScientist::DeclineFollowing( void )
 {
+	GibMonster();
 	Talk( 10 );
 	m_hTalkTarget = m_hEnemy;
 	PlaySentence( "SC_POK", 2, VOL_NORM, ATTN_NORM );

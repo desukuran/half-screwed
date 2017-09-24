@@ -134,7 +134,6 @@ void CPokeballWorld::PokeballOpen( void )
 
 	Vector vecSpot = pev->origin;
 
-	//Blows up in coins, disappears. Scott Pilgrim and River City Ransom-esque.
 	const Vector &direction = Vector(0,0,1);
 	int count = RANDOM_LONG(45,160);
 
@@ -157,7 +156,6 @@ void CPokeballWorld::PokeballOpen( void )
 	EMIT_SOUND(ENT(pev), CHAN_VOICE, "weapons/pokeball_open.wav", 1, ATTN_NORM);
 	CBaseMonster *pPokemon = (CBaseMonster*)Create( temp, pev->origin, newAngles, edict() );
 	pPokemon->pev->owner = pev->owner;
-	pPokemon->pev->scale = 2.0;
 	pokeball->m_cActiveBalls--;
 	UTIL_Remove(this);
 }

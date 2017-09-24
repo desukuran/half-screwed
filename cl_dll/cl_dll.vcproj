@@ -77,7 +77,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="odbc32.lib odbccp32.lib winmm.lib ../utils/vgui/lib/win32_vc6/vgui.lib wsock32.lib dectalk.lib"
+				AdditionalDependencies="odbc32.lib odbccp32.lib winmm.lib ../utils/vgui/lib/win32_vc6/vgui.lib wsock32.lib"
 				OutputFile=".\Debug\client.dll"
 				LinkIncremental="2"
 				SuppressStartupBanner="true"
@@ -112,7 +112,7 @@
 			<Tool
 				Name="VCPostBuildEventTool"
 				Description="Copying Client DEBUG DLLs..."
-				CommandLine="copy &quot;$(TargetPath)&quot; &quot;F:\Games\Steam\SteamApps\common\Half-Life\half-screwed\cl_dlls&quot;"
+				CommandLine="copy &quot;$(TargetPath)&quot; &quot;E:\Games\Steam\SteamApps\common\Half-Life\half-screwed\cl_dlls&quot;"
 			/>
 		</Configuration>
 		<Configuration
