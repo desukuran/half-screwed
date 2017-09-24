@@ -30,6 +30,7 @@ void CPokemonStadiumplay::PlayerSpawn( CBasePlayer *pPlayer )
 	}
 
 	SetBits( pPlayer->pev->flags, FL_NOTARGET );
+	SetBits( pPlayer->pev->flags, FL_GODMODE );
 
 	if ( addDefault )
 		pPlayer->GiveNamedItem( "weapon_pokeball" );

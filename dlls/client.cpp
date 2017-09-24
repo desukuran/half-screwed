@@ -1383,6 +1383,8 @@ void ClientPrecache( void )
 	PRECACHE_SOUND("player/death5.wav");
 	PRECACHE_SOUND("player/death6.wav");
 	PRECACHE_SOUND("player/death7.wav");
+	PRECACHE_SOUND("player/death8.wav");
+
 
 // What a shame
 	PRECACHE_SOUND("player/shame.wav");

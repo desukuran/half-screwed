@@ -60,6 +60,8 @@ int check = 0;
 
 float g_flIntermissionStartTime = 0;
 
+cvar_t allowPokeballs = {"hs_allowpokeballs","0", FCVAR_SERVER };
+
 CVoiceGameMgr	g_VoiceGameMgr;
 
 class CMultiplayGameMgrHelper : public IVoiceGameMgrHelper
@@ -1108,6 +1110,9 @@ int CHalfLifeMultiplay :: WeaponShouldRespawn( CBasePlayerItem *pWeapon )
 //=========================================================
 BOOL CHalfLifeMultiplay::CanHavePlayerItem( CBasePlayer *pPlayer, CBasePlayerItem *pItem )
 {
+	if (pItem->m_iId == WEAPON_POKEBALL && allowPokeballs.value == 0)
+		return FALSE;
+
 	if ( weaponstay.value > 0 )
 	{
 		if ( pItem->iFlags() & ITEM_FLAG_LIMITINWORLD )

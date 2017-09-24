@@ -371,7 +371,7 @@ void CBasePlayer :: DeathSound( void )
 	}
 	*/
 
-	switch (RANDOM_LONG(1,7)) 
+	switch (RANDOM_LONG(1,8)) 
 	{
 	case 1: 
 		EMIT_SOUND(ENT(pev), CHAN_VOICE, "player/death1.wav", 1, ATTN_NORM);
@@ -393,6 +393,9 @@ void CBasePlayer :: DeathSound( void )
 		break;
 	case 7:
 		EMIT_SOUND(ENT(pev), CHAN_VOICE, "player/death7.wav", 1, ATTN_NORM);
+		break;
+	case 8:
+		EMIT_SOUND(ENT(pev), CHAN_VOICE, "player/death8.wav", 1, ATTN_NORM);
 		break;
 	}
 
