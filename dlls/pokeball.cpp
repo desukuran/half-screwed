@@ -137,8 +137,7 @@ void CPokeballWorld::PokeballOpen( void )
 	const Vector &direction = Vector(0,0,1);
 	int count = RANDOM_LONG(45,160);
 
-	EMIT_SOUND(ENT(pev), CHAN_VOICE, "cwc/death.wav", 1, ATTN_NORM );
-
+#ifndef CLIENT_DLL
 	MESSAGE_BEGIN( MSG_PVS, SVC_TEMPENTITY, vecSpot );
 		WRITE_BYTE( TE_SPRITE_SPRAY );
 		WRITE_COORD( vecSpot.x );	// pos
@@ -152,6 +151,8 @@ void CPokeballWorld::PokeballOpen( void )
 		WRITE_BYTE ( 130 );			// speed
 		WRITE_BYTE ( 80 );			// noise ( client will divide by 100 )
 	MESSAGE_END();
+#endif
+
 
 	EMIT_SOUND(ENT(pev), CHAN_VOICE, "weapons/pokeball_open.wav", 1, ATTN_NORM);
 	CBaseMonster *pPokemon = (CBaseMonster*)Create( temp, pev->origin, newAngles, edict() );
@@ -265,7 +266,7 @@ int CPokeBall::GetItemInfo(ItemInfo *p)
 
 BOOL CPokeBall::Deploy( )
 {
-	ClientPrint(m_pPlayer->pev, HUD_PRINTCENTER, "Right Click to change monster choice."); //digamos al cliente
+	ClientPrint(m_pPlayer->pev, HUD_PRINTCENTER, "Right Click to change monster choice.");
 	return DefaultDeploy( "models/v_pokeball.mdl", "models/p_pokeball.mdl", HANDGRENADE_DRAW, "crowbar" );
 }
 
