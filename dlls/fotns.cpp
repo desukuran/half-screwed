@@ -181,17 +181,19 @@ void CFOTN::PrimaryAttack()
 	}
 	else
 	{
-	//Play Swing sound
-	switch(RANDOM_LONG(0,3))
-	{
-	case 0: EMIT_SOUND_DYN(ENT(m_pPlayer->pev), CHAN_ITEM, "weapons/fotn_atat1.wav", 1, ATTN_NORM,0,RANDOM_LONG(90,100)); break;
-	case 1: EMIT_SOUND_DYN(ENT(m_pPlayer->pev), CHAN_ITEM, "weapons/fotn_atat2.wav", 1, ATTN_NORM,0,RANDOM_LONG(90,100)); break;
-	case 2: EMIT_SOUND_DYN(ENT(m_pPlayer->pev), CHAN_ITEM, "weapons/fotn_atat3.wav", 1, ATTN_NORM,0,RANDOM_LONG(90,100)); break;
-	case 3: EMIT_SOUND_DYN(ENT(m_pPlayer->pev), CHAN_ITEM, "weapons/fotn_atat4.wav", 1, ATTN_NORM,0,RANDOM_LONG(90,100)); break;
+		//Play Swing sound
+		switch(RANDOM_LONG(0,3))
+		{
+			case 0: EMIT_SOUND_DYN(ENT(m_pPlayer->pev), CHAN_ITEM, "weapons/fotn_atat1.wav", 1, ATTN_NORM,0,RANDOM_LONG(90,100)); break;
+			case 1: EMIT_SOUND_DYN(ENT(m_pPlayer->pev), CHAN_ITEM, "weapons/fotn_atat2.wav", 1, ATTN_NORM,0,RANDOM_LONG(90,100)); break;
+			case 2: EMIT_SOUND_DYN(ENT(m_pPlayer->pev), CHAN_ITEM, "weapons/fotn_atat3.wav", 1, ATTN_NORM,0,RANDOM_LONG(90,100)); break;
+			case 3: EMIT_SOUND_DYN(ENT(m_pPlayer->pev), CHAN_ITEM, "weapons/fotn_atat4.wav", 1, ATTN_NORM,0,RANDOM_LONG(90,100)); break;
+		}
 	}
-	}
+
 	flAhDelay = gpGlobals->time + FOTN_DELAY;
 	flWataDelay = flAhDelay;
+
 	if (! Swing( 1 ))
 	{
 		SetThink( &CFOTN::SwingAgain );
@@ -244,6 +246,8 @@ int CFOTN::Swing( int fFirst )
 			if ( !pHit || pHit->IsBSPModel() )
 				FindGullIntersection( vecSrc, tr, VEC_DUCK_HULL_MIN, VEC_DUCK_HULL_MAX, m_pPlayer->edict() );
 			vecEnd = tr.vecEndPos;	// This is the point on the actual surface (the hull could have hit space)
+			pHit->pev->punchangle.z = -18;
+			pHit->pev->punchangle.x = 5;
 		}
 	}
 #endif

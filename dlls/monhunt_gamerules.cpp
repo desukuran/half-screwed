@@ -235,6 +235,7 @@ void CMonsterplay::PlayerSpawn( CBasePlayer *pPlayer )
 		pPlayer->GiveNamedItem( "weapon_boombox" );
 		pPlayer->GiveNamedItem( "weapon_scientist" );
 		pPlayer->GiveNamedItem( "weapon_modman" );
+		pPlayer->GiveNamedItem( "weapon_nerfgun" );
 	}
 }
 

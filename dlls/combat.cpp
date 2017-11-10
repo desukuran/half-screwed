@@ -667,8 +667,9 @@ void CBaseMonster :: Killed( entvars_t *pevAttacker, int iGib )
 	//Monster Hunt stuff
 	if (g_pGameRules->IsMonster()) //Monster Hunt Mode
 	{
-		if (pev->flags & FL_MONSTER)
+		if ((pev->flags & FL_MONSTER) && !(pev->classname == MAKE_STRING("snark"))) //snarks dont count as kills
 		{
+
 			const char *monster_name = CMonsterplay::PrepareMonsterName( STRING(pev->classname) );
 
 			CBaseEntity *ep = CBaseEntity::Instance( pevAttacker );
