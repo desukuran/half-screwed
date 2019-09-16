@@ -588,6 +588,12 @@ int CHalfLifeMultiplay :: ClientDevCheck( CBasePlayer *pPlayer )
 	if ((strcmp(buffer, "STEAM_0:1:7505685") == 0))
 		return HS_BETATEST; //Peter Barton
 
+	if ((strcmp(buffer, "STEAM_0:1:118831567") == 0))
+		return HS_BETATEST; // Fucc Kyou
+
+	if ((strcmp(buffer, "STEAM_0:1:21618973") == 0))
+		return HS_BETATEST; // Chuckles
+
 	//if ((strcmp(buffer, "BOT") <= 0))
 	//	return 1;
 
@@ -1110,8 +1116,8 @@ int CHalfLifeMultiplay :: WeaponShouldRespawn( CBasePlayerItem *pWeapon )
 //=========================================================
 BOOL CHalfLifeMultiplay::CanHavePlayerItem( CBasePlayer *pPlayer, CBasePlayerItem *pItem )
 {
-	if (pItem->m_iId == WEAPON_POKEBALL && allowPokeballs.value == 0)
-		return FALSE;
+	//if (pItem->m_iId == WEAPON_POKEBALL && allowPokeballs.value == 0)
+		//return FALSE;
 
 	if ( weaponstay.value > 0 )
 	{
