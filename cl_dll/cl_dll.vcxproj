@@ -14,6 +14,7 @@
     <ProjectGuid>{04D4239A-A9B9-48AA-AF65-F558F8AE2B88}</ProjectGuid>
     <RootNamespace>cl_dll</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+    <ProjectName>client</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
@@ -23,7 +24,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
-    <PlatformToolset>v142</PlatformToolset>
+    <PlatformToolset>v120</PlatformToolset>
     <UseOfMfc>false</UseOfMfc>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
@@ -106,7 +107,7 @@
     </Bscmake>
     <PostBuildEvent>
       <Message>Copying Client DEBUG DLLs...</Message>
-      <Command>copy "$(TargetPath)" "E:\Games\Steam\SteamApps\common\Half-Life\half-screwed\cl_dlls"</Command>
+      <Command>copy "$(TargetPath)" "D:\Games\Steam\SteamApps\common\Half-Life\half-screwed\cl_dlls"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -270,6 +271,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\common\itrackeruser.h" />
+    <ClInclude Include="..\common\miniaudio.h" />
     <ClInclude Include="..\game_shared\voice_banmgr.h" />
     <ClInclude Include="..\game_shared\voice_status.h" />
     <ClInclude Include="..\game_shared\voice_vgui_tweakdlg.h" />
@@ -287,9 +289,6 @@
     <ClInclude Include="demo.h" />
     <ClInclude Include="eventscripts.h" />
     <ClInclude Include="ev_hldm.h" />
-    <ClInclude Include="fmod.h" />
-    <ClInclude Include="fmoddyn.h" />
-    <ClInclude Include="fmod_errors.h" />
     <ClInclude Include="GameStudioModelRenderer.h" />
     <ClInclude Include="health.h" />
     <ClInclude Include="hud.h" />
@@ -316,9 +315,6 @@
     <ClInclude Include="vgui_TeamFortressViewport.h" />
     <ClInclude Include="view.h" />
     <ClInclude Include="wrect.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <Library Include="fmodvc.lib" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

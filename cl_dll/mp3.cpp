@@ -4,164 +4,110 @@
 #include "cl_util.h"
 #include "mp3.h"
 
+#define MINIAUDIO_IMPLEMENTATION
+#include "miniaudio.h"
+
+#define DEVICE_FORMAT       ma_format_f32
+#define DEVICE_CHANNELS     2
+#define DEVICE_SAMPLE_RATE  48000
+
+void data_callback(ma_device* pDevice, void* pOutput, const void* pInput, ma_uint32 frameCount)
+{
+	ma_decoder* pDecoder = (ma_decoder*)pDevice->pUserData;
+	if (pDecoder == NULL) {
+		return;
+	}
+
+	ma_decoder_read_pcm_frames(pDecoder, pOutput, frameCount);
+
+	(void)pInput;
+}
+
 int CMP3::Initialize()
 {
+	CVAR_CREATE("mp3_debug", "0", 0);
+	deviceConfig = ma_device_config_init(ma_device_type_playback);
+	deviceConfig.playback.format = DEVICE_FORMAT;
+	deviceConfig.playback.channels = DEVICE_CHANNELS;
+	deviceConfig.sampleRate = DEVICE_SAMPLE_RATE;
+	deviceConfig.dataCallback = data_callback;
+	deviceConfig.pUserData = &decoder;
 
-	char fmodlib[256];
-	
-	m_iIsPlaying = 0;
-	sprintf( fmodlib, "%s/fmod.dll", gEngfuncs.pfnGetGameDirectory());
-	// replace forward slashes with backslashes
-	for( int i=0; i < 256; i++ )
-		if( fmodlib[i] == '/' ) fmodlib[i] = '\\';
-	
-	m_hFMod = LoadLibrary( fmodlib );
-
-	if( m_hFMod != NULL )
-	{
-		// fill in the function pointers
-	//	(FARPROC&)VER = GetProcAddress(m_hFMod, "_FSOUND_GetVersion@0");
-		(FARPROC&)SCL = GetProcAddress(m_hFMod, "_FSOUND_Stream_Close@4");
-		(FARPROC&)SOP = GetProcAddress(m_hFMod, "_FSOUND_SetOutput@4");
-		(FARPROC&)SBS = GetProcAddress(m_hFMod, "_FSOUND_SetBufferSize@4");
-		(FARPROC&)SDRV = GetProcAddress(m_hFMod, "_FSOUND_SetDriver@4");
-		(FARPROC&)INIT = GetProcAddress(m_hFMod, "_FSOUND_Init@12");
-		(FARPROC&)SOF = GetProcAddress(m_hFMod, "_FSOUND_Stream_OpenFile@12");		//
-	//	(FARPROC&)LNGTH = GetProcAddress(m_hFMod, "_FSOUND_Stream_GetLength@4");	//
-		(FARPROC&)SO = GetProcAddress(m_hFMod, "_FSOUND_Stream_Open@16");			//AJH Use new version of fmod
-		(FARPROC&)SPLAY = GetProcAddress(m_hFMod, "_FSOUND_Stream_Play@8");
-		(FARPROC&)CLOSE = GetProcAddress(m_hFMod, "_FSOUND_Close@0");
-		(FARPROC&)VOL = GetProcAddress(m_hFMod, "_FSOUND_SetSFXMasterVolume@4");
-		
-		if( !(SCL && SOP && SBS && SDRV && INIT && (SOF||SO) && SPLAY && CLOSE && VOL) )
-		{
-			FreeLibrary( m_hFMod );
-			gEngfuncs.Con_Printf("Fatal Error: FMOD functions couldn't be loaded!\n");
-			return 0;
-		}
+	if (ma_device_init(NULL, &deviceConfig, &device) != MA_SUCCESS) {
+		gEngfuncs.Con_Printf("MP3: Failed to open playback device.\n");
+		ma_decoder_uninit(&decoder);
+		return -3;
 	}
 
-	else
-	{
-		gEngfuncs.Con_Printf("Fatal Error: FMOD library couldn't be loaded!\n");
-		return 0;
-	}
-	gEngfuncs.Con_Printf("FMOD.dll loaded successfully!\n");
+	gEngfuncs.Con_Printf("CMP3::Init called!\n");
+
 	return 1;
 }
 
 int CMP3::Shutdown()
 {
-	if( m_hFMod )
-	{
-		CLOSE();
-
-		FreeLibrary( m_hFMod );
-		m_hFMod = NULL;
-		m_iIsPlaying = 0;
-		return 1;
-	}
-	else
-		return 0;
+	ma_device_uninit(&device);
+	ma_decoder_uninit(&decoder);
+	return 0;
 }
 
 int CMP3::StopMP3( void )
 {
-	SCL( m_Stream );
-	m_iIsPlaying = 0;
+	ma_device_stop(&device);
 	return 1;
 }
 
 int CMP3::PlayMP3( const char *pszSong )
 {
-	float vol = CVAR_GET_FLOAT("mp3_volume");
-
-	if( m_iIsPlaying )
-	{
-	// sound system is already initialized
-		VOL( (int)(vol*256.f));
-		SCL( m_Stream );
-	} 
-	else
-	{
-		VOL( (int)(vol*256.f));
-		SOP( FSOUND_OUTPUT_DSOUND );
-		SBS( 200 );
-		SDRV( 0 );
-		INIT( 44100, 3, 0 ); // we need just one channel, multiple mp3s at a time would be, erm, strange...	
-	}//AJH not for really cool effects, say walking past cars in a street playing different tunes, might change this later.
+	//Kill
+	if (m_iIsPlaying)
+		ma_device_stop(&device);
 
 	char song[256];
 
-	sprintf( song, "%s/%s", gEngfuncs.pfnGetGameDirectory(), pszSong);
+	sprintf(song, "%s/%s", gEngfuncs.pfnGetGameDirectory(), pszSong);
 
-	//gEngfuncs.Con_Printf("Using fmod.dll version %f\n",VER());
+	if (CVAR_GET_FLOAT > 0) {
+		gEngfuncs.Con_Printf("MP3 Debug: Playing song... ");
+		gEngfuncs.Con_Printf(song);
+	}
 
-	if (SO)
-	{
-		m_Stream = SO( song, FSOUND_NORMAL | FSOUND_LOOP_NORMAL, 0 ,0); //AJH new version fmod uses Open
+	result = ma_decoder_init_file(song, NULL, &decoder);
+	if (result != MA_SUCCESS) {
+		gEngfuncs.Con_Printf("MP3: Song not found!\n");
+		m_iIsPlaying = false;
+		return -2;
 	}
-	else if( SOF )
-	{													
-		m_Stream = SOF( song, FSOUND_NORMAL | FSOUND_LOOP_NORMAL, 1 ); //AJH old version fmod OpenFile
+
+	//Set up the audio
+	deviceConfig = ma_device_config_init(ma_device_type_playback);
+	deviceConfig.playback.format = decoder.outputFormat;
+	deviceConfig.playback.channels = decoder.outputChannels;
+	deviceConfig.sampleRate = decoder.outputSampleRate;
+	deviceConfig.dataCallback = data_callback;
+	deviceConfig.pUserData = &decoder;
+
+	if (ma_device_init(NULL, &deviceConfig, &device) != MA_SUCCESS) {
+		gEngfuncs.Con_Printf("MP3: Failed to open playback device.\n");
+		ma_decoder_uninit(&decoder);
+		m_iIsPlaying = false;
+		return -3;
 	}
-	if(m_Stream)
-	{
-		SPLAY( 0, m_Stream );
-		m_iIsPlaying = 1;
-		return 1;
+
+	if (ma_device_start(&device) != MA_SUCCESS) {
+		gEngfuncs.Con_Printf("MP3: Failed to start playback device.\n");
+		ma_device_uninit(&device);
+		ma_decoder_uninit(&decoder);
+		m_iIsPlaying = false;
+		return -4;
 	}
-	else
-	{
-		m_iIsPlaying = 0;
-		gEngfuncs.Con_Printf("Error: Could not load %s\n",song);
-		return 0;
-	}
+
+	m_iIsPlaying = true;
 }
 
 int CMP3::PlayMP3NL( const char *pszSong )
 {
-	float vol = CVAR_GET_FLOAT("mp3_volume");
-
-	if( m_iIsPlaying )
-	{
-	// sound system is already initialized
-		VOL( (int)(vol*256.f));
-		SCL( m_Stream );
-	} 
-	else
-	{
-		VOL( (int)(vol*256.f));
-		SOP( FSOUND_OUTPUT_DSOUND );
-		SBS( 200 );
-		SDRV( 0 );
-		INIT( 44100, 3, 0 ); // we need just one channel, multiple mp3s at a time would be, erm, strange...	
-	}//AJH not for really cool effects, say walking past cars in a street playing different tunes, might change this later.
-
-	char song[256];
-
-	sprintf( song, "%s/%s", gEngfuncs.pfnGetGameDirectory(), pszSong);
-
-	//gEngfuncs.Con_Printf("Using fmod.dll version %f\n",VER());
-
-	if (SO)
-	{
-		m_Stream = SO( song, FSOUND_NORMAL | FSOUND_LOOP_OFF, 0 ,0); //AJH new version fmod uses Open
-	}
-	else if( SOF )
-	{													
-		m_Stream = SOF( song, FSOUND_NORMAL | FSOUND_LOOP_OFF, 1 ); //AJH old version fmod OpenFile
-	}
-	if(m_Stream)
-	{
-		SPLAY( 0, m_Stream );
-		m_iIsPlaying = 1;
-		return 1;
-	}
-	else
-	{
-		m_iIsPlaying = 0;
-		gEngfuncs.Con_Printf("Error: Could not load %s\n",song);
-		return 0;
-	}
+	//TODO: Fix. For now. This doesn't loop anyway.
+	PlayMP3(pszSong);
+	return 0;
 }

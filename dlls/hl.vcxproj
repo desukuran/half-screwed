@@ -22,7 +22,7 @@
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
-    <PlatformToolset>v142</PlatformToolset>
+    <PlatformToolset>v120</PlatformToolset>
     <UseOfMfc>false</UseOfMfc>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Profile|Win32'" Label="Configuration">
@@ -236,7 +236,7 @@
     </Bscmake>
     <PostBuildEvent>
       <Message>Copying Server DEBUG DLLs...</Message>
-      <Command>copy "$(TargetPath)" "E:\Games\Steam\SteamApps\common\Half-Life\half-screwed\dlls"</Command>
+      <Command>copy "$(TargetPath)" "D:\Games\Steam\SteamApps\common\Half-Life\half-screwed\dlls"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>

@@ -3,14 +3,12 @@
 #ifndef MP3_H
 #define MP3_H
 
-#include "fmod.h"
-#include "fmod_errors.h"
-#include "windows.h"
+#include "miniaudio.h"
 
 class CMP3
 {
 private:
-	float			(_stdcall * VER)	(void);//AJH get fmod dll version
+/*	float			(_stdcall * VER)	(void);//AJH get fmod dll version
 	signed char		(_stdcall * SCL)	(FSOUND_STREAM *stream);
 	signed char		(_stdcall * SOP)	(int outputtype);
 	signed char		(_stdcall * SBS)	(int len_ms);
@@ -24,7 +22,14 @@ private:
 	
 	FSOUND_STREAM  *m_Stream;
 	int		m_iIsPlaying;
-	HINSTANCE	m_hFMod;
+	HINSTANCE	m_hFMod;*/
+
+	bool		m_iIsPlaying;
+
+	ma_result result;
+	ma_decoder decoder;
+	ma_device_config deviceConfig;
+	ma_device device;
 
 public:
 	int		Initialize();

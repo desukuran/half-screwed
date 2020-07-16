@@ -13,8 +13,8 @@
       <UniqueIdentifier>{4fbb73ef-f3e7-4592-9fc4-38af448b9a7e}</UniqueIdentifier>
       <Extensions>h;hpp;hxx;hm;inl;fi;fd</Extensions>
     </Filter>
-    <Filter Include="Header Files\FMOD">
-      <UniqueIdentifier>{0a0714db-15ba-4a23-969c-7396bfeb2f4a}</UniqueIdentifier>
+    <Filter Include="Source Files\audio_api">
+      <UniqueIdentifier>{d5c63ad5-69d5-4524-9579-df147aef5ff3}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -443,19 +443,8 @@
     <ClInclude Include="wrect.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="fmod.h">
-      <Filter>Header Files\FMOD</Filter>
+    <ClInclude Include="..\common\miniaudio.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="fmod_errors.h">
-      <Filter>Header Files\FMOD</Filter>
-    </ClInclude>
-    <ClInclude Include="fmoddyn.h">
-      <Filter>Header Files\FMOD</Filter>
-    </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <Library Include="fmodvc.lib">
-      <Filter>Header Files\FMOD</Filter>
-    </Library>
   </ItemGroup>
 </Project>
