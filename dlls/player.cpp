@@ -3677,7 +3677,7 @@ void CBasePlayer::CheatImpulseCommands( int iImpulse )
 		GiveNamedItem( "weapon_jackal" );
 		GiveNamedItem( "weapon_modman" );
 		GiveNamedItem( "weapon_nerfgun" );
-		GiveNamedItem( "weapon_pokeball" );
+		//GiveNamedItem( "weapon_pokeball" );
 #endif
 		gEvilImpulse101 = FALSE;
 		break;

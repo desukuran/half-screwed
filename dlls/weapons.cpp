@@ -418,7 +418,7 @@ void W_Precache(void)
 #if !defined( OEM_BUILD ) && !defined( HLDEMO_BUILD )
 	// soda
 	UTIL_PrecacheOtherWeapon( "weapon_soda" );
-	UTIL_PrecacheOtherWeapon("weapon_pokeball");
+	//UTIL_PrecacheOtherWeapon("weapon_pokeball");
 #endif
 
 

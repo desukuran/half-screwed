@@ -12,6 +12,7 @@
 *   without written permission from Valve LLC.
 *
 ****/
+#if 0
 #include "extdll.h"
 #include "util.h"
 #include "cbase.h"
@@ -276,7 +277,7 @@ BOOL CPokeBall::CanHolster( void )
 	return ( m_flStartThrow == 0 );
 }
 
-void CPokeBall::Holster( int skiplocal /* = 0 */ )
+void CPokeBall::Holster( int skiplocal )
 {
 	m_pPlayer->m_flNextAttack = UTIL_WeaponTimeBase() + 0.5;
 
@@ -375,6 +376,4 @@ void CPokeBall::WeaponIdle( void )
 		SendWeaponAnim( iAnim );
 }
 
-
-
-
+#endif 0

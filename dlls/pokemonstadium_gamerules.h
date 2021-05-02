@@ -1,7 +1,7 @@
 //
 // pokemonstadium_gamerules.h
 //
-
+#if 0
 class CPokemonStadiumplay : public CHalfLifeMultiplay
 {
 public:
@@ -13,3 +13,5 @@ public:
 	virtual BOOL CanHavePlayerItem( CBasePlayer *pPlayer, CBasePlayerItem *pWeapon );// The player is touching an CBasePlayerItem, do I give it to him?
 	virtual BOOL CanHaveAmmo( CBasePlayer *pPlayer, const char *pszAmmoName, int iMaxCarry );// can this player take more of this ammo?
 };
+
+#endif 0

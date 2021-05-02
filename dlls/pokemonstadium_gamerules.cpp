@@ -1,3 +1,4 @@
+#if 0
 #include	"extdll.h"
 #include	"util.h"
 #include	"cbase.h"
@@ -58,3 +59,4 @@ BOOL CPokemonStadiumplay::FPlayerCanTakeDamage( CBasePlayer *pPlayer, CBaseEntit
 {
 	return FALSE;
 }
+#endif 0

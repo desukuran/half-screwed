@@ -100,7 +100,7 @@ public:
 #define WEAPON_JACKAL			25
 #define WEAPON_MODMAN			26
 #define WEAPON_NERFGUN			27
-#define WEAPON_POKEBALL			28
+//#define WEAPON_POKEBALL			28
 #define WEAPON_MLG				29
 
 
@@ -127,7 +127,7 @@ public:
 #define EGON_WEIGHT			20
 #define HORNETGUN_WEIGHT	10
 #define HANDGRENADE_WEIGHT	5
-#define POKEBALL_WEIGHT		5
+//#define POKEBALL_WEIGHT		5
 #define SNARK_WEIGHT		5
 #define SATCHEL_WEIGHT		-10
 #define TRIPMINE_WEIGHT		-10
@@ -929,7 +929,7 @@ public:
 #endif
 	}
 };
-
+/*
 class CPokeBall : public CBasePlayerWeapon
 {
 public:
@@ -957,7 +957,7 @@ public:
 		return FALSE;
 #endif
 	}
-};
+};*/
 
 class CSatchel : public CBasePlayerWeapon
 {

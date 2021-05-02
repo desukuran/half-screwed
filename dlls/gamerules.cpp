@@ -26,7 +26,7 @@
 #include	"shytplay_gamerules.h"
 #include	"heavyrain_gamerules.h"
 #include	"monhunt_gamerules.h"
-#include	"pokemonstadium_gamerules.h"
+//#include	"pokemonstadium_gamerules.h"
 #include	"coop_gamerules.h"
 #include	"cod_gamerules.h"
 #include	"test_gamerules.h"
@@ -389,11 +389,13 @@ CGameRules *InstallGameRules( void )
 			g_gameplay = HS_MONSTER;
 			return new CMonsterplay;
 		}
+#if 0
 		else if ( gameplay.value == HS_POKEMON )
 		{
 			g_gameplay = HS_POKEMON;
 			return new CPokemonStadiumplay;
 		}
+#endif 0
 		else if ( gameplay.value == HS_TESTMODE )
 		{
 			g_gameplay = HS_TESTMODE;

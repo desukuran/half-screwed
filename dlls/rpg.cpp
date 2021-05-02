@@ -191,8 +191,8 @@ void CRpgRocket :: IgniteThink( void  )
 
 	if (rocketMode)
 	{
-	// make rocket sound
-	EMIT_SOUND( ENT(pev), CHAN_VOICE, "weapons/wheredahoodat.wav", 1, 0.5 );
+		// make rocket sound
+		EMIT_SOUND( ENT(pev), CHAN_VOICE, "weapons/wheredahoodat.wav", 1, 0.5 );
 	}
 
 	// rocket trail

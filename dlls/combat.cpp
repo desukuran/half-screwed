@@ -682,7 +682,7 @@ void CBaseMonster :: Killed( entvars_t *pevAttacker, int iGib )
 			MESSAGE_END();
 		}
 	}
-
+#if 0
 	if (g_pGameRules->IsPokemon())
 	{
 		if (pevAttacker->flags & FL_MONSTER)
@@ -701,7 +701,7 @@ void CBaseMonster :: Killed( entvars_t *pevAttacker, int iGib )
 			}
 		}
 	}
-
+#endif 0
 
 
 
